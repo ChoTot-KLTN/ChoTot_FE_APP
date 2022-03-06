@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 const root_url = "chotothd.herokuapp.com";
@@ -49,7 +50,7 @@ class BaseRepository {
       'Connection': 'keep-alive',
       'Accept': '*/*',
       'Accept-Encoding': 'gzip, deflate, br',
-      'Authorization': 'Bearer ' + '',
+      'Authorization': 'Bearer ' + (GetStorage().read('token') ?? ""),
     };
   }
 }

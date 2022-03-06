@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:chotot_app/src/pages/authentication/login/login_page.dart';
+import 'package:chotot_app/src/pages/chat/chat_page.dart';
 import 'package:chotot_app/src/pages/splash/flash_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../main.dart';
 
@@ -48,6 +50,10 @@ class _AppChoTotState extends State<AppChoTot> {
 
   @override
   Widget build(BuildContext context) {
-    return time > 0 ? SplashScreen() : LoginScreen();
+    return time > 0
+        ? SplashScreen()
+        : GetStorage().read('token') != null
+            ? ChatScreen()
+            : LoginScreen();
   }
 }

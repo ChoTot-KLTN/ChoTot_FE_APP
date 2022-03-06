@@ -5,6 +5,7 @@ import 'package:chotot_app/src/pages/authentication/forgot_password/forgot_passw
 import 'package:chotot_app/src/pages/authentication/register/register_page.dart';
 import 'package:chotot_app/src/pages/authentication/verify/otp_verifycation_page.dart';
 import 'package:chotot_app/src/pages/chat/chat_page.dart';
+
 import 'package:chotot_app/src/repositories/authentication_repo.dart';
 import 'package:chotot_app/src/widgets/dialog_loading.dart';
 import 'package:chotot_app/src/widgets/header_widget.dart';
@@ -184,6 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   var dataResponse = jsonDecode(status.body);
                                   await GetStorage().write('token',
                                       dataResponse['data']['accessToken']);
+
                                   Get.to(() => ChatScreen());
                                 } else if (status.statusCode == 401) {
                                   Get.defaultDialog(

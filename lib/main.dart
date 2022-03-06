@@ -1,8 +1,10 @@
 import 'package:chotot_app/src/app.dart';
+import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await GetStorage.init();
@@ -16,14 +18,19 @@ class MyApp extends StatelessWidget {
   final Color _accentColor = HexColor('#F0E68C');
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          // primarySwatch: Colors.blue,
-          primaryColor: _pimaryColors,
-          accentColor: _accentColor),
-      home: AppChoTot(),
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserProvider>(create: (context) => userProvider)
+      ],
+      child: GetMaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+            // primarySwatch: Colors.blue,
+            primaryColor: _pimaryColors,
+            accentColor: _accentColor),
+        home: AppChoTot(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chotot_app/src/common/api_gateway.dart';
+import 'package:chotot_app/src/models/user_model.dart';
 import 'package:chotot_app/src/repositories/base_repo.dart';
 import 'package:http/http.dart' as http;
 
@@ -66,5 +67,14 @@ class AuthenticationRepository {
     http.Response response =
         await BaseRepository().post(ApiGateway.sendNewPass, body);
     return response;
+  }
+
+  Future<UserModel?> getAuthAPI() async {
+    http.Response response = await BaseRepository().get(ApiGateway.getAuth);
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body)['data'];
+      print("dataUser: " + jsonResponse.toString());
+      return UserModel.fromMap(jsonResponse['user']);
+    }
   }
 }
