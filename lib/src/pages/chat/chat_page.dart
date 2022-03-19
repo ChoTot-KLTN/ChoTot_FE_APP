@@ -1,4 +1,5 @@
 import 'package:chotot_app/src/pages/authentication/login/login_page.dart';
+import 'package:chotot_app/src/pages/home/home_nav_page.dart';
 import 'package:chotot_app/src/pages/home/home_page.dart';
 
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           ElevatedButton(
               onPressed: () {
-                Get.to(() => HomeScreen());
+                Get.to(() => MyHomePage());
               },
               child: Text("home"))
         ]),

@@ -25,8 +25,8 @@ class ItemNewsWidget extends StatelessWidget {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 60,
-              width: 60,
+              height: 52,
+              width: 52,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                   color: color),
@@ -37,6 +37,9 @@ class ItemNewsWidget extends StatelessWidget {
                   size: 30,
                 ),
               ),
+            ),
+            SizedBox(
+              height: 8,
             ),
             SizedBox(
               height: 60,
