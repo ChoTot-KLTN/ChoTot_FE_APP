@@ -1,4 +1,13 @@
 import 'package:chotot_app/src/pages/create_post/components/create_post_BDS.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_Bicycle.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_Car.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_Ground.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_House.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_Laptop.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_MotelRoom.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_Motorbike.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_Office.dart';
+import 'package:chotot_app/src/pages/create_post/components/create_post_Phone.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -42,19 +51,27 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   ListTile(
                       title: Text("Nhà ở"),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.to(() => CreatePostHouseScreen());
+                      }),
                   ListTile(
                       title: Text("Đất"),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.to(() => CreatePostGroundScreen());
+                      }),
                   ListTile(
                       title: Text("Văn phòng, mặt bằng kinh doanh"),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.to(() => CreatePostOfficeScreen());
+                      }),
                   ListTile(
                       title: Text("Phòng trọ"),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.to(() => CreatePostMotelRoomScreen());
+                      }),
                 ],
               ),
               ExpansionTile(
@@ -67,27 +84,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   ListTile(
                       title: Text("Ô tô"),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.to(() => CreatePostCarScreen());
+                      }),
                   ListTile(
                       title: Text("Xe máy"),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
-                  ListTile(
-                      title: Text("Xe tải, xe ben"),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.to(() => CreatePostMotorbikeScreen());
+                      }),
                   ListTile(
                       title: Text("Xe điện"),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
-                  ListTile(
-                      title: Text("Xe đạp"),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
-                  ListTile(
-                      title: Text("Phương tiện khác"),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.to(() => CreatePostBicycleScreen());
+                      }),
                 ],
               ),
               ExpansionTile(
@@ -96,7 +107,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 leading: Icon(Icons.phone_iphone),
-                children: [],
+                children: [
+                  ListTile(
+                      title: Text("Điện Thoại"),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                      onTap: () {
+                        Get.to(() => CreatePostPhoneScreen());
+                      }),
+                  ListTile(
+                      title: Text("Laptop"),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                      onTap: () {
+                        Get.to(() => CreatePostLaptopScreen());
+                      }),
+                ],
               ),
               ExpansionTile(
                 title: Text(

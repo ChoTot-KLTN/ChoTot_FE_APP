@@ -7,22 +7,26 @@ import 'package:chotot_app/src/repositories/location_repo.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 
-class CreatePostBDSScreen extends StatefulWidget {
-  const CreatePostBDSScreen({Key? key}) : super(key: key);
+class CreatePostHouseScreen extends StatefulWidget {
+  const CreatePostHouseScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreatePostBDSScreen> createState() => _CreatePostBDSScreenState();
+  State<CreatePostHouseScreen> createState() => _CreatePostHouseScreenState();
 }
 
-class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
+class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
   bool isSafe = false; // bán
   bool isBorrow = false; // thuê
   TextEditingController building = TextEditingController(); // tên tòa nhà
   TextEditingController addressDetail = TextEditingController();
+  TextEditingController codeHome = TextEditingController();
+  TextEditingController block = TextEditingController();
+  TextEditingController numberOfFloor = TextEditingController();
   TextEditingController area = TextEditingController();
   TextEditingController price = TextEditingController();
+  TextEditingController width = TextEditingController();
+  TextEditingController height = TextEditingController();
   TextEditingController titlePoster = TextEditingController();
   TextEditingController descriptionPoster = TextEditingController();
   String province = "";
@@ -31,7 +35,7 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
 
   String idProvince = "";
   String idDistrict = "";
-  String typeHouse = "Chung cư";
+  String typeHouse = "Nhà mặt phố, mặt tiền";
   String numRoom = '1';
   String numBadRoom = '1';
   String directionBalcony = 'Đông';
@@ -41,12 +45,10 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
   bool isSelectedProvince = false;
   bool isSelectedDistrict = false;
   List<String> listTypeHouse = [
-    'Chung cư',
-    'Duplex',
-    'Penthouse',
-    'Căn hộ dịch vụ, mini',
-    'Tập thể, cư xá',
-    'Officetel'
+    'Nhà mặt phố, mặt tiền',
+    'Nhà ngõ, hẻm',
+    'Nhà biệt thự',
+    'Nhà phố liền kề'
   ];
   final _formkey = GlobalKey<FormState>();
   final _formkey1 = GlobalKey<FormState>();
@@ -82,7 +84,7 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Bất động sản - Căn hộ/Chung cư',
+                        'Bất động sản - Nhà ở',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
@@ -177,18 +179,17 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                             height: 15,
                           ),
                           TextFormField(
-                            controller: building,
-                            decoration: ThemeHelper()
-                                .textInputDecorationWithOutBorderRadius(
-                                    "Tên tòa nhà, khu dân cư",
-                                    "Tên tòa nhà / khu dân cư / dự án"),
-                            validator: (value) {
-                              if (value == "") {
-                                return "Vui lòng nhập tên tòa nhà";
-                              }
-                              return null;
-                            },
-                          ),
+                              controller: building,
+                              decoration: ThemeHelper()
+                                  .textInputDecorationWithOutBorderRadius(
+                                      "Tên tòa nhà, khu dân cư",
+                                      "Tên tòa nhà / khu dân cư / dự án"),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Nhập tòa nhà, KDC";
+                                }
+                                return null;
+                              }),
                           SizedBox(
                             height: 15,
                           ),
@@ -198,8 +199,8 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                                     "Địa chỉ", "Địa chỉ"),
                             controller: addressDetail,
                             validator: (value) {
-                              if (value == "") {
-                                return "Vui lòng nhập địa chỉ";
+                              if (value!.isEmpty) {
+                                return "Nhập tên đường";
                               }
                               return null;
                             },
@@ -302,6 +303,7 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: codeHome,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Mã căn", "Mã căn"),
@@ -310,24 +312,10 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: block,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
-                                  "Block/tháp", "Block/tháp"),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          keyboardType: TextInputType.number,
-                          decoration: ThemeHelper()
-                              .textInputDecorationDropWithOutBorderRadius(
-                                  "Tầng số", "Tầng số"),
-                          validator: (value) {
-                            if (value!.isEmpty || int.parse(value) > 1000) {
-                              return "Vui lòng chọn lại số tầng";
-                            }
-                            return null;
-                          },
+                                  "Tên phân khu/lô", "Tên phân khu/lô"),
                         ),
                       ],
                     ),
@@ -351,7 +339,7 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                               borderRadius: BorderRadius.circular(4)),
                           child: Row(
                             children: [
-                              Text("Loại hình căn hộ: "),
+                              Text("Loại hình nhà ở: "),
                               SizedBox(
                                 width: 5,
                               ),
@@ -465,44 +453,6 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                               borderRadius: BorderRadius.circular(4)),
                           child: Row(
                             children: [
-                              Text("Hướng ban công: "),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Flexible(
-                                flex: 1,
-                                child: DropdownButton(
-                                  menuMaxHeight: size.width,
-                                  underline: SizedBox(),
-                                  isExpanded: true,
-                                  value: directionBalcony,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      directionBalcony = value.toString();
-                                    });
-                                  },
-                                  items: direction.map((e) {
-                                    return DropdownMenuItem(
-                                      child: new Text(e),
-                                      value: e,
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 50,
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 0.5),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Row(
-                            children: [
                               Text("Hướng cửa chính: "),
                               SizedBox(
                                 width: 5,
@@ -529,6 +479,15 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                               ),
                             ],
                           ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: numberOfFloor,
+                          decoration: ThemeHelper()
+                              .textInputDecorationDropWithOutBorderRadius(
+                                  "Tổng số tầng", "Tổng số tầng"),
                         ),
                       ],
                     ),
@@ -645,6 +604,36 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: width,
+                          decoration: ThemeHelper()
+                              .textInputDecorationDropWithOutBorderRadius(
+                                  "Chiều ngang", "Chiều ngang"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Không được để trống chiều ngang";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: height,
+                          decoration: ThemeHelper()
+                              .textInputDecorationDropWithOutBorderRadius(
+                                  "Chiều dài", "Chiều dài"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Không được để trống Chiều dài";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
                           controller: price,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
@@ -663,7 +652,7 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                buildTitle("TIÊU ĐỀ TIN ĐĂNG VÀ MÔ TẢ CHI TIẾT", size),
+                buildTitle("TIÊU ĐỀ TIN Đăng VÀ Mô TẢ CHI TIẾT", size),
                 Padding(
                   padding: EdgeInsets.only(left: 15, right: 15, top: 10),
                   child: Form(
@@ -765,9 +754,7 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () {
-              print("Xem truoc");
-            },
+            onPressed: () {},
             child: Text("XEM TRƯỚC TIN",
                 style: TextStyle(
                     color: Colors.orange.shade500,

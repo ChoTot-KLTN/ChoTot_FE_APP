@@ -86,7 +86,7 @@ class ThemeHelper {
       hintText: hintText,
       fillColor: Colors.white,
       filled: true,
-      contentPadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+      contentPadding: EdgeInsets.fromLTRB(10, 10, 0, 0),
       focusedBorder:
           OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
       enabledBorder: OutlineInputBorder(
