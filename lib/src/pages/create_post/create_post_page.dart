@@ -9,7 +9,7 @@ import 'package:chotot_app/src/pages/create_post/components/create_post_Motorbik
 import 'package:chotot_app/src/pages/create_post/components/create_post_Office.dart';
 import 'package:chotot_app/src/pages/create_post/components/create_post_Phone.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:get/get.dart';
 
 class CreatePostScreen extends StatefulWidget {

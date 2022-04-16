@@ -9,4 +9,24 @@ class ApiGateway {
   static const forgotPass = "auth/forgot-password";
   static const sendNewPass = "auth/send-password";
   static const getAuth = "auth/get-auth";
+
+  // Post API
+  //vehicle: xe cộ :))
+  static const createPostCar = "post/create-post-car";
+  static const craetePostMotorbike = "post/create-post-motorbike";
+  static const createPostElecticBicycle = "post/create-post-bicycle";
+  //BĐS
+  static const createPostApartment = "post/create-post-apartment";
+  static const createPostHouse = "post/create-post-house";
+  static const createPostGround = "post/create-post-ground";
+  static const createPostMotelRoom = "post/create-post-motelroom";
+  static const createPostOffice = "post/create-post-office";
+
+  // điện tử
+  static const createPostLaptop = "post/create-post-laptop";
+  static const createPostPhone = "post/create-post-phone";
+
+  // Post Service
+  static const getAllPostAuth = "post/get-list-post";
+  static const getAllPost = "post/get-all-post";
 }

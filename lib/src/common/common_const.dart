@@ -1,4 +1,4 @@
-List<String> numberOfRoom = ['1', '2', '3', '4', '5', 'Lớn hơn 5'];
+List<String> numberOfRoom = ['1', '2', '3', '4', '5', '6', 'Lớn hơn 7'];
 List<String> direction = [
   'Đông',
   'Tây',
@@ -29,7 +29,8 @@ List<String> yearOfManufacture = [
   '2014',
   '2013',
   '2012',
-  '< 2012'
+  '2011',
+  '2010'
 ];
 
 List<String> carGearbox = ['Tự động', 'Số sàn', 'Bán tự động'];
@@ -139,4 +140,20 @@ List<String> listBrandPhone = [
   'Vivo',
   'Xiaomi',
   'Hãng khác'
+];
+
+List<String> listTypeGround = [
+  'Đất thổ cư',
+  'Đất nền dự án',
+  'Đất công nghiệp',
+  'Đất nông nghiệp'
+];
+
+List<String> listTypeHouse = [
+  'Chung cư',
+  'Duplex',
+  'Penthouse',
+  'Căn hộ dịch vụ, mini',
+  'Tập thể, cư xá',
+  'Officetel'
 ];

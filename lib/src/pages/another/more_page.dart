@@ -1,5 +1,11 @@
+import 'package:chotot_app/src/models/user_model.dart';
+import 'package:chotot_app/src/pages/authentication/login/login_page.dart';
 import 'package:chotot_app/src/pages/home/home_page.dart';
+import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
+import 'package:get_storage/get_storage.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({Key? key}) : super(key: key);
@@ -9,45 +15,95 @@ class MoreScreen extends StatefulWidget {
 }
 
 class _MoreScreenState extends State<MoreScreen> {
+  UserModel? currentUser;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      currentUser = userProvider.getUser;
+    });
+  }
+
   List<ItemNews> listItems = [
     ItemNews(
         color: Colors.green.shade400,
         iconData: Icons.history,
-        title: "Đơn hàng đặt cọc"),
+        title: "Đơn hàng đặt cọc",
+        function: () {
+          print("Đặt cọc");
+        }),
     ItemNews(
         color: Colors.pink.shade400,
         iconData: Icons.favorite,
-        title: "Tin đăng đã lưu"),
+        title: "Tin đăng đã lưu",
+        function: () {
+          print("Đã lưu");
+        }),
     ItemNews(
         color: Colors.purple.shade400,
         iconData: Icons.flag,
-        title: "Tìm kiếm đã lưu"),
+        title: "Tìm kiếm đã lưu",
+        function: () {
+          print("Tìm đã lưu");
+        }),
     ItemNews(
         color: Colors.blue.shade500,
         iconData: Icons.people_sharp,
-        title: "Bạn bè"),
+        title: "Bạn bè",
+        function: () {
+          print("Bạn bè");
+        }),
     ItemNews(
         color: Colors.brown.shade500,
         iconData: Icons.history_edu,
-        title: "Lịch sử giao dịch"),
+        title: "Lịch sử giao dịch",
+        function: () {
+          print("LS giao dịch");
+        }),
     ItemNews(
         color: Colors.brown.shade200,
         iconData: Icons.card_membership,
-        title: "Tài khoản nhận thanh toán"),
+        title: "Tài khoản nhận thanh toán",
+        function: () {
+          print("Thanh toán");
+        }),
     ItemNews(
         color: Colors.green.shade500,
         iconData: Icons.star,
-        title: "Chợ tốt HD ưu đãi"),
+        title: "Chợ tốt HD ưu đãi",
+        function: () {
+          print("HD ưu đãi");
+        }),
     ItemNews(
         color: Colors.green.shade500,
         iconData: Icons.payment,
-        title: "Chợ tốt HD Khuyến mãi"),
+        title: "Chợ tốt HD Khuyến mãi",
+        function: () {
+          print("HD khuyến mãi");
+        }),
     ItemNews(
-        color: Colors.grey.shade500, iconData: Icons.help, title: "Trợ giúp"),
+        color: Colors.grey.shade500,
+        iconData: Icons.help,
+        title: "Trợ giúp",
+        function: () {
+          print("Trợ giúp");
+        }),
     ItemNews(
         color: Colors.grey.shade500,
         iconData: Icons.settings,
-        title: "Cài đặt"),
+        title: "Cài đặt",
+        function: () {
+          print("Cài đặt");
+        }),
+    ItemNews(
+        color: Colors.grey.shade500,
+        iconData: Icons.logout,
+        title: "Thoát",
+        function: () {
+          print("Thoát");
+          GetStorage().remove('token');
+          Get.to(() => LoginScreen());
+        }),
   ];
   @override
   Widget build(BuildContext context) {
@@ -77,8 +133,11 @@ class _MoreScreenState extends State<MoreScreen> {
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return buildItem(listItems[index].color,
-                        listItems[index].iconData, listItems[index].title);
+                    return buildItem(
+                        listItems[index].color,
+                        listItems[index].iconData,
+                        listItems[index].title,
+                        listItems[index].function);
                   },
                 )
               ],
@@ -115,10 +174,17 @@ class _MoreScreenState extends State<MoreScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Phùng Vĩnh Đức",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+              currentUser == null
+                  ? Text(
+                      "Guest",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    )
+                  : Text(
+                      currentUser!.name,
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
               SizedBox(
                 width: 25,
               ),
@@ -138,10 +204,12 @@ class _MoreScreenState extends State<MoreScreen> {
     );
   }
 
-  Widget buildItem(Color color, IconData iconData, String title) {
+  Widget buildItem(
+      Color color, IconData iconData, String title, Callback function) {
     return GestureDetector(
       onTap: () {
         print(title);
+        function();
       },
       child: Row(
         children: [

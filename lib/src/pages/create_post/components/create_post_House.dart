@@ -1,12 +1,20 @@
+import 'dart:io';
+
 import 'package:chotot_app/src/common/common_const.dart';
 import 'package:chotot_app/src/common/theme_helper.dart';
+import 'package:chotot_app/src/models/address_model.dart';
 import 'package:chotot_app/src/models/district_model.dart';
 import 'package:chotot_app/src/models/province.dart';
 import 'package:chotot_app/src/models/village_model.dart';
 import 'package:chotot_app/src/repositories/location_repo.dart';
+import 'package:chotot_app/src/repositories/post_repo.dart';
+import 'package:chotot_app/src/widgets/dialog_loading.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreatePostHouseScreen extends StatefulWidget {
   const CreatePostHouseScreen({Key? key}) : super(key: key);
@@ -35,24 +43,29 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
 
   String idProvince = "";
   String idDistrict = "";
-  String typeHouse = "Nhà mặt phố, mặt tiền";
-  String numRoom = '1';
-  String numBadRoom = '1';
-  String directionBalcony = 'Đông';
-  String directionDoor = 'Đông';
-  String juridical = "Đã có sổ"; // pháp lý
-  String apartmentStatus = "Nội thất cao cấp"; // tình trạng nội thất
-  bool isSelectedProvince = false;
-  bool isSelectedDistrict = false;
   List<String> listTypeHouse = [
     'Nhà mặt phố, mặt tiền',
     'Nhà ngõ, hẻm',
     'Nhà biệt thự',
     'Nhà phố liền kề'
   ];
+  String typeHouse = "Nhà mặt phố, mặt tiền";
+  String numRoom = numberOfRoom[0];
+  String numBathRoom = numberOfRoom[0];
+  String directionBalcony = direction[0];
+  String directionDoor = direction[0];
+  String juridical = "Đã có sổ"; // pháp lý
+  String apartmentStatus = listApartmentStatus[0]; // tình trạng nội thất
+  bool isSelectedProvince = false;
+  bool isSelectedDistrict = false;
+
   final _formkey = GlobalKey<FormState>();
   final _formkey1 = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
+  final ImagePicker _imagePicker = ImagePicker();
+  List<XFile> _selectedFile = [];
+  List<String> arrImageURl = [];
+  FirebaseStorage? _storageRef = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -290,6 +303,25 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
                             height: 10,
                           ),
                           buildSelectedImage(size),
+                          Container(
+                            padding:
+                                EdgeInsets.only(right: 15, left: 15, top: 10),
+                            child: _selectedFile.length == 0
+                                ? Text("Chưa có ảnh nào")
+                                : SizedBox(
+                                    height: 150,
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return buildImage(
+                                            _selectedFile[index].path, index);
+                                      },
+                                      itemCount: _selectedFile.length,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      physics: ScrollPhysics(),
+                                    ),
+                                  ),
+                          ),
                         ],
                       )),
                 ),
@@ -307,6 +339,12 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Mã căn", "Mã căn"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Vui lòng nhập mã căn";
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(
                           height: 10,
@@ -316,6 +354,12 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Tên phân khu/lô", "Tên phân khu/lô"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Vui lòng nhập tên phân khu";
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),
@@ -425,10 +469,10 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
                                   menuMaxHeight: size.width,
                                   underline: SizedBox(),
                                   isExpanded: true,
-                                  value: numBadRoom,
+                                  value: numBathRoom,
                                   onChanged: (value) {
                                     setState(() {
-                                      numBadRoom = value.toString();
+                                      numBathRoom = value.toString();
                                     });
                                   },
                                   items: numberOfRoom.map((e) {
@@ -485,9 +529,16 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
                         ),
                         TextFormField(
                           controller: numberOfFloor,
+                          keyboardType: TextInputType.number,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Tổng số tầng", "Tổng số tầng"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Vui lòng nhập số tầng";
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),
@@ -605,6 +656,7 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
                         ),
                         TextFormField(
                           controller: width,
+                          keyboardType: TextInputType.number,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Chiều ngang", "Chiều ngang"),
@@ -620,6 +672,7 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
                         ),
                         TextFormField(
                           controller: height,
+                          keyboardType: TextInputType.number,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Chiều dài", "Chiều dài"),
@@ -635,6 +688,7 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
                         ),
                         TextFormField(
                           controller: price,
+                          keyboardType: TextInputType.number,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Giá", "Giá tiền"),
@@ -721,10 +775,118 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
     );
   }
 
+  Widget buildImage(String path, int index) {
+    return Container(
+      child: Stack(children: [
+        Container(
+          height: 150,
+          width: 150,
+          margin: EdgeInsets.all(10),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.file(
+              File(path),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 2,
+          right: 2,
+          child: GestureDetector(
+            onTap: () {
+              print("Delete: " + index.toString());
+              setState(() {
+                _selectedFile.removeAt(index);
+              });
+            },
+            child: Container(
+              height: 25,
+              width: 25,
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.white),
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.black38),
+              child: Center(
+                child: Icon(
+                  Icons.close_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+        index == 0
+            ? Positioned(
+                bottom: 15,
+                left: 20,
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(color: Colors.black38),
+                  child: Text(
+                    'Hình bìa',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ))
+            : SizedBox()
+      ]),
+    );
+  }
+
+  void uploadFunction(List<XFile> images) {
+    for (int i = 0; i < _selectedFile.length; i++) {
+      uploadFile(images[i]);
+      // print("URL: " + imageURL);
+      // arrImageURl.add(imageURL.toString());
+    }
+  }
+
+  // function lưu file ảnh lên firebase
+  Future<String> uploadFile(XFile image) async {
+    Reference reference =
+        _storageRef!.ref().child("multiple_images").child(image.name);
+    UploadTask uploadTask = reference.putFile(File(image.path));
+    // await uploadTask.whenComplete(() {
+    //   print("ref URL: " + reference.getDownloadURL().toString());
+    // });
+    uploadTask.whenComplete(() async {
+      try {
+        String url = await reference.getDownloadURL();
+        arrImageURl.add(url);
+        // print("url in uploadFile: " + url);
+      } catch (err) {
+        print("lỗi " + err.toString());
+      }
+    });
+    return await reference.getDownloadURL();
+  }
+
+  // function pick ảnh
+  void selectedImage() async {
+    if (_selectedFile != null) {
+      _selectedFile.clear();
+    }
+    try {
+      final List<XFile>? imgs = await _imagePicker.pickMultiImage();
+      if (imgs!.isNotEmpty) {
+        _selectedFile.addAll(imgs);
+        setState(() {});
+      }
+    } on PlatformException catch (err) {
+      print("flatform: " + err.toString());
+    } catch (err) {
+      print("sai roi: " + err.toString());
+    }
+    print("image length: " + _selectedFile.length.toString());
+    setState(() {});
+  }
+
   Widget buildSelectedImage(Size size) {
     return GestureDetector(
       onTap: () {
         print('chụp ảnh');
+        selectedImage();
       },
       child: Container(
         width: size.width,
@@ -771,10 +933,79 @@ class _CreatePostHouseScreenState extends State<CreatePostHouseScreen> {
             width: 15,
           ),
           ElevatedButton(
-            onPressed: () {
-              if (_formkey.currentState!.validate() ||
-                  _formkey1.currentState!.validate() ||
-                  _formkey2.currentState!.validate()) {}
+            onPressed: () async {
+              if (_formkey.currentState!.validate() &&
+                  _formkey1.currentState!.validate() &&
+                  _formkey2.currentState!.validate()) {
+                showDialogLoading(context);
+                if (_selectedFile.isNotEmpty) {
+                  uploadFunction(_selectedFile);
+                } else {
+                  arrImageURl = ['1', '2', '3'];
+                }
+                await Future.delayed(Duration(seconds: 5), () {
+                  print('upload succes');
+                });
+                AddressModel address = AddressModel(
+                    detail: addressDetail.text,
+                    village: village,
+                    district: district,
+                    province: province);
+                String type = "sale";
+                if (isSafe == true) {
+                  type = "sale";
+                } else {
+                  type = "borrow";
+                }
+                PostHouseModelRequired postHouseModelRequired =
+                    PostHouseModelRequired(
+                        address: address,
+                        codeHouse: codeHome.text,
+                        block: block.text,
+                        typeHouse: typeHouse,
+                        numberOfBedroom: numRoom,
+                        numberOfBathroom: numBathRoom,
+                        numberOfFloor: numberOfFloor.text,
+                        doorDirection: directionDoor,
+                        juridical: juridical,
+                        interiorCondition: apartmentStatus,
+                        area: double.parse(area.text),
+                        height: double.parse(height.text),
+                        width: double.parse(width.text),
+                        price: int.parse(price.text));
+                var result = await PostRepository().createPostHouse(
+                    onModel: "PostHouse",
+                    title: titlePoster.text,
+                    content: descriptionPoster.text,
+                    image: arrImageURl,
+                    type: type,
+                    postHouseModel: postHouseModelRequired);
+                Get.back();
+                if (result.statusCode == 200) {
+                  arrImageURl.clear();
+                  Get.snackbar(
+                    "Thành công",
+                    "Tạo bài đăng thành công",
+                    duration: Duration(seconds: 3),
+                    margin: EdgeInsets.all(6),
+                    backgroundColor: Colors.white,
+                    leftBarIndicatorColor: Colors.green,
+                    colorText: Colors.green.shade500,
+                    snackPosition: SnackPosition.TOP,
+                  );
+                } else {
+                  Get.snackbar(
+                    "Thất bại",
+                    "Tạo bài đăng thất bại",
+                    duration: Duration(seconds: 3),
+                    margin: EdgeInsets.all(6),
+                    backgroundColor: Colors.white,
+                    leftBarIndicatorColor: Colors.red,
+                    colorText: Colors.red.shade500,
+                    snackPosition: SnackPosition.TOP,
+                  );
+                }
+              }
             },
             child: Text("ĐĂNG TIN",
                 style: TextStyle(

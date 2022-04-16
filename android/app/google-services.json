@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "463407147148",
+    "project_id": "kltn-upload-file",
+    "storage_bucket": "kltn-upload-file.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463407147148:android:dda5358539f84e468c33a9",
+        "android_client_info": {
+          "package_name": "com.example.chotot_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463407147148-8j3ej131d4mna28o09sl4k1k28u1urvl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR6FB8bwU4Mbp5llxSKofjD40I4pbDdrE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "463407147148-8j3ej131d4mna28o09sl4k1k28u1urvl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

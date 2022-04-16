@@ -3,6 +3,8 @@ import 'package:chotot_app/src/pages/create_post/create_post_page.dart';
 import 'package:chotot_app/src/pages/home/home_page.dart';
 import 'package:chotot_app/src/pages/managePost/manage_post_screen.dart';
 import 'package:chotot_app/src/pages/notification/notification_page.dart';
+import 'package:chotot_app/src/providers/user_provider.dart';
+import 'package:chotot_app/src/repositories/authentication_repo.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -14,9 +16,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _index = 2;
+  int _index = 0;
   Widget child = Text("CMM");
   Widget appbarWithpage = Text("hello");
+
+  @override
+  void initState() {
+    // get infor user
+    AuthenticationRepository().getAuthAPI().then((user) {
+      if (user != null) {
+        userProvider.setUser = user;
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

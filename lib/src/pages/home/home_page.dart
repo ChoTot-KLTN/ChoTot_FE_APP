@@ -3,7 +3,8 @@ import 'package:chotot_app/src/models/category_model.dart';
 import 'package:chotot_app/src/pages/home/components/item_news.dart';
 import 'package:chotot_app/src/pages/home/components/item_post.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -28,27 +29,52 @@ class _HomeScreenState extends State<HomeScreen> {
     ItemNews(
         color: Colors.yellow,
         iconData: Icons.notifications,
-        title: "Chương trình/ ưu đãi"),
+        title: "Chương trình/ ưu đãi",
+        function: () {
+          print("ưu đãi");
+        }),
     ItemNews(
-        color: Colors.green, iconData: Icons.history, title: "Đơn đặt cọc"),
+        color: Colors.green,
+        iconData: Icons.history,
+        title: "Đơn đặt cọc",
+        function: () {
+          print("Đơn đặt cọc");
+        }),
     ItemNews(
         color: Colors.orange,
         iconData: Icons.card_giftcard,
-        title: "Đăng tin cho tặng"),
+        title: "Đăng tin cho tặng",
+        function: () {
+          print("tin cho đặng");
+        }),
     ItemNews(
         color: Colors.red.shade500,
         iconData: Icons.car_rental,
-        title: "Định giá xe"),
+        title: "Định giá xe",
+        function: () {
+          print("Định giá xe");
+        }),
     ItemNews(
         color: Colors.green.shade500,
         iconData: Icons.star_rate,
-        title: "Ưu đãi"),
+        title: "Ưu đãi",
+        function: () {
+          print("ưu đãi");
+        }),
     ItemNews(
-        color: Colors.pink, iconData: Icons.favorite, title: "Tin đăng đã lưu"),
+        color: Colors.pink,
+        iconData: Icons.favorite,
+        title: "Tin đăng đã lưu",
+        function: () {
+          print("đã lưu");
+        }),
     ItemNews(
         color: Colors.blue.shade500,
         iconData: Icons.search,
-        title: "Tìm kiếm đã lưu"),
+        title: "Tìm kiếm đã lưu",
+        function: () {
+          print("tìm đã lưu");
+        }),
   ];
 
   List<CategoryModel> listCategory = [
@@ -338,6 +364,11 @@ class ItemNews {
   final Color color;
   final IconData iconData;
   final String title;
+  final Callback function;
 
-  ItemNews({required this.color, required this.iconData, required this.title});
+  ItemNews(
+      {required this.color,
+      required this.iconData,
+      required this.title,
+      required this.function});
 }

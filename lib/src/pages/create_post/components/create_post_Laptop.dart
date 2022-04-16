@@ -1,12 +1,20 @@
+import 'dart:io';
+
 import 'package:chotot_app/src/common/common_const.dart';
 import 'package:chotot_app/src/common/theme_helper.dart';
+import 'package:chotot_app/src/models/address_model.dart';
 import 'package:chotot_app/src/models/district_model.dart';
 import 'package:chotot_app/src/models/province.dart';
 import 'package:chotot_app/src/models/village_model.dart';
 import 'package:chotot_app/src/repositories/location_repo.dart';
+import 'package:chotot_app/src/repositories/post_repo.dart';
+import 'package:chotot_app/src/widgets/dialog_loading.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreatePostLaptopScreen extends StatefulWidget {
   const CreatePostLaptopScreen({Key? key}) : super(key: key);
@@ -22,6 +30,7 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
   TextEditingController addressDetail = TextEditingController();
   TextEditingController area = TextEditingController();
   TextEditingController price = TextEditingController();
+  TextEditingController color = TextEditingController();
   TextEditingController titlePoster = TextEditingController();
   TextEditingController descriptionPoster = TextEditingController();
   String province = "";
@@ -43,6 +52,10 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
   final _formkey = GlobalKey<FormState>();
   final _formkey1 = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
+  final ImagePicker _imagePicker = ImagePicker();
+  List<XFile> _selectedFile = [];
+  List<String> arrImageURl = [];
+  FirebaseStorage? _storageRef = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -91,6 +104,24 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
                 Padding(
                     padding: EdgeInsets.only(right: 15, left: 15, top: 10),
                     child: buildSelectedImage(size)),
+                Container(
+                  padding: EdgeInsets.only(right: 15, left: 15, top: 10),
+                  child: _selectedFile.length == 0
+                      ? Text("Chưa có ảnh nào")
+                      : SizedBox(
+                          height: 150,
+                          child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              return buildImage(
+                                  _selectedFile[index].path, index);
+                            },
+                            itemCount: _selectedFile.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            physics: ScrollPhysics(),
+                          ),
+                        ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, left: 15, top: 10),
                   child: Form(
@@ -445,7 +476,24 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: color,
+                          keyboardType: TextInputType.number,
+                          decoration: ThemeHelper()
+                              .textInputDecorationDropWithOutBorderRadius(
+                                  "Màu", "Màu"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Vui lòng nhập màu laptop";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
                           controller: price,
+                          keyboardType: TextInputType.number,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Giá", "Giá tiền"),
@@ -642,10 +690,118 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
     );
   }
 
+  Widget buildImage(String path, int index) {
+    return Container(
+      child: Stack(children: [
+        Container(
+          height: 150,
+          width: 150,
+          margin: EdgeInsets.all(10),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.file(
+              File(path),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 2,
+          right: 2,
+          child: GestureDetector(
+            onTap: () {
+              print("Delete: " + index.toString());
+              setState(() {
+                _selectedFile.removeAt(index);
+              });
+            },
+            child: Container(
+              height: 25,
+              width: 25,
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.white),
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.black38),
+              child: Center(
+                child: Icon(
+                  Icons.close_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+        index == 0
+            ? Positioned(
+                bottom: 15,
+                left: 20,
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(color: Colors.black38),
+                  child: Text(
+                    'Hình bìa',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ))
+            : SizedBox()
+      ]),
+    );
+  }
+
+  void uploadFunction(List<XFile> images) {
+    for (int i = 0; i < _selectedFile.length; i++) {
+      uploadFile(images[i]);
+      // print("URL: " + imageURL);
+      // arrImageURl.add(imageURL.toString());
+    }
+  }
+
+  // function lưu file ảnh lên firebase
+  Future<String> uploadFile(XFile image) async {
+    Reference reference =
+        _storageRef!.ref().child("multiple_images").child(image.name);
+    UploadTask uploadTask = reference.putFile(File(image.path));
+    // await uploadTask.whenComplete(() {
+    //   print("ref URL: " + reference.getDownloadURL().toString());
+    // });
+    uploadTask.whenComplete(() async {
+      try {
+        String url = await reference.getDownloadURL();
+        arrImageURl.add(url);
+        // print("url in uploadFile: " + url);
+      } catch (err) {
+        print("lỗi " + err.toString());
+      }
+    });
+    return await reference.getDownloadURL();
+  }
+
+  // function pick ảnh
+  void selectedImage() async {
+    if (_selectedFile != null) {
+      _selectedFile.clear();
+    }
+    try {
+      final List<XFile>? imgs = await _imagePicker.pickMultiImage();
+      if (imgs!.isNotEmpty) {
+        _selectedFile.addAll(imgs);
+        setState(() {});
+      }
+    } on PlatformException catch (err) {
+      print("flatform: " + err.toString());
+    } catch (err) {
+      print("sai roi: " + err.toString());
+    }
+    print("image length: " + _selectedFile.length.toString());
+    setState(() {});
+  }
+
   Widget buildSelectedImage(Size size) {
     return GestureDetector(
       onTap: () {
         print('chụp ảnh');
+        selectedImage();
       },
       child: Container(
         width: size.width,
@@ -692,10 +848,76 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
             width: 15,
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formkey.currentState!.validate() ||
                   _formkey1.currentState!.validate() ||
-                  _formkey2.currentState!.validate()) {}
+                  _formkey2.currentState!.validate()) {
+                showDialogLoading(context);
+                if (_selectedFile.isNotEmpty) {
+                  uploadFunction(_selectedFile);
+                } else {
+                  arrImageURl = ['1', '2', '3'];
+                }
+                await Future.delayed(Duration(seconds: 5), () {
+                  print('upload succes');
+                });
+                AddressModel address = AddressModel(
+                    detail: addressDetail.text,
+                    village: village,
+                    district: district,
+                    province: province);
+                String statusLaptop = "Mới";
+                if (isNew == true) {
+                  statusLaptop = "Mới";
+                } else {
+                  statusLaptop = "Đã sử dụng";
+                }
+                PostLaptopModelRequired postLaptopModel =
+                    PostLaptopModelRequired(
+                        address: address,
+                        brand: brandLaptop,
+                        // color: color,
+                        microprocessor: microprocessor,
+                        ram: ram,
+                        hardDrive: hardDrive,
+                        typeHardDrive: typeHardDrive,
+                        graphicsCard: card,
+                        statusLaptop: statusLaptop,
+                        guarantee: guarantee,
+                        price: int.parse(price.text));
+
+                var result = await PostRepository().createPostLaptop(
+                    onModel: "PostLaptop",
+                    title: titlePoster.text,
+                    content: descriptionPoster.text,
+                    image: arrImageURl,
+                    postLaptopModel: postLaptopModel);
+                Get.back();
+                if (result.statusCode == 200) {
+                  arrImageURl.clear();
+                  Get.snackbar(
+                    "Thành công",
+                    "Tạo bài đăng thành công",
+                    duration: Duration(seconds: 3),
+                    margin: EdgeInsets.all(6),
+                    backgroundColor: Colors.white,
+                    leftBarIndicatorColor: Colors.green,
+                    colorText: Colors.green.shade500,
+                    snackPosition: SnackPosition.TOP,
+                  );
+                } else {
+                  Get.snackbar(
+                    "Thất bại",
+                    "Tạo bài đăng thất bại",
+                    duration: Duration(seconds: 3),
+                    margin: EdgeInsets.all(6),
+                    backgroundColor: Colors.white,
+                    leftBarIndicatorColor: Colors.red,
+                    colorText: Colors.red.shade500,
+                    snackPosition: SnackPosition.TOP,
+                  );
+                }
+              }
             },
             child: Text("ĐĂNG TIN",
                 style: TextStyle(

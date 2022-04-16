@@ -1,6 +1,5 @@
 import 'package:chotot_app/src/pages/authentication/login/login_page.dart';
 import 'package:chotot_app/src/pages/home/home_nav_page.dart';
-import 'package:chotot_app/src/pages/home/home_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
