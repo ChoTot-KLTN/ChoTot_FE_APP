@@ -730,6 +730,8 @@ class _CreatePostMotorbikeScreenState extends State<CreatePostMotorbikeScreen> {
               if (_formkey.currentState!.validate() &&
                   _formkey1.currentState!.validate() &&
                   _formkey2.currentState!.validate()) {
+                FocusScope.of(context)
+                    .requestFocus(new FocusNode()); // key broad sẽ tắt
                 showDialogLoading(context);
                 if (_selectedFile.isNotEmpty) {
                   uploadFunction(_selectedFile);

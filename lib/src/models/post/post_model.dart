@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chotot_app/src/common/base_convert.dart';
 import 'package:flutter/foundation.dart';
 
 class PostModel {
@@ -15,8 +16,11 @@ class PostModel {
   bool isAdvertised;
   int priceAdvert;
   int totalPrice;
-  String dateStartPost;
-  String dateEndPost;
+  DateTime? dateStartPost;
+  DateTime? dateEndPost;
+  int prePrice;
+  String province;
+  String nameOfPoster;
   PostModel(
       {required this.id,
       required this.title,
@@ -31,40 +35,47 @@ class PostModel {
       required this.priceAdvert,
       required this.totalPrice,
       required this.dateStartPost,
-      required this.dateEndPost});
+      required this.dateEndPost,
+      required this.prePrice,
+      required this.province,
+      required this.nameOfPoster});
 
-  PostModel copyWith({
-    String? id,
-    String? title,
-    String? content,
-    List<String>? image,
-    String? typePost,
-    String? onModel,
-    int? status,
-    int? ratings,
-    String? idUserPost,
-    bool? isAdvertised,
-    int? priceAdvert,
-    int? totalPrice,
-    String? dateStartPost,
-    String? dateEndPost,
-  }) {
+  PostModel copyWith(
+      {String? id,
+      String? title,
+      String? content,
+      List<String>? image,
+      String? typePost,
+      String? onModel,
+      int? status,
+      int? ratings,
+      String? idUserPost,
+      bool? isAdvertised,
+      int? priceAdvert,
+      int? totalPrice,
+      DateTime? dateStartPost,
+      DateTime? dateEndPost,
+      int? prePrice,
+      String? province,
+      String? nameOfPoster}) {
     return PostModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      content: content ?? this.content,
-      image: image ?? this.image,
-      typePost: typePost ?? this.typePost,
-      onModel: onModel ?? this.onModel,
-      status: status ?? this.status,
-      ratings: ratings ?? this.ratings,
-      idUserPost: idUserPost ?? this.idUserPost,
-      isAdvertised: isAdvertised ?? this.isAdvertised,
-      priceAdvert: priceAdvert ?? this.priceAdvert,
-      totalPrice: totalPrice ?? this.totalPrice,
-      dateStartPost: dateStartPost ?? this.dateStartPost,
-      dateEndPost: dateEndPost ?? this.dateEndPost,
-    );
+        id: id ?? this.id,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        image: image ?? this.image,
+        typePost: typePost ?? this.typePost,
+        onModel: onModel ?? this.onModel,
+        status: status ?? this.status,
+        ratings: ratings ?? this.ratings,
+        idUserPost: idUserPost ?? this.idUserPost,
+        isAdvertised: isAdvertised ?? this.isAdvertised,
+        priceAdvert: priceAdvert ?? this.priceAdvert,
+        totalPrice: totalPrice ?? this.totalPrice,
+        dateStartPost: dateStartPost ?? this.dateStartPost,
+        dateEndPost: dateEndPost ?? this.dateEndPost,
+        prePrice: prePrice ?? this.prePrice,
+        province: province ?? this.province,
+        nameOfPoster: nameOfPoster ?? this.nameOfPoster);
   }
 
   Map<String, dynamic> toMap() {
@@ -100,8 +111,11 @@ class PostModel {
         isAdvertised: map['isAdvertised'] ?? false,
         priceAdvert: map['priceAdvert']?.toInt() ?? 0,
         totalPrice: map['totalPrice']?.toInt() ?? 0,
-        dateStartPost: map['dateStartPost'] ?? '',
-        dateEndPost: map['dateEndPost'] ?? '');
+        dateStartPost: convertTextToDateTime(map['dateStartPost']) ?? null,
+        dateEndPost: convertTextToDateTime(map['dateEndPost']) ?? null,
+        prePrice: map['prePrice']?.toInt() ?? 0,
+        province: map['province'] ?? '',
+        nameOfPoster: map['nameOfPoster'] ?? '');
   }
 
   static List<PostModel> fromJsonList(List list) {

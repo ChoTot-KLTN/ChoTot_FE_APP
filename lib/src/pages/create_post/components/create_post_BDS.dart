@@ -940,6 +940,8 @@ class _CreatePostBDSScreenState extends State<CreatePostBDSScreen> {
                   _formkey1.currentState!.validate() &&
                   _formkey2.currentState!.validate() &&
                   _formkey3.currentState!.validate()) {
+                FocusScope.of(context)
+                    .requestFocus(new FocusNode()); // key broad sẽ tắt
                 showDialogLoading(context);
                 if (_selectedFile.isNotEmpty) {
                   uploadFunction(_selectedFile);

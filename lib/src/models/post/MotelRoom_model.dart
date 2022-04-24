@@ -9,7 +9,7 @@ class PostMotelRoomModel {
   AddressModel address;
   String type;
   String interiorCondition;
-  Double area;
+  int area;
   int price;
   int deposit;
   PostMotelRoomModel({
@@ -29,7 +29,7 @@ class PostMotelRoomModel {
     AddressModel? address,
     String? type,
     String? interiorCondition,
-    Double? area,
+    int? area,
     int? price,
     int? deposit,
   }) {

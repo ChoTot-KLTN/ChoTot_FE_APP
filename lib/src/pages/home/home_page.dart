@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chotot_app/src/models/category_model.dart';
+import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/pages/home/components/item_news.dart';
 import 'package:chotot_app/src/pages/home/components/item_post.dart';
+import 'package:chotot_app/src/repositories/post_service_repo.dart';
+import 'package:chotot_app/src/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
@@ -174,8 +179,30 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ))
       .toList();
+
+  StreamController<List<PostModel>> stream =
+      StreamController<List<PostModel>>();
+  loadData() async {
+    var result =
+        await PostServiceRepository().getAllPost(page: 0, limit: 10, status: 0);
+    if (result.length == 0) {
+      stream.add([]);
+    } else {
+      stream.add(result);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width;
     return Scaffold(
       appBar: AppBar(
         title: buildSearch(),
@@ -190,118 +217,173 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: ListView(
-          shrinkWrap: true,
-          physics: ScrollPhysics(),
-          children: [
-            CarouselSlider(
-              options: CarouselOptions(
-                aspectRatio: 2.0,
-                enlargeCenterPage: true,
-                scrollDirection: Axis.horizontal,
-                autoPlay: true,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    current = index;
-                  });
-                },
-              ),
-              carouselController: _controller,
-              items: imageSliders,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 120,
-                width: 85,
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return ItemNewsWidget(
-                      color: listNews[index].color,
-                      iconData: listNews[index].iconData,
-                      title: listNews[index].title,
-                    );
-                  },
-                  itemCount: listNews.length,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(
+                  aspectRatio: 2.0,
+                  enlargeCenterPage: true,
                   scrollDirection: Axis.horizontal,
+                  autoPlay: true,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      current = index;
+                    });
+                  },
                 ),
+                carouselController: _controller,
+                items: imageSliders,
               ),
-            ),
-
-            buildDevider(Colors.black12, 0, 0, 6, 16),
-            // SizedBox(
-            //   height: 16,
-            // ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: SizedBox(
-                child: Row(
-                  children: [
-                    Text(
-                      "khám phá danh mục",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                height: 50,
+              SizedBox(
+                height: 10,
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 5, right: 5),
-              child: Container(
-                height: 300,
-                width: MediaQuery.of(context).size.width - 20,
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 1.5,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 0,
-                    mainAxisSpacing: 8,
+              Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 120,
+                  //width: 85,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return ItemNewsWidget(
+                        color: listNews[index].color,
+                        iconData: listNews[index].iconData,
+                        title: listNews[index].title,
+                      );
+                    },
+                    itemCount: listNews.length,
+                    scrollDirection: Axis.horizontal,
                   ),
-                  itemBuilder: (context, index) {
-                    return ItemPostWidget(
-                      categoryModel: listCategory[index],
+                ),
+              ),
+
+              buildDevider(Colors.black12, 0, 0, 6, 16),
+              // SizedBox(
+              //   height: 16,
+              // ),
+              Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: SizedBox(
+                  child: Row(
+                    children: [
+                      Text(
+                        "khám phá danh mục",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  height: 50,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: Container(
+                  height: 300,
+                  width: MediaQuery.of(context).size.width - 20,
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 1.5,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 8,
+                    ),
+                    itemBuilder: (context, index) {
+                      return ItemPostWidget(
+                        categoryModel: listCategory[index],
+                      );
+                    },
+                    itemCount: listCategory.length,
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
+              ),
+              buildDevider(Colors.black12, 0, 0, 6, 16),
+              Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: SizedBox(
+                  child: Row(
+                    children: [
+                      Text(
+                        "Chợ HD có gì mới",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  height: 50,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 3,
+                    child: Image.asset(
+                      'assets/images/chotohd.png',
+                      fit: BoxFit.cover,
+                    )),
+              ),
+              SizedBox(height: 15),
+              buildDevider(Colors.black12, 0, 0, 6, 16),
+              Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: SizedBox(
+                  child: Row(
+                    children: [
+                      Text(
+                        "Tin dành cho bạn",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  height: 50,
+                ),
+              ),
+              Container(
+                // height: 500,
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: StreamBuilder<List<PostModel>>(
+                  stream: stream.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 4.0,
+                            mainAxisSpacing: 8.0,
+                            mainAxisExtent: 310),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return PostCard(
+                            postData: snapshot.data![index],
+                          );
+                        },
+                        itemCount:
+                            snapshot.data!.length, //listDataProduct.length,
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      Center(
+                        child: Text("Lỗi"),
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
                     );
                   },
-                  itemCount: listCategory.length,
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
                 ),
               ),
-            ),
-            buildDevider(Colors.black12, 0, 0, 6, 16),
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: SizedBox(
-                child: Row(
-                  children: [
-                    Text(
-                      "Chợ HD có gì mới",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                height: 50,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 3,
-                  child: Image.asset(
-                    'assets/images/chotohd.png',
-                    fit: BoxFit.cover,
-                  )),
-            ),
-            SizedBox(height: 15),
-          ],
+              SizedBox(
+                height: 150,
+              )
+            ],
+          ),
         ),
       ),
     );

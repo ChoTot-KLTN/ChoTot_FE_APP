@@ -477,7 +477,6 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
                         ),
                         TextFormField(
                           controller: color,
-                          keyboardType: TextInputType.number,
                           decoration: ThemeHelper()
                               .textInputDecorationDropWithOutBorderRadius(
                                   "Màu", "Màu"),
@@ -852,6 +851,8 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
               if (_formkey.currentState!.validate() ||
                   _formkey1.currentState!.validate() ||
                   _formkey2.currentState!.validate()) {
+                FocusScope.of(context)
+                    .requestFocus(new FocusNode()); // key broad sẽ tắt
                 showDialogLoading(context);
                 if (_selectedFile.isNotEmpty) {
                   uploadFunction(_selectedFile);

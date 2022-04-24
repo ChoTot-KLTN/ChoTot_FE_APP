@@ -14,10 +14,10 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
   void initState() {
     super.initState();
     _tabsValue = [
-      TabModel(title: "Đang hiển thị", icon: Icons.history, width: 100),
-      TabModel(title: "bị từ chối", icon: Icons.cancel_outlined, width: 100),
+      TabModel(title: "Chờ duyệt", icon: Icons.history, width: 80),
+      TabModel(title: "Bị từ chối", icon: Icons.cancel_outlined, width: 100),
       TabModel(title: "Cần thanh toán", icon: Icons.payment, width: 100),
-      TabModel(title: "Tin nháp", icon: Icons.check_circle, width: 70),
+      TabModel(title: "Đang hiển thị", icon: Icons.check_circle, width: 100),
       TabModel(title: "Khác", icon: Icons.info_outline, width: 70),
     ];
   }
@@ -31,7 +31,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
             child: Row(
               children: [
                 Text(
-                  "Đang hiển thị",
+                  "Chờ duyệt",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -91,7 +91,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
             child: Row(
               children: [
                 Text(
-                  "Tin nháp",
+                  "Đang hiển thị",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],

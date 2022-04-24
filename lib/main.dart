@@ -7,6 +7,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -21,6 +23,7 @@ class MyApp extends StatelessWidget {
   final Color _accentColor = HexColor('#F0E68C');
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UserProvider>(create: (context) => userProvider)
