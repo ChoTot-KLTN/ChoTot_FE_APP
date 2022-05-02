@@ -327,6 +327,18 @@ class _DetailPostMotorbikeState extends State<DetailPostMotorbike> {
                     children: [
                       buildDetail(Icons.payment_outlined,
                           "Trạng thái: ${postMotorbikeModel!.type}"),
+                      buildDetail(
+                          Icons.flag, "Hãng: ${postMotorbikeModel!.brand}"),
+                      buildDetail(Icons.calendar_view_month,
+                          "Năm đăng kí: ${postMotorbikeModel!.yearOfRegistration}"),
+                      buildDetail(Icons.edit_road,
+                          "Số km đã đi: ${postMotorbikeModel!.numberOfKm}"),
+                      buildDetail(Icons.history_edu,
+                          "Tình trạng: ${postMotorbikeModel!.statusMotorbike}"),
+                      buildDetail(Icons.category_outlined,
+                          "Loại xe: ${postMotorbikeModel!.typeMotorbike}"),
+                      buildDetail(Icons.settings_suggest_outlined,
+                          "Dung tích xe: ${postMotorbikeModel!.capacity}"),
                     ],
                   ),
           ),

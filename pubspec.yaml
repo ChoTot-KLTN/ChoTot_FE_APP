@@ -45,6 +45,7 @@ dependencies:
   firebase_storage: ^8.0.1
   image_picker: ^0.8.4+1
   intl: ^0.17.0
+  marquee: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

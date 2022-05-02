@@ -1,4 +1,12 @@
+import 'dart:async';
+
+import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/models/tab_model.dart';
+import 'package:chotot_app/src/pages/managePost/wait_review_screen.dart';
+import 'package:chotot_app/src/widgets/list_empty_widget.dart';
+import 'package:chotot_app/src/widgets/post_widget_ver.dart';
+import 'package:chotot_app/src/widgets/post_widget_ver_paymet.dart';
+import 'package:chotot_app/src/widgets/post_widget_ver_reject.dart';
 import 'package:flutter/material.dart';
 
 class ManagePostScreen extends StatefulWidget {
@@ -9,6 +17,8 @@ class ManagePostScreen extends StatefulWidget {
 }
 
 class _ManagePostScreenState extends State<ManagePostScreen> {
+  StreamController<List<PostModel>> postWaitConfirmController =
+      StreamController<List<PostModel>>.broadcast();
   List<TabModel> _tabsValue = [];
   @override
   void initState() {
@@ -22,24 +32,10 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
     ];
   }
 
-  Widget state1(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 5.0, top: 10.0),
-            child: Row(
-              children: [
-                Text(
-                  "Chờ duyệt",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  @override
+  void dispose() {
+    postWaitConfirmController.close();
+    super.dispose();
   }
 
   Widget state2(BuildContext context) {
@@ -57,6 +53,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
               ],
             ),
           ),
+          PostwidgetReject()
         ],
       ),
     );
@@ -77,6 +74,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
               ],
             ),
           ),
+          PostWidgetpayment(),
         ],
       ),
     );
@@ -95,6 +93,12 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 100),
+            child: ListEmptyWidget(
+              status: "Không có tin đăng nào",
             ),
           ),
         ],
@@ -168,7 +172,10 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
         ),
         body: SafeArea(
           child: TabBarView(children: [
-            state1(context),
+            //state1(context),
+            WaitReviewScreen(
+              postWaitConfirmController: postWaitConfirmController,
+            ),
             state2(context),
             state3(context),
             state4(context),
