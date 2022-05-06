@@ -1,29 +1,42 @@
+import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 
 class PostWidgetpayment extends StatefulWidget {
-  const PostWidgetpayment({Key? key}) : super(key: key);
-  //final PostModel postData;
+  const PostWidgetpayment({Key? key, required this.postData}) : super(key: key);
+  final PostModel postData;
   @override
   State<PostWidgetpayment> createState() => _PostWidgetpaymentState();
 }
 
 class _PostWidgetpaymentState extends State<PostWidgetpayment> {
-  // int l = widget.postData.image.length;
-  //   String img = widget.postData.image[l - 1];
-  //   DateTime? dateStart = widget.postData.dateStartPost;
-  //   DateTime? dateEnd = widget.postData.dateEndPost;
-  //   var dateNow = DateTime.now();
-  //   int date = dateNow.day - dateStart!.day;
-  //   int timeActive = 0;
-  //   if (date == 0) {
-  //     timeActive = dateNow.hour - dateStart.hour;
-  //   } else {
-  //     timeActive = date;
-  //   }
+  List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   @override
   Widget build(BuildContext context) {
+    int l = widget.postData.image.length;
+    String img = widget.postData.image[l - 1];
+    DateTime? dateStart = widget.postData.dateStartPost;
+    // DateTime? dateEnd = widget.postData.dateEndPost;
+    int monthStart = widget.postData.dateStartPost!.month;
+    int dayStart = widget.postData.dateStartPost!.day;
+    int monthEnd = widget.postData.dateEndPost!.month;
+    int dayEnd = widget.postData.dateEndPost!.day;
+    int timeActive = 0;
+    var dateNow = DateTime.now();
+    int date = dateNow.day - dateStart!.day;
+    if (dateNow.month == monthStart) {
+      if (date == 0) {
+        timeActive = dateNow.hour - dateStart.hour;
+      } else {
+        timeActive = date;
+      }
+    } else {
+      int day = dateNow.day;
+      int d = dateOfMonth[dateNow.month - 1];
+      date = d - dayStart + day;
+      print(d.toString() + " " + dayStart.toString() + " " + day.toString());
+    }
     return Container(
       //height: 150,
       decoration: BoxDecoration(
@@ -45,7 +58,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMYZs0S9LijUFhuJxe72HYXcTIUsObXACf2w&usqp=CAU",
+                  img,
                   fit: BoxFit.cover,
                   height: 140,
                   width: 140,
@@ -109,7 +122,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                   height: 50,
                   width: MediaQuery.of(context).size.width / 2,
                   child: Marquee(
-                    text: "Thú cưng",
+                    text: widget.postData.title,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     // scrollAxis: Axis.horizontal,
                     // crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,7 +145,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                   child: Row(
                     children: [
                       Text(
-                        ("4000000".toString()).toVND(),
+                        ("${widget.postData.prePrice}".toString()).toVND(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -151,7 +164,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                         size: 15,
                       ),
                       Text(
-                        "- Thành phố Hồ Chí Minh",
+                        "- ${widget.postData.province}",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
@@ -169,13 +182,21 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                         color: Colors.orange.shade500,
                         size: 15,
                       ),
-                      Text(
-                        ' - 4 giờ trước',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: Colors.red),
-                      )
+                      date == 0
+                          ? Text(
+                              ' - $timeActive giờ trước',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Colors.red),
+                            )
+                          : Text(
+                              ' - $date ngày trước',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Colors.red),
+                            ),
                     ],
                   ),
                 ),

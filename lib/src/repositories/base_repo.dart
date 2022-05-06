@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
-const root_url = "marketplace-hd.herokuapp.com";
-const root_url1 = "https://marketplace-hd.herokuapp.com/";
+// const root_url = "marketplace-hd.herokuapp.com";
+const root_url = "marketplace111.herokuapp.com";
+const root_url1 = "https://marketplace111.herokuapp.com/";
 
 class BaseRepository {
   // get(String name, [String? params]) async {
@@ -13,6 +14,7 @@ class BaseRepository {
   //       paramsObject[element.split('=')[0].toString()] =
   //           element.split('=')[1].toString();
   //     });
+  //   print("URL: " + root_url + "/" + name);
   //   http.Response response = await http.get(
   //     params == null
   //         ? Uri.http(root_url, '/' + name)
@@ -21,6 +23,7 @@ class BaseRepository {
   //   );
   //   return response;
   // }
+
   get(String name, [String? params]) async {
     Map<String, String> paramsObject = {};
     if (params != null)

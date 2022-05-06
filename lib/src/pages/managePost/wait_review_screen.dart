@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
+import 'package:chotot_app/src/widgets/list_empty_widget.dart';
 import 'package:chotot_app/src/widgets/post_widget_ver.dart';
 import 'package:flutter/material.dart';
 
@@ -62,17 +63,23 @@ class _WaitReviewScreenState extends State<WaitReviewScreen> {
                 stream: widget.postWaitConfirmController.stream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                      padding: EdgeInsets.only(bottom: 40),
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemBuilder: (cotext, index) {
-                        return PostWidgetVer(
-                          postData: snapshot.data![index],
-                        );
-                      },
-                      itemCount: snapshot.data!.length,
-                    );
+                    return snapshot.data!.length == 0
+                        ? Center(
+                            child: ListEmptyWidget(
+                              status: "Không có tin đăng nào",
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: EdgeInsets.only(bottom: 40),
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (cotext, index) {
+                              return PostWidgetVer(
+                                postData: snapshot.data![index],
+                              );
+                            },
+                            itemCount: snapshot.data!.length,
+                          );
                   }
                   if (snapshot.hasError) {
                     Center(

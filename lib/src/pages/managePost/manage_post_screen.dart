@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/models/tab_model.dart';
+import 'package:chotot_app/src/pages/managePost/reject_screen.dart';
+import 'package:chotot_app/src/pages/managePost/showing_screen.dart';
 import 'package:chotot_app/src/pages/managePost/wait_review_screen.dart';
 import 'package:chotot_app/src/widgets/list_empty_widget.dart';
-import 'package:chotot_app/src/widgets/post_widget_ver.dart';
 import 'package:chotot_app/src/widgets/post_widget_ver_paymet.dart';
-import 'package:chotot_app/src/widgets/post_widget_ver_reject.dart';
 import 'package:flutter/material.dart';
 
 class ManagePostScreen extends StatefulWidget {
@@ -19,6 +19,10 @@ class ManagePostScreen extends StatefulWidget {
 class _ManagePostScreenState extends State<ManagePostScreen> {
   StreamController<List<PostModel>> postWaitConfirmController =
       StreamController<List<PostModel>>.broadcast();
+  StreamController<List<PostModel>> postRejectController =
+      StreamController<List<PostModel>>.broadcast();
+  StreamController<List<PostModel>> postShowingController =
+      StreamController<List<PostModel>>.broadcast();
   List<TabModel> _tabsValue = [];
   @override
   void initState() {
@@ -26,15 +30,17 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
     _tabsValue = [
       TabModel(title: "Chờ duyệt", icon: Icons.history, width: 80),
       TabModel(title: "Bị từ chối", icon: Icons.cancel_outlined, width: 100),
-      TabModel(title: "Cần thanh toán", icon: Icons.payment, width: 100),
       TabModel(title: "Đang hiển thị", icon: Icons.check_circle, width: 100),
-      TabModel(title: "Khác", icon: Icons.info_outline, width: 70),
+      TabModel(title: "Hủy", icon: Icons.remove_circle, width: 70),
+      TabModel(title: "Hết hạn", icon: Icons.info_outline, width: 70),
     ];
   }
 
   @override
   void dispose() {
     postWaitConfirmController.close();
+    postRejectController.close();
+    postShowingController.close();
     super.dispose();
   }
 
@@ -53,7 +59,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
               ],
             ),
           ),
-          PostwidgetReject()
+          // PostwidgetReject()
         ],
       ),
     );
@@ -74,7 +80,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
               ],
             ),
           ),
-          PostWidgetpayment(),
+          // PostWidgetpayment(),
         ],
       ),
     );
@@ -115,7 +121,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
             child: Row(
               children: [
                 Text(
-                  "Khác",
+                  "Hết hạn",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -176,8 +182,14 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
             WaitReviewScreen(
               postWaitConfirmController: postWaitConfirmController,
             ),
-            state2(context),
-            state3(context),
+            RejectPostScreen(
+              postRejectController: postRejectController,
+            ),
+            //state2(context),
+            ShowingPostScreen(
+              postShowingController: postShowingController,
+            ),
+            // state3(context),
             state4(context),
             state5(context),
           ]),

@@ -5,21 +5,24 @@ class ListEmptyWidget extends StatelessWidget {
   final String status;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Image.asset(
-          "assets/images/listempty.png",
-          width: 160,
-        ),
-        SizedBox(height: 20),
-        Text(status,
-            style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontStyle: FontStyle.normal,
-                fontSize: 14)),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(top: 50),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            "assets/images/listempty.png",
+            width: 160,
+          ),
+          SizedBox(height: 20),
+          Text(status,
+              style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 14)),
+        ],
+      ),
     );
   }
 }
