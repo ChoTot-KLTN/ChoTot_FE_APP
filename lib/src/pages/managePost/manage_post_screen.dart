@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/models/tab_model.dart';
+import 'package:chotot_app/src/pages/managePost/delete_screen.dart';
+import 'package:chotot_app/src/pages/managePost/overtime_screen.dart';
 import 'package:chotot_app/src/pages/managePost/reject_screen.dart';
 import 'package:chotot_app/src/pages/managePost/showing_screen.dart';
 import 'package:chotot_app/src/pages/managePost/wait_review_screen.dart';
-import 'package:chotot_app/src/widgets/list_empty_widget.dart';
-import 'package:chotot_app/src/widgets/post_widget_ver_paymet.dart';
 import 'package:flutter/material.dart';
 
 class ManagePostScreen extends StatefulWidget {
@@ -16,12 +16,23 @@ class ManagePostScreen extends StatefulWidget {
   State<ManagePostScreen> createState() => _ManagePostScreenState();
 }
 
+// Các status code:
+// 0 : Chờ được duyệt
+// 1 : Từ chối duyệt
+// 2 : Đang hiển thị
+// 3 : Hủy
+// 4 : Hết hạn
+
 class _ManagePostScreenState extends State<ManagePostScreen> {
   StreamController<List<PostModel>> postWaitConfirmController =
       StreamController<List<PostModel>>.broadcast();
   StreamController<List<PostModel>> postRejectController =
       StreamController<List<PostModel>>.broadcast();
   StreamController<List<PostModel>> postShowingController =
+      StreamController<List<PostModel>>.broadcast();
+  StreamController<List<PostModel>> postDeleteController =
+      StreamController<List<PostModel>>.broadcast();
+  StreamController<List<PostModel>> postOvertimeController =
       StreamController<List<PostModel>>.broadcast();
   List<TabModel> _tabsValue = [];
   @override
@@ -41,95 +52,9 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
     postWaitConfirmController.close();
     postRejectController.close();
     postShowingController.close();
+    postDeleteController.close();
+    postOvertimeController.close();
     super.dispose();
-  }
-
-  Widget state2(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 5.0, top: 10.0),
-            child: Row(
-              children: [
-                Text(
-                  "Bị từ chối",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          // PostwidgetReject()
-        ],
-      ),
-    );
-  }
-
-  Widget state3(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 5.0, top: 10.0),
-            child: Row(
-              children: [
-                Text(
-                  "Cần thành toán",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          // PostWidgetpayment(),
-        ],
-      ),
-    );
-  }
-
-  Widget state4(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 5.0, top: 10.0),
-            child: Row(
-              children: [
-                Text(
-                  "Đang hiển thị",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 100),
-            child: ListEmptyWidget(
-              status: "Không có tin đăng nào",
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget state5(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 5.0, top: 10.0),
-            child: Row(
-              children: [
-                Text(
-                  "Hết hạn",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -178,20 +103,21 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
         ),
         body: SafeArea(
           child: TabBarView(children: [
-            //state1(context),
             WaitReviewScreen(
               postWaitConfirmController: postWaitConfirmController,
             ),
             RejectPostScreen(
               postRejectController: postRejectController,
             ),
-            //state2(context),
             ShowingPostScreen(
               postShowingController: postShowingController,
             ),
-            // state3(context),
-            state4(context),
-            state5(context),
+            DeletePostScreen(
+              postDeleteController: postDeleteController,
+            ),
+            OvertimePostScreen(
+              postOvertimeController: postOvertimeController,
+            ),
           ]),
         ),
       ),

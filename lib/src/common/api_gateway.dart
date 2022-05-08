@@ -30,4 +30,5 @@ class ApiGateway {
   static const getAllPostAuth = "post/get-list-post";
   static const getAllPost = "post/get-all-post";
   static const getPostDetailAPI = "post/get-detail-post";
+  static const getPostOver = "post/get-list-post-over";
 }

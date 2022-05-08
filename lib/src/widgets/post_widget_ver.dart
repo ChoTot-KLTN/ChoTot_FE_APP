@@ -12,19 +12,28 @@ class PostWidgetVer extends StatefulWidget {
 }
 
 class _PostWidgetVerState extends State<PostWidgetVer> {
+  List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   @override
   Widget build(BuildContext context) {
     int l = widget.postData.image.length;
     String img = widget.postData.image[l - 1];
     DateTime? dateStart = widget.postData.dateStartPost;
-    DateTime? dateEnd = widget.postData.dateEndPost;
+    // DateTime? dateEnd = widget.postData.dateEndPost;
+    int monthStart = widget.postData.dateStartPost!.month;
+    int dayStart = widget.postData.dateStartPost!.day;
+    int timeActive = 0;
     var dateNow = DateTime.now();
     int date = dateNow.day - dateStart!.day;
-    int timeActive = 0;
-    if (date == 0) {
-      timeActive = dateNow.hour - dateStart.hour;
+    if (dateNow.month == monthStart) {
+      if (date == 0) {
+        timeActive = dateNow.hour - dateStart.hour;
+      } else {
+        timeActive = date;
+      }
     } else {
-      timeActive = date;
+      int day = dateNow.day;
+      int d = dateOfMonth[dateNow.month - 1];
+      date = d - dayStart + day;
     }
     return Container(
       height: 150,

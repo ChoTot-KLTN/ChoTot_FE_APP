@@ -3,30 +3,30 @@ import 'dart:async';
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/list_empty_widget.dart';
-import 'package:chotot_app/src/widgets/post_widget_ver_paymet.dart';
+import 'package:chotot_app/src/widgets/post_widget_ver_delete.dart';
 import 'package:flutter/material.dart';
 
-class ShowingPostScreen extends StatefulWidget {
-  const ShowingPostScreen({Key? key, required this.postShowingController})
+class DeletePostScreen extends StatefulWidget {
+  const DeletePostScreen({Key? key, required this.postDeleteController})
       : super(key: key);
-  final StreamController<List<PostModel>> postShowingController;
+  final StreamController<List<PostModel>> postDeleteController;
 
   @override
-  State<ShowingPostScreen> createState() => _ShowingPostScreenState();
+  State<DeletePostScreen> createState() => _DeletePostScreenState();
 }
 
-class _ShowingPostScreenState extends State<ShowingPostScreen> {
+class _DeletePostScreenState extends State<DeletePostScreen> {
   loadData() async {
     try {
       var result = await PostServiceRepository()
-          .getAllPostAuth(page: 0, limit: 10, status: 2);
+          .getAllPostAuth(page: 0, limit: 10, status: 3);
       if (result.length == 0) {
-        widget.postShowingController.add([]);
+        widget.postDeleteController.add([]);
       } else {
-        widget.postShowingController.add(result);
+        widget.postDeleteController.add(result);
       }
     } catch (err) {
-      widget.postShowingController.addError("error");
+      widget.postDeleteController.addError("error");
     }
   }
 
@@ -48,7 +48,7 @@ class _ShowingPostScreenState extends State<ShowingPostScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Đang hiển thị",
+                  "Đã hủy",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -60,7 +60,7 @@ class _ShowingPostScreenState extends State<ShowingPostScreen> {
               // height: 500,
               padding: EdgeInsets.only(left: 10, right: 10),
               child: StreamBuilder<List<PostModel>>(
-                stream: widget.postShowingController.stream,
+                stream: widget.postDeleteController.stream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return snapshot.data!.length == 0
@@ -74,7 +74,7 @@ class _ShowingPostScreenState extends State<ShowingPostScreen> {
                             shrinkWrap: true,
                             physics: ScrollPhysics(),
                             itemBuilder: (cotext, index) {
-                              return PostWidgetpayment(
+                              return PostDeleteWidgetVer(
                                 postData: snapshot.data![index],
                               );
                             },

@@ -44,12 +44,12 @@ class PostServiceRepository {
   // }
 
   Future<List<PostModel>> getAllPostAuth(
-      int page, int limit, int status) async {
+      {required int page, required int limit, required int status}) async {
     print('request URL: ' +
         ApiGateway.getAllPostAuth +
         '?status=$status&page=$page&limit=$limit');
-    http.Response result = await BaseRepository()
-        .get(ApiGateway.getAllPostAuth, '?page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostAuth + '?status=$status&page=$page&limit=$limit');
     if (result.statusCode == 200) {
       var data = jsonDecode(result.body)['data']['posts'];
       var list = PostModel.fromJsonList(data);
@@ -88,5 +88,20 @@ class PostServiceRepository {
       print(data.toString());
     }
     return result;
+  }
+
+  Future<List<PostModel>> getAllPostOvertime(
+      {required int page, required int limit, required int status}) async {
+    print('request URL: ' +
+        ApiGateway.getPostOver +
+        '?status=$status&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getPostOver + '?status=$status&page=$page&limit=$limit');
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      return list;
+    }
+    return [];
   }
 }

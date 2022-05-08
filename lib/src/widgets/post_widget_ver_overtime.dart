@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 
-class PostWidgetpayment extends StatefulWidget {
-  const PostWidgetpayment({Key? key, required this.postData}) : super(key: key);
+class PostwidgetOverTime extends StatefulWidget {
+  const PostwidgetOverTime({Key? key, required this.postData})
+      : super(key: key);
   final PostModel postData;
   @override
-  State<PostWidgetpayment> createState() => _PostWidgetpaymentState();
+  State<PostwidgetOverTime> createState() => _PostwidgetOvertimeState();
 }
 
-class _PostWidgetpaymentState extends State<PostWidgetpayment> {
+class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
   @override
   Widget build(BuildContext context) {
     int l = widget.postData.image.length;
@@ -33,10 +35,10 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
       int day = dateNow.day;
       int d = dateOfMonth[dateNow.month - 1];
       date = d - dayStart + day;
-      print(d.toString() + " " + dayStart.toString() + " " + day.toString());
     }
+
     return Container(
-      //height: 150,
+      height: 150,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -162,7 +164,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                         size: 15,
                       ),
                       Text(
-                        "- ${widget.postData.province}",
+                        "${widget.postData.province}",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
@@ -171,45 +173,59 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 0, right: 0, top: 8),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.alarm,
-                        color: Colors.orange.shade500,
-                        size: 15,
-                      ),
-                      date == 0
-                          ? Text(
-                              ' - $timeActive giờ trước',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                  color: Colors.red),
-                            )
-                          : Text(
-                              ' - $date ngày trước',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                  color: Colors.red),
-                            ),
-                    ],
-                  ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 0),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.grey.shade500),
-                          onPressed: () {
-                            print("Yêu cầu lại");
-                          },
-                          child: Text("Đăng thường")),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.alarm,
+                                color: Colors.orange.shade500,
+                                size: 15,
+                              ),
+                              date == 0
+                                  ? Text(
+                                      ' - $timeActive giờ trước',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.red),
+                                    )
+                                  : Text(
+                                      ' - $date ngày trước',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.red),
+                                    ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.cancel_outlined,
+                                color: Colors.red.shade500,
+                                size: 15,
+                              ),
+                              Text(
+                                ' Đã hết hạn',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    color: Colors.red),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 8),
@@ -219,7 +235,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                           onPressed: () {
                             print("Yêu cầu lại");
                           },
-                          child: Text("Ưu tiên")),
+                          child: Text("Gia hạn")),
                     )
                   ],
                 ),

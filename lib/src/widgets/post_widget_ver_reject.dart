@@ -1,4 +1,3 @@
-import 'package:chotot_app/src/common/ultils.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
@@ -22,8 +21,6 @@ class _PostwidgetRejectState extends State<PostwidgetReject> {
     // DateTime? dateEnd = widget.postData.dateEndPost;
     int monthStart = widget.postData.dateStartPost!.month;
     int dayStart = widget.postData.dateStartPost!.day;
-    int monthEnd = widget.postData.dateEndPost!.month;
-    int dayEnd = widget.postData.dateEndPost!.day;
     int timeActive = 0;
     var dateNow = DateTime.now();
     int date = dateNow.day - dateStart!.day;
@@ -36,7 +33,7 @@ class _PostwidgetRejectState extends State<PostwidgetReject> {
     } else {
       int day = dateNow.day;
       int d = dateOfMonth[dateNow.month - 1];
-      timeActive = d - dayStart + day;
+      date = d - dayStart + day;
     }
 
     return Container(

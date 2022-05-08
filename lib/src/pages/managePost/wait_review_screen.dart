@@ -19,7 +19,7 @@ class _WaitReviewScreenState extends State<WaitReviewScreen> {
   loadData() async {
     try {
       var result = await PostServiceRepository()
-          .getAllPost(page: 0, limit: 10, status: 0);
+          .getAllPostAuth(page: 0, limit: 10, status: 0);
       if (result.length == 0) {
         widget.postWaitConfirmController.add([]);
       } else {

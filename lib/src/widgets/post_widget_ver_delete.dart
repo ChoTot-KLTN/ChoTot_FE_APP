@@ -1,16 +1,18 @@
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
+import 'package:marquee/marquee.dart';
 
-class PostWidgetpayment extends StatefulWidget {
-  const PostWidgetpayment({Key? key, required this.postData}) : super(key: key);
+class PostDeleteWidgetVer extends StatefulWidget {
+  const PostDeleteWidgetVer({Key? key, required this.postData})
+      : super(key: key);
   final PostModel postData;
+
   @override
-  State<PostWidgetpayment> createState() => _PostWidgetpaymentState();
+  State<PostDeleteWidgetVer> createState() => _PostDeleteWidgetVerState();
 }
 
-class _PostWidgetpaymentState extends State<PostWidgetpayment> {
+class _PostDeleteWidgetVerState extends State<PostDeleteWidgetVer> {
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   @override
   Widget build(BuildContext context) {
@@ -33,10 +35,9 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
       int day = dateNow.day;
       int d = dateOfMonth[dateNow.month - 1];
       date = d - dayStart + day;
-      print(d.toString() + " " + dayStart.toString() + " " + day.toString());
     }
     return Container(
-      //height: 150,
+      height: 150,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -143,7 +144,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                   child: Row(
                     children: [
                       Text(
-                        ("${widget.postData.prePrice}".toString()).toVND(),
+                        (widget.postData.prePrice.toString()).toVND(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -162,7 +163,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                         size: 15,
                       ),
                       Text(
-                        "- ${widget.postData.province}",
+                        widget.postData.province,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
@@ -198,30 +199,24 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 0),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.grey.shade500),
-                          onPressed: () {
-                            print("Yêu cầu lại");
-                          },
-                          child: Text("Đăng thường")),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 8),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.orange.shade500),
-                          onPressed: () {
-                            print("Yêu cầu lại");
-                          },
-                          child: Text("Ưu tiên")),
-                    )
-                  ],
+                Padding(
+                  padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.alarm_add_outlined,
+                        color: Colors.orange.shade500,
+                        size: 15,
+                      ),
+                      Text(
+                        ' ĐÃ HỦY',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.red),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
