@@ -31,4 +31,10 @@ class ApiGateway {
   static const getAllPost = "post/get-all-post";
   static const getPostDetailAPI = "post/get-detail-post";
   static const getPostOver = "post/get-list-post-over";
+  static const updatePost = "post/update-post";
+  static const reNewPost = "post/renew-post";
+
+  // payment Service
+  static const paymentPaypal = "payment/order";
+  static const paymentVNPay = "post/priority-post";
 }

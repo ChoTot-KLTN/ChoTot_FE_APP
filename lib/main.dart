@@ -1,4 +1,5 @@
 import 'package:chotot_app/src/app.dart';
+import 'package:chotot_app/src/pages/home/home_nav_page.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
             accentColor: _accentColor),
         home: AppChoTot(),
         debugShowCheckedModeBanner: false,
+        routes: {
+          'home': (context) => MyHomePage(),
+        },
       ),
     );
   }

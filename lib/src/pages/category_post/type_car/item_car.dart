@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ItemNewsWidget extends StatelessWidget {
+class ItemCarsWidget extends StatelessWidget {
   final Color color;
   final IconData iconData;
   final String title;
 
-  const ItemNewsWidget(
+  const ItemCarsWidget(
       {Key? key,
       required this.color,
       required this.iconData,
@@ -33,7 +33,7 @@ class ItemNewsWidget extends StatelessWidget {
               child: Center(
                 child: Icon(
                   iconData,
-                  color: Colors.white,
+                  color: Colors.grey,
                   size: 30,
                 ),
               ),
@@ -42,11 +42,11 @@ class ItemNewsWidget extends StatelessWidget {
               height: 8,
             ),
             SizedBox(
-              height: 60,
+              height: 30,
               width: 60,
               child: Text(
                 title,
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,

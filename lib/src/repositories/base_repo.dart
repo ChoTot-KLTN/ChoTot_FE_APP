@@ -50,7 +50,7 @@ class BaseRepository {
 
   put(String name, Map<String, dynamic> body) async {
     return await http.put(
-      Uri.http(root_url, '/' + name),
+      Uri.parse(root_url1 + name),
       headers: getHeader(),
       body: jsonEncode(body),
     );

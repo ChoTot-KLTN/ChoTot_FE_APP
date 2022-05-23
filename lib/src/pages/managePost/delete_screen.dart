@@ -26,7 +26,7 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
         widget.postDeleteController.add(result);
       }
     } catch (err) {
-      widget.postDeleteController.addError("error");
+      // widget.postDeleteController.addError("error");
     }
   }
 

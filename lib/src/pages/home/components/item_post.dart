@@ -1,5 +1,5 @@
 import 'package:chotot_app/src/models/category_model.dart';
-import 'package:chotot_app/src/pages/category_post/post_type_car.dart';
+import 'package:chotot_app/src/pages/category_post/type_car/post_type_car.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

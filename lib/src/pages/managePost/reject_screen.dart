@@ -26,7 +26,7 @@ class _RejectPostScreenState extends State<RejectPostScreen> {
         widget.postRejectController.add(result);
       }
     } catch (err) {
-      widget.postRejectController.addError("error");
+      // widget.postRejectController.addError("error");
     }
   }
 
@@ -76,6 +76,7 @@ class _RejectPostScreenState extends State<RejectPostScreen> {
                             itemBuilder: (cotext, index) {
                               return PostwidgetReject(
                                 postData: snapshot.data![index],
+                                loadData: loadData(),
                               );
                             },
                             itemCount: snapshot.data!.length,

@@ -26,7 +26,7 @@ class _OvertimePostScreenState extends State<OvertimePostScreen> {
         widget.postOvertimeController.add(result);
       }
     } catch (err) {
-      widget.postOvertimeController.addError("error");
+      // widget.postOvertimeController.addError("error");
     }
   }
 
@@ -76,6 +76,7 @@ class _OvertimePostScreenState extends State<OvertimePostScreen> {
                             itemBuilder: (cotext, index) {
                               return PostwidgetOverTime(
                                 postData: snapshot.data![index],
+                                loadData: loadData(),
                               );
                             },
                             itemCount: snapshot.data!.length,

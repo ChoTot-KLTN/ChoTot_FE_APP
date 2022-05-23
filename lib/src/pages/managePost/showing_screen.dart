@@ -26,7 +26,7 @@ class _ShowingPostScreenState extends State<ShowingPostScreen> {
         widget.postShowingController.add(result);
       }
     } catch (err) {
-      widget.postShowingController.addError("error");
+      // widget.postShowingController.addError("error");
     }
   }
 
@@ -76,6 +76,7 @@ class _ShowingPostScreenState extends State<ShowingPostScreen> {
                             itemBuilder: (cotext, index) {
                               return PostWidgetpayment(
                                 postData: snapshot.data![index],
+                                loadData: loadData(),
                               );
                             },
                             itemCount: snapshot.data!.length,

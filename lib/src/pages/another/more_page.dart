@@ -1,6 +1,6 @@
+import 'package:chotot_app/src/models/item_new.dart';
 import 'package:chotot_app/src/models/user_model.dart';
 import 'package:chotot_app/src/pages/authentication/login/login_page.dart';
-import 'package:chotot_app/src/pages/home/home_page.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

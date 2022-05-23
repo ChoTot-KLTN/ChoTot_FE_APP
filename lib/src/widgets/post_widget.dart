@@ -177,7 +177,7 @@ class _PostCardState extends State<PostCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: 130,
+                    width: 120,
                     child: Text(
                       widget.postData.title,
                       overflow: TextOverflow.ellipsis,

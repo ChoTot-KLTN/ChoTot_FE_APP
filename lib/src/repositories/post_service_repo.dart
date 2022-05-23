@@ -104,4 +104,42 @@ class PostServiceRepository {
     }
     return [];
   }
+
+  Future<http.Response> updateStatusPostAPI(
+      {required String idPost, required int status}) async {
+    print('request URL: ' + ApiGateway.updatePost + '?postId=$idPost');
+    var bodypost = {
+      "post": {"status": status},
+      "postDetail": {}
+    };
+    http.Response result = await BaseRepository()
+        .put(ApiGateway.updatePost + '?postId=$idPost', bodypost);
+    print("statusCode: " + result.statusCode.toString());
+    return result;
+  }
+
+  Future<http.Response> paymentVNPayAPI(
+      {required String idPost, required bool isAdver}) async {
+    print('request URL: ' + ApiGateway.updatePost + '?postId=$idPost');
+    var bodypost = {
+      "post": {"isAdvertised": isAdver},
+      "postDetail": {}
+    };
+    http.Response result = await BaseRepository()
+        .put(ApiGateway.updatePost + '?postId=$idPost', bodypost);
+    print("statusCode: " + result.statusCode.toString());
+    return result;
+  }
+
+  // Gia hạn lại post
+  Future<http.Response> reNewPostAPI(
+      {required String idPost, required int date}) async {
+    print(
+        'request URL: ' + ApiGateway.reNewPost + '/postId=$idPost&days=$date');
+    var bodypost = {"idPost": idPost, "days": date};
+    http.Response result =
+        await BaseRepository().put(ApiGateway.reNewPost, bodypost);
+    print("statusCode: " + result.statusCode.toString());
+    return result;
+  }
 }

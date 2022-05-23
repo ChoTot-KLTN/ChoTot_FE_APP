@@ -1,11 +1,16 @@
 import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/repositories/post_service_repo.dart';
+import 'package:chotot_app/src/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 
 class PostwidgetReject extends StatefulWidget {
-  const PostwidgetReject({Key? key, required this.postData}) : super(key: key);
+  const PostwidgetReject(
+      {Key? key, required this.postData, required this.loadData})
+      : super(key: key);
   final PostModel postData;
+  final Future loadData;
   @override
   State<PostwidgetReject> createState() => _PostwidgetRejectState();
 }
@@ -231,8 +236,23 @@ class _PostwidgetRejectState extends State<PostwidgetReject> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: Colors.orange.shade500),
-                          onPressed: () {
+                          onPressed: () async {
                             print("Yêu cầu lại");
+                            var result = await PostServiceRepository()
+                                .updateStatusPostAPI(
+                                    idPost: widget.postData.id, status: 0);
+                            if (result.statusCode == 200) {
+                              showDialoga(
+                                  title: "Thành công",
+                                  subTitle: "Gửi yêu cầu thành công",
+                                  status: "Success");
+                              await widget.loadData;
+                            } else {
+                              showDialoga(
+                                  title: "Thất bại",
+                                  subTitle: "Gửi yêu cầu thất bại thất bại",
+                                  status: "Fail");
+                            }
                           },
                           child: Text("Yêu cầu lại")),
                     )

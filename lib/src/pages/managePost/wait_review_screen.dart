@@ -26,7 +26,7 @@ class _WaitReviewScreenState extends State<WaitReviewScreen> {
         widget.postWaitConfirmController.add(result);
       }
     } catch (err) {
-      widget.postWaitConfirmController.addError("error");
+      // widget.postWaitConfirmController.addError("error");
     }
   }
 

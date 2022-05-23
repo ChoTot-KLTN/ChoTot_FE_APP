@@ -1,12 +1,16 @@
 import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 
 class PostwidgetOverTime extends StatefulWidget {
-  const PostwidgetOverTime({Key? key, required this.postData})
+  const PostwidgetOverTime(
+      {Key? key, required this.postData, required this.loadData})
       : super(key: key);
   final PostModel postData;
+  final Future loadData;
   @override
   State<PostwidgetOverTime> createState() => _PostwidgetOvertimeState();
 }
@@ -232,7 +236,33 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: Colors.orange.shade500),
-                          onPressed: () {
+                          onPressed: () async {
+                            var result = await PostServiceRepository()
+                                .reNewPostAPI(
+                                    idPost: widget.postData.id, date: 7);
+                            if (result.statusCode == 200 ||
+                                result.statusCode == 201) {
+                              Get.snackbar(
+                                  "Thành công", "Gia hạn bài viết thành công",
+                                  duration: Duration(seconds: 3),
+                                  margin: EdgeInsets.all(6),
+                                  backgroundColor: Colors.white,
+                                  leftBarIndicatorColor: Colors.green,
+                                  colorText: Colors.black,
+                                  snackPosition: SnackPosition.TOP);
+                              await widget.loadData;
+                            } else {
+                              Get.snackbar(
+                                "Thất bại",
+                                "Gia hạn bài viết thất bại",
+                                duration: Duration(seconds: 3),
+                                margin: EdgeInsets.all(6),
+                                backgroundColor: Colors.white,
+                                leftBarIndicatorColor: Colors.red,
+                                colorText: Colors.black,
+                                snackPosition: SnackPosition.TOP,
+                              );
+                            }
                             print("Yêu cầu lại");
                           },
                           child: Text("Gia hạn")),

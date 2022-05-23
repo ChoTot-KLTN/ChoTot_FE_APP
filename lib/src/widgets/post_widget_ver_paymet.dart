@@ -1,17 +1,30 @@
+import 'dart:convert';
+
 import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/pages/payment/payment_paypal_screen.dart';
+import 'package:chotot_app/src/pages/payment/payment_vnpayy_screen.dart';
+import 'package:chotot_app/src/repositories/payment_repo.dart';
+import 'package:chotot_app/src/repositories/post_service_repo.dart';
+import 'package:chotot_app/src/widgets/base_widget.dart';
+import 'package:chotot_app/src/widgets/dialog_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 
 class PostWidgetpayment extends StatefulWidget {
-  const PostWidgetpayment({Key? key, required this.postData}) : super(key: key);
+  const PostWidgetpayment(
+      {Key? key, required this.postData, required this.loadData})
+      : super(key: key);
   final PostModel postData;
+  final Future loadData;
   @override
   State<PostWidgetpayment> createState() => _PostWidgetpaymentState();
 }
 
 class _PostWidgetpaymentState extends State<PostWidgetpayment> {
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  bool isAssignVNPay = true;
   @override
   Widget build(BuildContext context) {
     int l = widget.postData.image.length;
@@ -206,21 +219,233 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: Colors.grey.shade500),
-                          onPressed: () {
-                            print("Yêu cầu lại");
+                          onPressed: () async {
+                            var result = await PostServiceRepository()
+                                .updateStatusPostAPI(
+                                    idPost: widget.postData.id, status: 3);
+                            if (result.statusCode == 200) {
+                              showDialoga(
+                                  title: "Thành công",
+                                  subTitle: "Hủy bài đăng thành công",
+                                  status: "Success");
+
+                              await widget.loadData;
+                            } else {
+                              showDialoga(
+                                  title: "Thất bại",
+                                  subTitle: "Hủy bài đăng thất bại",
+                                  status: "Fail");
+                            }
                           },
-                          child: Text("Đăng thường")),
+                          child: Text("Hủy tin")),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 8),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.orange.shade500),
-                          onPressed: () {
-                            print("Yêu cầu lại");
-                          },
-                          child: Text("Ưu tiên")),
-                    )
+                    widget.postData.isAdvertised == true
+                        ? Padding(
+                            padding: EdgeInsets.only(right: 12),
+                            child: Text(
+                              "Tin ưu tiên",
+                              style: TextStyle(
+                                  color: Colors.green.shade500, fontSize: 16),
+                            ))
+                        : Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.orange.shade500),
+                                onPressed: () {
+                                  print("Ưu tiên");
+                                  Get.defaultDialog(
+                                      title: "Thanh Toán",
+                                      titleStyle: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                      backgroundColor: Colors.white,
+                                      // middleText: "Chọn phương thức thanh toán",
+                                      content: StatefulBuilder(
+                                          builder: (context, setState) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      isAssignVNPay = true;
+                                                    });
+                                                  },
+                                                  child: Row(children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 5, right: 5),
+                                                      child: Icon(
+                                                        isAssignVNPay
+                                                            ? Icons
+                                                                .radio_button_checked
+                                                            : Icons
+                                                                .radio_button_off,
+                                                        color: isAssignVNPay
+                                                            ? Colors.green
+                                                            : Colors.grey,
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 6),
+                                                      child: Text(
+                                                        "VNPay",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontFamily:
+                                                                "OpenSans",
+                                                            color: Colors.black,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                            fontSize: 14),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                  ]),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      isAssignVNPay = false;
+                                                    });
+                                                  },
+                                                  child: Row(children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10,
+                                                              right: 5),
+                                                      child: Icon(
+                                                        isAssignVNPay == false
+                                                            ? Icons
+                                                                .radio_button_checked
+                                                            : Icons
+                                                                .radio_button_off,
+                                                        color: isAssignVNPay ==
+                                                                false
+                                                            ? Colors.green
+                                                            : Colors.grey,
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 11),
+                                                      child: Text("Paypal",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "OpenSans",
+                                                              color:
+                                                                  Colors.black,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .normal,
+                                                              fontSize: 14)),
+                                                    ),
+                                                  ]),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                      middleTextStyle: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                      textConfirm: "OK",
+                                      textCancel: "Hủy",
+                                      cancelTextColor: Colors.orange.shade500,
+                                      confirmTextColor: Colors.white,
+                                      onConfirm: () async {
+                                        if (isAssignVNPay == true) {
+                                          // print("Thanh toán VNPay");
+                                          showDialogLoading(context);
+                                          var result = await PaymentRepository()
+                                              .preorityPostAPI(
+                                                  idPost: widget.postData.id,
+                                                  prices: 50000,
+                                                  nameOfPoster: "Author");
+                                          Navigator.pop(context);
+                                          if (result.statusCode == 200 ||
+                                              result.statusCode == 201) {
+                                            String dataURL = "a";
+                                            dataURL =
+                                                jsonDecode(result.body)['data'];
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentVNPayScreen(
+                                                          url: dataURL,
+                                                          postID: widget
+                                                              .postData.id,
+                                                        )));
+                                          } else {
+                                            Get.snackbar(
+                                              "Thất bại",
+                                              "Thanh toán thất bại",
+                                              duration: Duration(seconds: 3),
+                                              margin: EdgeInsets.all(6),
+                                              backgroundColor: Colors.white,
+                                              leftBarIndicatorColor: Colors.red,
+                                              colorText: Colors.black,
+                                              snackPosition: SnackPosition.TOP,
+                                            );
+                                          }
+                                        } else {
+                                          //print("Thanh toán paypal");
+                                          showDialogLoading(context);
+                                          var result = await PaymentRepository()
+                                              .paymentPostAPI(
+                                                  idPost: widget.postData.id,
+                                                  price: 50000);
+                                          Navigator.pop(context);
+                                          if (result.statusCode == 200 ||
+                                              result.statusCode == 201) {
+                                            String dataURL = "a";
+                                            dataURL =
+                                                jsonDecode(result.body)['data'];
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentPaypalScreen(
+                                                          url: dataURL,
+                                                        )));
+                                          } else {
+                                            Get.snackbar(
+                                              "Thất bại",
+                                              "Thanh toán thất bại",
+                                              duration: Duration(seconds: 3),
+                                              margin: EdgeInsets.all(6),
+                                              backgroundColor: Colors.white,
+                                              leftBarIndicatorColor: Colors.red,
+                                              colorText: Colors.black,
+                                              snackPosition: SnackPosition.TOP,
+                                            );
+                                          }
+                                        }
+                                      },
+                                      onCancel: () {
+                                        Get.back();
+                                      });
+                                },
+                                child: Text("Ưu tiên")),
+                          )
                   ],
                 ),
               ],

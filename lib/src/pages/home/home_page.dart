@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chotot_app/src/models/category_model.dart';
+import 'package:chotot_app/src/models/item_new.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/pages/home/components/item_news.dart';
 import 'package:chotot_app/src/pages/home/components/item_post.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -184,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
       StreamController<List<PostModel>>();
   loadData() async {
     var result =
-        await PostServiceRepository().getAllPost(page: 0, limit: 10, status: 0);
+        await PostServiceRepository().getAllPost(page: 0, limit: 10, status: 2);
     if (result.length == 0) {
       stream.add([]);
     } else {
@@ -440,17 +439,4 @@ class _HomeScreenState extends State<HomeScreen> {
       height: h,
     );
   }
-}
-
-class ItemNews {
-  final Color color;
-  final IconData iconData;
-  final String title;
-  final Callback function;
-
-  ItemNews(
-      {required this.color,
-      required this.iconData,
-      required this.title,
-      required this.function});
 }
