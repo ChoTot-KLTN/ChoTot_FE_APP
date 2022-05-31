@@ -49,24 +49,7 @@ class _CreatePostCarScreenState extends State<CreatePostCarScreen> {
   String fuel = "Xăng";
   bool isSelectedProvince = false;
   bool isSelectedDistrict = false;
-  List<String> listBrandCar = [
-    'Cadillac',
-    'Buick',
-    'Ford',
-    'Honda',
-    'Hyundai',
-    'Isuzu',
-    'Kia',
-    'Lamborghini',
-    'LandRover',
-    'Lexus',
-    'Mayback',
-    'Vinfast',
-    'Porsche',
-    'Toyota',
-    'Suzuki',
-    'Hãng khác'
-  ];
+
   final _formkey = GlobalKey<FormState>();
   final _formkey1 = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();

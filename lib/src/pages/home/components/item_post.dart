@@ -1,4 +1,6 @@
 import 'package:chotot_app/src/models/category_model.dart';
+import 'package:chotot_app/src/pages/category_post/type_BDS/post_type_BDS.dart';
+import 'package:chotot_app/src/pages/category_post/type_Device/post_type_device.dart';
 import 'package:chotot_app/src/pages/category_post/type_car/post_type_car.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,8 +16,12 @@ class ItemPostWidget extends StatelessWidget {
       onTap: () {
         if (categoryModel.id == "2") {
           Get.to(() => PostTypeCarScreen());
+        } else if (categoryModel.id == '3') {
+          Get.to(() => PostTypeDeviceScreen());
+        } else if (categoryModel.id == '1') {
+          Get.to(() => PostTypeBDSScreen());
         } else {
-          print('Khác loại');
+          print('Khác loại category');
         }
       },
       child: SizedBox(

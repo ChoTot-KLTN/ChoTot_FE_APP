@@ -3,30 +3,32 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chotot_app/src/models/item_new.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
-import 'package:chotot_app/src/pages/category_post/type_car/components/bicycle_screen.dart';
-import 'package:chotot_app/src/pages/category_post/type_car/components/car_screen.dart';
-import 'package:chotot_app/src/pages/category_post/type_car/components/motorbike_screen.dart';
-import 'package:chotot_app/src/pages/category_post/type_car/item_car.dart';
-import 'package:chotot_app/src/pages/home/components/item_news.dart';
+import 'package:chotot_app/src/pages/category_post/type_BDS/components/apartment_screen.dart';
+import 'package:chotot_app/src/pages/category_post/type_BDS/components/ground_screen.dart';
+import 'package:chotot_app/src/pages/category_post/type_BDS/components/house_screen.dart';
+import 'package:chotot_app/src/pages/category_post/type_BDS/components/motel_room_screen.dart';
+import 'package:chotot_app/src/pages/category_post/type_BDS/components/office_screen.dart';
+import 'package:chotot_app/src/pages/category_post/type_BDS/item_BDS.dart';
+
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/base_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PostTypeCarScreen extends StatefulWidget {
-  const PostTypeCarScreen({Key? key}) : super(key: key);
+class PostTypeBDSScreen extends StatefulWidget {
+  const PostTypeBDSScreen({Key? key}) : super(key: key);
 
   @override
-  State<PostTypeCarScreen> createState() => _PostTypeCarScreenState();
+  State<PostTypeBDSScreen> createState() => _PostTypeBDSScreenState();
 }
 
-class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
+class _PostTypeBDSScreenState extends State<PostTypeBDSScreen> {
   TextEditingController search = TextEditingController();
   static const imgList = [
-    'assets/banner/bannercara.jpg',
-    'assets/banner/bannercarb.jpg',
-    'assets/banner/bannercarc.jpg',
+    'assets/banner/bannerbdsa.jpg',
+    'assets/banner/bannerbdsb.jpg',
+    'assets/banner/bannerbdsc.jpg',
   ];
   StreamController<List<PostModel>> stream =
       StreamController<List<PostModel>>();
@@ -34,51 +36,43 @@ class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
   List<ItemNews> listNews = [
     ItemNews(
         color: Colors.white,
-        iconData: Icons.car_rental_outlined,
-        title: "Ô tô",
+        iconData: Icons.apartment_outlined,
+        title: "Căn hộ/chung cư",
         function: () {
-          Get.to(() => CarScreen());
+          Get.to(() => ApartmentScreen());
         }),
     ItemNews(
         color: Colors.white,
-        iconData: Icons.motorcycle_rounded,
-        title: "Xe máy",
+        iconData: Icons.house_outlined,
+        title: "Nhà ở",
         function: () {
-          Get.to(() => MotorbikeScreen());
+          Get.to(() => HouseScreen());
         }),
     ItemNews(
         color: Colors.white,
-        iconData: Icons.electric_moped_outlined,
-        title: "Xe điện",
+        iconData: Icons.house_sharp,
+        title: "Nhà trọ",
         function: () {
-          Get.to(() => BicycleScreen());
-          print("Xe điện");
+          Get.to(() => MotelRoomScreen());
+        }),
+    ItemNews(
+        color: Colors.white,
+        iconData: Icons.golf_course_outlined,
+        title: "Đất",
+        function: () {
+          Get.to(() => GroundScreen());
+        }),
+    ItemNews(
+        color: Colors.white,
+        iconData: Icons.location_city,
+        title: "Mặt bằng",
+        function: () {
+          Get.to(() => OfficeScreen());
         }),
   ];
-  List<ItemNews> listNews2 = [
-    ItemNews(
-        color: Colors.green.shade500,
-        iconData: Icons.car_repair_outlined,
-        title: "Kiểm định xe cũ",
-        function: () {
-          print("ưu đãi");
-        }),
-    ItemNews(
-        color: Colors.pink,
-        iconData: Icons.electric_car,
-        title: "Định giá bán xe",
-        function: () {
-          print("đã lưu");
-        }),
-    ItemNews(
-        color: Colors.blue.shade500,
-        iconData: Icons.new_label_outlined,
-        title: "Trang tin xe",
-        function: () {
-          print("tìm đã lưu");
-        }),
-  ];
+
   final CarouselController _controller = CarouselController();
+
   loadData() async {
     var result = await PostServiceRepository().getAllPost(page: 0, limit: 10);
     if (result.length == 0) {
@@ -185,7 +179,7 @@ class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
                 child: Row(
                   children: [
                     Text(
-                      "Khám phá danh mục xe cộ",
+                      "Danh mục thiết bị điện tử",
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     )
@@ -198,30 +192,19 @@ class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
               height: 14,
             ),
             Container(
-              // height: 120,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ItemCarsWidget(
-                    color: listNews[0].color,
-                    iconData: listNews[0].iconData,
-                    title: listNews[0].title,
-                    function: listNews[0].function,
-                  ),
-                  ItemCarsWidget(
-                    color: listNews[1].color,
-                    iconData: listNews[1].iconData,
-                    title: listNews[1].title,
-                    function: listNews[1].function,
-                  ),
-                  ItemCarsWidget(
-                    color: listNews[2].color,
-                    iconData: listNews[2].iconData,
-                    title: listNews[2].title,
-                    function: listNews[2].function,
-                  )
-                ],
+              height: 120,
+              //width: 85,
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return ItemBDSWidget(
+                    color: listNews[index].color,
+                    iconData: listNews[index].iconData,
+                    title: listNews[index].title,
+                    function: listNews[index].function,
+                  );
+                },
+                itemCount: listNews.length,
+                scrollDirection: Axis.horizontal,
               ),
             ),
             buildDevider(Colors.black12, 0, 0, 6, 16),
@@ -292,47 +275,9 @@ class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
                 ),
               ),
             ),
-            buildDevider(Colors.black12, 0, 0, 6, 16),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: SizedBox(
-                child: Row(
-                  children: [
-                    Text(
-                      "Công cụ mua bán",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                height: 50,
-              ),
+            SizedBox(
+              height: 50,
             ),
-            Container(
-              // height: 120,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ItemNewsWidget(
-                    color: listNews2[0].color,
-                    iconData: listNews2[0].iconData,
-                    title: listNews2[0].title,
-                  ),
-                  ItemNewsWidget(
-                    color: listNews2[1].color,
-                    iconData: listNews2[1].iconData,
-                    title: listNews2[1].title,
-                  ),
-                  ItemNewsWidget(
-                    color: listNews2[2].color,
-                    iconData: listNews2[2].iconData,
-                    title: listNews2[2].title,
-                  ),
-                ],
-              ),
-            ),
-            buildDevider(Colors.black12, 0, 0, 6, 16),
           ],
         ),
       )),

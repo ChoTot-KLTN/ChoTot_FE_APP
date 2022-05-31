@@ -3,30 +3,30 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chotot_app/src/models/item_new.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
-import 'package:chotot_app/src/pages/category_post/type_car/components/bicycle_screen.dart';
-import 'package:chotot_app/src/pages/category_post/type_car/components/car_screen.dart';
-import 'package:chotot_app/src/pages/category_post/type_car/components/motorbike_screen.dart';
-import 'package:chotot_app/src/pages/category_post/type_car/item_car.dart';
-import 'package:chotot_app/src/pages/home/components/item_news.dart';
+import 'package:chotot_app/src/pages/category_post/type_Device/components/laptop_screen.dart';
+import 'package:chotot_app/src/pages/category_post/type_Device/components/phone_screen.dart';
+import 'package:chotot_app/src/pages/category_post/type_Device/item_device.dart';
+
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/base_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PostTypeCarScreen extends StatefulWidget {
-  const PostTypeCarScreen({Key? key}) : super(key: key);
+class PostTypeDeviceScreen extends StatefulWidget {
+  const PostTypeDeviceScreen({Key? key}) : super(key: key);
 
   @override
-  State<PostTypeCarScreen> createState() => _PostTypeCarScreenState();
+  State<PostTypeDeviceScreen> createState() => _PostTypeDeviceScreenState();
 }
 
-class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
+class _PostTypeDeviceScreenState extends State<PostTypeDeviceScreen> {
   TextEditingController search = TextEditingController();
   static const imgList = [
-    'assets/banner/bannercara.jpg',
-    'assets/banner/bannercarb.jpg',
-    'assets/banner/bannercarc.jpg',
+    'assets/banner/bannerlaptopa.png',
+    'assets/banner/bannerlaptopb.png',
+    'assets/banner/bannerlaptopc.jpg',
+    'assets/banner/bannerlaptopd.jpg',
   ];
   StreamController<List<PostModel>> stream =
       StreamController<List<PostModel>>();
@@ -34,51 +34,22 @@ class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
   List<ItemNews> listNews = [
     ItemNews(
         color: Colors.white,
-        iconData: Icons.car_rental_outlined,
-        title: "Ô tô",
+        iconData: Icons.phone_iphone_rounded,
+        title: "Điện thoại",
         function: () {
-          Get.to(() => CarScreen());
+          Get.to(() => PhoneScreen());
         }),
     ItemNews(
         color: Colors.white,
-        iconData: Icons.motorcycle_rounded,
-        title: "Xe máy",
+        iconData: Icons.laptop_mac,
+        title: "Laptop",
         function: () {
-          Get.to(() => MotorbikeScreen());
-        }),
-    ItemNews(
-        color: Colors.white,
-        iconData: Icons.electric_moped_outlined,
-        title: "Xe điện",
-        function: () {
-          Get.to(() => BicycleScreen());
-          print("Xe điện");
+          Get.to(() => LaptopScreen());
         }),
   ];
-  List<ItemNews> listNews2 = [
-    ItemNews(
-        color: Colors.green.shade500,
-        iconData: Icons.car_repair_outlined,
-        title: "Kiểm định xe cũ",
-        function: () {
-          print("ưu đãi");
-        }),
-    ItemNews(
-        color: Colors.pink,
-        iconData: Icons.electric_car,
-        title: "Định giá bán xe",
-        function: () {
-          print("đã lưu");
-        }),
-    ItemNews(
-        color: Colors.blue.shade500,
-        iconData: Icons.new_label_outlined,
-        title: "Trang tin xe",
-        function: () {
-          print("tìm đã lưu");
-        }),
-  ];
+
   final CarouselController _controller = CarouselController();
+
   loadData() async {
     var result = await PostServiceRepository().getAllPost(page: 0, limit: 10);
     if (result.length == 0) {
@@ -185,7 +156,7 @@ class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
                 child: Row(
                   children: [
                     Text(
-                      "Khám phá danh mục xe cộ",
+                      "Danh mục thiết bị điện tử",
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     )
@@ -201,26 +172,22 @@ class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
               // height: 120,
               margin: EdgeInsets.only(left: 20, right: 20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ItemCarsWidget(
+                  ItemDevicesWidget(
                     color: listNews[0].color,
                     iconData: listNews[0].iconData,
                     title: listNews[0].title,
                     function: listNews[0].function,
                   ),
-                  ItemCarsWidget(
+                  SizedBox(
+                    width: 20,
+                  ),
+                  ItemDevicesWidget(
                     color: listNews[1].color,
                     iconData: listNews[1].iconData,
                     title: listNews[1].title,
                     function: listNews[1].function,
                   ),
-                  ItemCarsWidget(
-                    color: listNews[2].color,
-                    iconData: listNews[2].iconData,
-                    title: listNews[2].title,
-                    function: listNews[2].function,
-                  )
                 ],
               ),
             ),
@@ -292,47 +259,9 @@ class _PostTypeCarScreenState extends State<PostTypeCarScreen> {
                 ),
               ),
             ),
-            buildDevider(Colors.black12, 0, 0, 6, 16),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: SizedBox(
-                child: Row(
-                  children: [
-                    Text(
-                      "Công cụ mua bán",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                height: 50,
-              ),
+            SizedBox(
+              height: 50,
             ),
-            Container(
-              // height: 120,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ItemNewsWidget(
-                    color: listNews2[0].color,
-                    iconData: listNews2[0].iconData,
-                    title: listNews2[0].title,
-                  ),
-                  ItemNewsWidget(
-                    color: listNews2[1].color,
-                    iconData: listNews2[1].iconData,
-                    title: listNews2[1].title,
-                  ),
-                  ItemNewsWidget(
-                    color: listNews2[2].color,
-                    iconData: listNews2[2].iconData,
-                    title: listNews2[2].title,
-                  ),
-                ],
-              ),
-            ),
-            buildDevider(Colors.black12, 0, 0, 6, 16),
           ],
         ),
       )),

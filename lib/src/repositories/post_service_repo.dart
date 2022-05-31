@@ -142,4 +142,22 @@ class PostServiceRepository {
     print("statusCode: " + result.statusCode.toString());
     return result;
   }
+
+  // get all post uu tiên
+  Future<List<PostModel>> getAllPostpreority(
+      {int? page, int? limit, int? status}) async {
+    // print('request URL: ' +
+    //     ApiGateway.getAllPost +
+    //     '?status=$status&page=$page&limit=$limit');
+    http.Response result = await BaseRepository()
+        .get(ApiGateway.getAllPost + '?status=$status&page=$page&limit=$limit');
+    print("Status: " + result.statusCode.toString());
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
 }

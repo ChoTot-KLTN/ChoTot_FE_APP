@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ItemCarsWidget extends StatelessWidget {
+class ItemBDSWidget extends StatelessWidget {
   final Color color;
   final IconData iconData;
   final String title;
   final Function function;
 
-  const ItemCarsWidget(
+  const ItemBDSWidget(
       {Key? key,
       required this.color,
       required this.iconData,

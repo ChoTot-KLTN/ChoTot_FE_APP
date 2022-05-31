@@ -1,4 +1,5 @@
 import 'package:chotot_app/src/app.dart';
+import 'package:chotot_app/src/pages/category_post/type_car/components/car_screen.dart';
 import 'package:chotot_app/src/pages/home/home_nav_page.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           'home': (context) => MyHomePage(),
+          'carScreen': (context) => CarScreen(),
         },
       ),
     );
