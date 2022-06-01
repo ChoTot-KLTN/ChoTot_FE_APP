@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +9,30 @@ import 'package:chotot_app/src/common/base_convert.dart';
 
 class PostwidgetOverTime extends StatefulWidget {
   const PostwidgetOverTime(
-      {Key? key, required this.postData, required this.loadData})
+      {Key? key, required this.postData, required this.postOvertimeController})
       : super(key: key);
   final PostModel postData;
-  final Future loadData;
+  // final Future loadData;
+  final StreamController<List<PostModel>> postOvertimeController;
   @override
   State<PostwidgetOverTime> createState() => _PostwidgetOvertimeState();
 }
 
 class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  loadData() async {
+    try {
+      var result = await PostServiceRepository()
+          .getAllPostOvertime(page: 0, limit: 10, status: 2);
+      if (result.length == 0) {
+        widget.postOvertimeController.add([]);
+      } else {
+        widget.postOvertimeController.add(result);
+      }
+    } catch (err) {
+      // widget.postOvertimeController.addError("error");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +266,8 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
                                   leftBarIndicatorColor: Colors.green,
                                   colorText: Colors.black,
                                   snackPosition: SnackPosition.TOP);
-                              await widget.loadData;
+                              // await widget.loadData;
+                              loadData();
                             } else {
                               Get.snackbar(
                                 "Thất bại",

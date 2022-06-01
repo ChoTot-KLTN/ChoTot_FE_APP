@@ -877,7 +877,7 @@ class _CreatePostLaptopScreenState extends State<CreatePostLaptopScreen> {
                     PostLaptopModelRequired(
                         address: address,
                         brand: brandLaptop,
-                        // color: color,
+                        color: color.text,
                         microprocessor: microprocessor,
                         ram: ram,
                         hardDrive: hardDrive,

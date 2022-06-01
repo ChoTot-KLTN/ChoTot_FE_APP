@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/base_widget.dart';
@@ -7,16 +9,30 @@ import 'package:chotot_app/src/common/base_convert.dart';
 
 class PostwidgetReject extends StatefulWidget {
   const PostwidgetReject(
-      {Key? key, required this.postData, required this.loadData})
+      {Key? key, required this.postData, required this.postRejectController})
       : super(key: key);
   final PostModel postData;
-  final Future loadData;
+  // final Future loadData;
+  final StreamController<List<PostModel>> postRejectController;
   @override
   State<PostwidgetReject> createState() => _PostwidgetRejectState();
 }
 
 class _PostwidgetRejectState extends State<PostwidgetReject> {
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  loadData() async {
+    try {
+      var result = await PostServiceRepository()
+          .getAllPostAuth(page: 0, limit: 10, status: 1);
+      if (result.length == 0) {
+        widget.postRejectController.add([]);
+      } else {
+        widget.postRejectController.add(result);
+      }
+    } catch (err) {
+      // widget.postRejectController.addError("error");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +262,8 @@ class _PostwidgetRejectState extends State<PostwidgetReject> {
                                   title: "Thành công",
                                   subTitle: "Gửi yêu cầu thành công",
                                   status: "Success");
-                              await widget.loadData;
+                              // await widget.loadData;
+                              loadData();
                             } else {
                               showDialoga(
                                   title: "Thất bại",

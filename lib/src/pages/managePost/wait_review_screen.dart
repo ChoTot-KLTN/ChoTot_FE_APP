@@ -37,6 +37,14 @@ class _WaitReviewScreenState extends State<WaitReviewScreen> {
   }
 
   @override
+  void dispose() {
+    // if (widget.postWaitConfirmController != null) {
+    //   widget.postWaitConfirmController.close();
+    // }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(

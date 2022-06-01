@@ -7,23 +7,24 @@ import 'package:chotot_app/src/widgets/post_widget_ver_paymet.dart';
 import 'package:flutter/material.dart';
 
 class ShowingPostScreen extends StatefulWidget {
-  const ShowingPostScreen({Key? key, required this.postShowingController})
-      : super(key: key);
-  final StreamController<List<PostModel>> postShowingController;
+  const ShowingPostScreen({Key? key}) : super(key: key);
+  // final StreamController<List<PostModel>> postShowingController;
 
   @override
   State<ShowingPostScreen> createState() => _ShowingPostScreenState();
 }
 
 class _ShowingPostScreenState extends State<ShowingPostScreen> {
+  StreamController<List<PostModel>> postShowingController =
+      StreamController<List<PostModel>>.broadcast();
   loadData() async {
     try {
       var result = await PostServiceRepository()
           .getAllPostAuth(page: 0, limit: 10, status: 2);
       if (result.length == 0) {
-        widget.postShowingController.add([]);
+        postShowingController.add([]);
       } else {
-        widget.postShowingController.add(result);
+        postShowingController.sink.add(result);
       }
     } catch (err) {
       // widget.postShowingController.addError("error");
@@ -34,6 +35,13 @@ class _ShowingPostScreenState extends State<ShowingPostScreen> {
   void initState() {
     super.initState();
     loadData();
+  }
+
+  @override
+  void dispose() {
+    postShowingController.close();
+
+    super.dispose();
   }
 
   @override
@@ -60,7 +68,7 @@ class _ShowingPostScreenState extends State<ShowingPostScreen> {
               // height: 500,
               padding: EdgeInsets.only(left: 10, right: 10),
               child: StreamBuilder<List<PostModel>>(
-                stream: widget.postShowingController.stream,
+                stream: postShowingController.stream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return snapshot.data!.length == 0
@@ -76,7 +84,9 @@ class _ShowingPostScreenState extends State<ShowingPostScreen> {
                             itemBuilder: (cotext, index) {
                               return PostWidgetpayment(
                                 postData: snapshot.data![index],
-                                loadData: loadData(),
+                                postShowingController: postShowingController,
+
+                                // loadData: loadData(),
                               );
                             },
                             itemCount: snapshot.data!.length,

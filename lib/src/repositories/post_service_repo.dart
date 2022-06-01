@@ -149,9 +149,49 @@ class PostServiceRepository {
     // print('request URL: ' +
     //     ApiGateway.getAllPost +
     //     '?status=$status&page=$page&limit=$limit');
-    http.Response result = await BaseRepository()
-        .get(ApiGateway.getAllPost + '?status=$status&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(ApiGateway.getAllPost +
+        '?status=$status&page=$page&limit=$limit&isAdvert=true');
     print("Status: " + result.statusCode.toString());
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  ///post/get-all-post-type?status=2&type=PostMotelRoom&isAdvert=true&page=0&limit=10
+
+  // lấy các bài post theo thể loại có ưu tiên
+  Future<List<PostModel>> getAllPostWithTypePreority(
+      {int? page, int? limit, int? status, String? type}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostType +
+        '?status=$status&type=$type&isAdvert=true&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostType +
+            '?status=$status&type=$type&page=$page&limit=$limit&isAdvert=true');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  // lấy các bài post theo thể loại
+  Future<List<PostModel>> getAllPostWithType(
+      {int? page, int? limit, int? status, String? type}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostType +
+        '?status=$status&type=$type&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostType +
+            '?status=$status&type=$type&page=$page&limit=$limit');
+
     if (result.statusCode == 200) {
       var data = jsonDecode(result.body)['data']['posts'];
       var list = PostModel.fromJsonList(data);

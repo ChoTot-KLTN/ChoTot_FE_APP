@@ -95,15 +95,15 @@ class _MoreScreenState extends State<MoreScreen> {
         function: () {
           print("Cài đặt");
         }),
-    ItemNews(
-        color: Colors.grey.shade500,
-        iconData: Icons.logout,
-        title: "Thoát",
-        function: () {
-          print("Thoát");
-          GetStorage().remove('token');
-          Get.to(() => LoginScreen());
-        }),
+    // ItemNews(
+    //     color: Colors.grey.shade500,
+    //     iconData: Icons.logout,
+    //     title: "Thoát",
+    //     function: () {
+    //       print("Thoát");
+    //       GetStorage().remove('token');
+    //       Get.to(() => LoginScreen());
+    //     }),
   ];
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,12 @@ class _MoreScreenState extends State<MoreScreen> {
                         listItems[index].title,
                         listItems[index].function);
                   },
-                )
+                ),
+                buildItem(Colors.grey.shade500, Icons.logout, "Thoát", () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      (route) => false);
+                })
               ],
             ),
           ),

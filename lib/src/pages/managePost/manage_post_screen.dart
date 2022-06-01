@@ -23,13 +23,16 @@ class ManagePostScreen extends StatefulWidget {
 // 3 : Hủy
 // 4 : Hết hạn
 
-class _ManagePostScreenState extends State<ManagePostScreen> {
+class _ManagePostScreenState extends State<ManagePostScreen>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   StreamController<List<PostModel>> postWaitConfirmController =
       StreamController<List<PostModel>>.broadcast();
   StreamController<List<PostModel>> postRejectController =
       StreamController<List<PostModel>>.broadcast();
   StreamController<List<PostModel>> postShowingController =
-      StreamController<List<PostModel>>.broadcast();
+      StreamController<List<PostModel>>();
   StreamController<List<PostModel>> postDeleteController =
       StreamController<List<PostModel>>.broadcast();
   StreamController<List<PostModel>> postOvertimeController =
@@ -38,6 +41,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 5, vsync: this);
     _tabsValue = [
       TabModel(title: "Chờ duyệt", icon: Icons.history, width: 80),
       TabModel(title: "Bị từ chối", icon: Icons.cancel_outlined, width: 100),
@@ -85,6 +89,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
                 ))
           ],
           bottom: TabBar(
+            controller: _tabController,
             isScrollable: true,
             labelColor: Colors.white,
             indicatorColor: Colors.black,
@@ -102,7 +107,7 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
           ),
         ),
         body: SafeArea(
-          child: TabBarView(children: [
+          child: TabBarView(controller: _tabController, children: [
             WaitReviewScreen(
               postWaitConfirmController: postWaitConfirmController,
             ),
@@ -110,8 +115,8 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
               postRejectController: postRejectController,
             ),
             ShowingPostScreen(
-              postShowingController: postShowingController,
-            ),
+                // postShowingController: postShowingController,
+                ),
             DeletePostScreen(
               postDeleteController: postDeleteController,
             ),

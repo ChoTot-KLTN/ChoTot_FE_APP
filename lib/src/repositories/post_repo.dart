@@ -126,7 +126,7 @@ class PostRepository {
         'province': postLaptopModel.address.province
       },
       'brand': postLaptopModel.brand,
-      //'color': postLaptopModel.color,
+      'color': postLaptopModel.color,
       'microprocessor': postLaptopModel.microprocessor,
       'ram': postLaptopModel.ram,
       'hardDrive': postLaptopModel.hardDrive,
@@ -440,7 +440,7 @@ class PostElecticBicycleModelRequired {
 class PostLaptopModelRequired {
   AddressModel address;
   String brand;
-  //String color;
+  String color;
   String microprocessor;
   String ram;
   String hardDrive;
@@ -452,7 +452,7 @@ class PostLaptopModelRequired {
   PostLaptopModelRequired(
       {required this.address,
       required this.brand,
-      // required this.color,
+      required this.color,
       required this.microprocessor,
       required this.ram,
       required this.hardDrive,

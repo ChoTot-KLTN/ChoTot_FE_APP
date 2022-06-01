@@ -37,6 +37,14 @@ class _RejectPostScreenState extends State<RejectPostScreen> {
   }
 
   @override
+  void dispose() {
+    // if (widget.postRejectController != null) {
+    //   widget.postRejectController.close();
+    // }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -76,7 +84,9 @@ class _RejectPostScreenState extends State<RejectPostScreen> {
                             itemBuilder: (cotext, index) {
                               return PostwidgetReject(
                                 postData: snapshot.data![index],
-                                loadData: loadData(),
+                                postRejectController:
+                                    widget.postRejectController,
+                                // loadData: loadData(),
                               );
                             },
                             itemCount: snapshot.data!.length,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chotot_app/src/pages/authentication/login/login_page.dart';
 import 'package:chotot_app/src/repositories/authentication_repo.dart';
 import 'package:chotot_app/src/widgets/dialog_loading.dart';
 import 'package:chotot_app/src/widgets/header_widget.dart';
@@ -282,7 +283,10 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                   Flexible(
                     child: TextButton(
                       child: Text("Đăng nhập"),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => LoginScreen()));
+                      },
                     ),
                   ),
                 ],

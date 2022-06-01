@@ -37,6 +37,14 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
   }
 
   @override
+  void dispose() {
+    // if (widget.postDeleteController != null) {
+    //   widget.postDeleteController.close();
+    // }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(

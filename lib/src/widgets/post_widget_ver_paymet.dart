@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:chotot_app/src/models/post/post_model.dart';
@@ -14,10 +15,11 @@ import 'package:chotot_app/src/common/base_convert.dart';
 
 class PostWidgetpayment extends StatefulWidget {
   const PostWidgetpayment(
-      {Key? key, required this.postData, required this.loadData})
+      {Key? key, required this.postData, required this.postShowingController})
       : super(key: key);
   final PostModel postData;
-  final Future loadData;
+  // final Future? loadData;
+  final StreamController<List<PostModel>> postShowingController;
   @override
   State<PostWidgetpayment> createState() => _PostWidgetpaymentState();
 }
@@ -25,6 +27,20 @@ class PostWidgetpayment extends StatefulWidget {
 class _PostWidgetpaymentState extends State<PostWidgetpayment> {
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   bool isAssignVNPay = true;
+  loadData() async {
+    try {
+      var result = await PostServiceRepository()
+          .getAllPostAuth(page: 0, limit: 10, status: 2);
+      if (result.length == 0) {
+        widget.postShowingController.add([]);
+      } else {
+        widget.postShowingController.sink.add(result);
+      }
+    } catch (err) {
+      // widget.postShowingController.addError("error");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     int l = widget.postData.image.length;
@@ -229,7 +245,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                                   subTitle: "Hủy bài đăng thành công",
                                   status: "Success");
 
-                              await widget.loadData;
+                              loadData();
                             } else {
                               showDialoga(
                                   title: "Thất bại",
@@ -441,7 +457,7 @@ class _PostWidgetpaymentState extends State<PostWidgetpayment> {
                                         }
                                       },
                                       onCancel: () {
-                                        Get.back();
+                                        Navigator.of(context).pop();
                                       });
                                 },
                                 child: Text("Ưu tiên")),

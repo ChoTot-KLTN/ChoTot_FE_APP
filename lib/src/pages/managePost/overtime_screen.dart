@@ -37,6 +37,14 @@ class _OvertimePostScreenState extends State<OvertimePostScreen> {
   }
 
   @override
+  void dispose() {
+    // if (widget.postOvertimeController != null) {
+    //   widget.postOvertimeController.close();
+    // }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -76,7 +84,9 @@ class _OvertimePostScreenState extends State<OvertimePostScreen> {
                             itemBuilder: (cotext, index) {
                               return PostwidgetOverTime(
                                 postData: snapshot.data![index],
-                                loadData: loadData(),
+                                postOvertimeController:
+                                    widget.postOvertimeController,
+                                // loadData: loadData(),
                               );
                             },
                             itemCount: snapshot.data!.length,

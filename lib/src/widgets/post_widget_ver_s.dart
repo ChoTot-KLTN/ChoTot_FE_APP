@@ -1,4 +1,3 @@
-import 'package:chotot_app/src/common/base_convert.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/pages/detail_post/detail_post_apartment.dart';
 import 'package:chotot_app/src/pages/detail_post/detail_post_bicyle.dart';
@@ -11,18 +10,19 @@ import 'package:chotot_app/src/pages/detail_post/detail_post_motorbike.dart';
 import 'package:chotot_app/src/pages/detail_post/detail_post_office.dart';
 import 'package:chotot_app/src/pages/detail_post/detail_post_phone.dart';
 import 'package:flutter/material.dart';
+import 'package:chotot_app/src/common/base_convert.dart';
+import 'package:marquee/marquee.dart';
 import 'package:get/get.dart';
 
-class PostCard extends StatefulWidget {
-  const PostCard({required this.postData, Key? key}) : super(key: key);
+class PostWidgetVerS extends StatefulWidget {
+  const PostWidgetVerS({Key? key, required this.postData}) : super(key: key);
   final PostModel postData;
+
   @override
-  State<PostCard> createState() => _PostCardState();
+  State<PostWidgetVerS> createState() => _PostWidgetVerSState();
 }
 
-class _PostCardState extends State<PostCard> {
-  // String dateStart = DateFormat("d/MM/y -").format(DateTime.now());
-  // String dateEnd = DateFormat(" d/MM/y").format(DateTime.now());
+class _PostWidgetVerSState extends State<PostWidgetVerS> {
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   @override
   Widget build(BuildContext context) {
@@ -98,12 +98,10 @@ class _PostCardState extends State<PostCard> {
           Get.to(() => DetailPostHouse(
                 postdetail: widget.postData,
               ));
-          print("Khác loại post");
         }
       },
       child: Container(
-        width: 180,
-        //  height: 290,
+        height: 150,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -114,7 +112,8 @@ class _PostCardState extends State<PostCard> {
           ],
           color: Colors.white,
         ),
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
               padding: EdgeInsets.only(top: 10, right: 5),
@@ -124,8 +123,8 @@ class _PostCardState extends State<PostCard> {
                   child: Image.network(
                     img,
                     fit: BoxFit.cover,
-                    height: 180,
-                    width: 180,
+                    height: 140,
+                    width: 140,
                     loadingBuilder: (BuildContext context, Widget child,
                         ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) {
@@ -175,112 +174,126 @@ class _PostCardState extends State<PostCard> {
                     )),
               ]),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 120,
-                    child: Text(
-                      widget.postData.title,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Marquee(
+                      text: widget.postData.title,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      // scrollAxis: Axis.horizontal,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      blankSpace: 20.0,
+                      velocity: 100.0,
+                      pauseAfterRound: Duration(seconds: 1),
+                      showFadingOnlyWhenScrolling: true,
+                      fadingEdgeStartFraction: 0.1,
+                      fadingEdgeEndFraction: 0.1,
+                      //numberOfRounds: 3,
+                      startPadding: 10.0,
+                      accelerationDuration: Duration(seconds: 1),
+                      accelerationCurve: Curves.linear,
+                      decelerationDuration: Duration(milliseconds: 500),
+                      decelerationCurve: Curves.easeOut,
                     ),
                   ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Icon(Icons.more_vert),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 4),
-              child: Row(
-                children: [
-                  Text(
-                    (widget.postData.prePrice.toString()).toVND(),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.red),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 0, right: 0, top: 8),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.home,
-                    color: Colors.orange.shade500,
-                    size: 15,
-                  ),
-                  Text(
-                    ' -${widget.postData.province}',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                        color: Colors.red),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 0, right: 0, top: 8),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.alarm,
-                    color: Colors.orange.shade500,
-                    size: 15,
-                  ),
-                  date == 0
-                      ? Text(
-                          ' - $timeActive giờ trước',
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                    child: Row(
+                      children: [
+                        Text(
+                          (widget.postData.prePrice.toString()).toVND(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                              fontSize: 16,
                               color: Colors.red),
                         )
-                      : Text(
-                          ' - $date ngày trước',
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.home,
+                          color: Colors.orange.shade500,
+                          size: 15,
+                        ),
+                        Text(
+                          widget.postData.province,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 12,
                               color: Colors.red),
                         ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.alarm,
+                          color: Colors.orange.shade500,
+                          size: 15,
+                        ),
+                        date == 0
+                            ? Text(
+                                ' - $timeActive giờ trước',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    color: Colors.red),
+                              )
+                            : Text(
+                                ' - $date ngày trước',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    color: Colors.red),
+                              ),
+                      ],
+                    ),
+                  ),
+                  widget.postData.isAdvertised
+                      ? Flexible(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 4),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.brightness_auto_outlined,
+                                  color: Colors.orange,
+                                  size: 18,
+                                ),
+                                Text(
+                                  " Ưu tiên",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.red),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
                 ],
               ),
             ),
-            widget.postData.isAdvertised
-                ? Flexible(
-                    flex: 1,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 4),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.brightness_auto_outlined,
-                            color: Colors.orange,
-                            size: 18,
-                          ),
-                          Text(
-                            " Ưu tiên",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.red),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                : SizedBox(),
+            SizedBox(
+              height: 10,
+            )
           ],
         ),
       ),

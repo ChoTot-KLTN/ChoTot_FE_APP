@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:chotot_app/src/common/common_const.dart';
+import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/filter_widget.dart';
+import 'package:chotot_app/src/widgets/post_widget_ver_s.dart';
 import 'package:flutter/material.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 
@@ -17,6 +22,11 @@ class _BicycleScreenState extends State<BicycleScreen> {
   String brandCurrent = listBrandBicycle[0];
   int startPrice = 0;
   int endPrice = 10000000;
+  StreamController<List<PostModel>> listPostController =
+      StreamController<List<PostModel>>();
+  StreamController<List<PostModel>> listPostPreorityController =
+      StreamController<List<PostModel>>();
+  List<PostModel> listTemp = [];
 
   callback(selectBrand, priceMax, priceMin) {
     setState(() {
@@ -26,9 +36,38 @@ class _BicycleScreenState extends State<BicycleScreen> {
     });
   }
 
+  loadData() async {
+    var listPostPreority = await PostServiceRepository()
+        .getAllPostWithTypePreority(
+            page: 0, limit: 10, status: 2, type: "PostBicycle");
+    if (listPostPreority.length == 0) {
+      listPostPreorityController.add([]);
+    } else {
+      listTemp.addAll(listPostPreority);
+      listPostPreorityController.add(listPostPreority);
+    }
+    var listPost = await PostServiceRepository()
+        .getAllPostWithType(page: 0, limit: 10, status: 2, type: "PostBicycle");
+    if (listPost.length == 0) {
+      listPostController.add([]);
+    } else {
+      // listPostController.add(listTemp);
+      listTemp.addAll(listPost);
+      listPostController.add(listTemp);
+    }
+  }
+
   @override
   void initState() {
+    loadData();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    listPostController.close();
+    listPostPreorityController.close();
+    super.dispose();
   }
 
   @override
@@ -142,13 +181,42 @@ class _BicycleScreenState extends State<BicycleScreen> {
                 height: 50,
               ),
             ),
-            SizedBox(
-              height: 180,
-              child: Text("Hiển thị tin từ API"),
-            ),
-            SizedBox(
-              height: 20,
-            ),
+            Container(
+                padding: EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  bottom: 20,
+                ),
+                margin: EdgeInsets.only(bottom: 20),
+                child: StreamBuilder<List<PostModel>>(
+                  stream: listPostController.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!.length == 0
+                          ? Center(
+                              child: Text("không có tin đăng nào"),
+                            )
+                          : ListView.builder(
+                              itemBuilder: (context, index) {
+                                return PostWidgetVerS(
+                                  postData: snapshot.data![index],
+                                );
+                              },
+                              itemCount: snapshot.data!.length,
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                            );
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text("Lỗi"),
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                )),
             SizedBox(
               child: GestureDetector(
                 onTap: () {

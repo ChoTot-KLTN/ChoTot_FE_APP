@@ -29,7 +29,7 @@ class AuthenticationRepository {
     };
 
     http.Response response = await http.post(
-        Uri.https('chotothd.herokuapp.com', '/auth/register'),
+        Uri.https('marketplace111.herokuapp.com', '/auth/register'),
         body: jsonEncode(body),
         headers: {
           "Content-type": "application/json",

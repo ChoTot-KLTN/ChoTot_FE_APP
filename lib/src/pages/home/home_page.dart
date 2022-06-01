@@ -21,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController search = TextEditingController();
   final CarouselController _controller = CarouselController();
   int current = 0;
+  int currentPage = 0;
+  bool endPage = false;
 
   static const imgList = [
     'assets/banner/chotota.png',
@@ -181,13 +183,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   StreamController<List<PostModel>> stream =
       StreamController<List<PostModel>>();
+  StreamController<List<PostModel>> listPostPreorityController =
+      StreamController<List<PostModel>>();
+  List<PostModel> listTemp = [];
+  ScrollController scrollController = ScrollController();
   loadData() async {
-    var result =
-        await PostServiceRepository().getAllPost(page: 0, limit: 10, status: 2);
+    var result = await PostServiceRepository()
+        .getAllPost(page: currentPage, limit: 10, status: 2);
     if (result.length == 0) {
-      stream.add([]);
+      endPage = true;
+      stream.add(listTemp);
     } else {
-      stream.add(result);
+      listTemp.addAll(result);
+      stream.add(listTemp);
+    }
+  }
+
+  loadDataPreority() async {
+    var listPreority = await PostServiceRepository()
+        .getAllPostpreority(page: 0, limit: 10, status: 2);
+    if (listPreority.length == 0) {
+      listPostPreorityController.add([]);
+    } else {
+      listPostPreorityController.add(listPreority);
     }
   }
 
@@ -195,6 +213,25 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     loadData();
+    loadDataPreority();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        setState(() {
+          currentPage = currentPage + 1;
+        });
+        if (endPage == false) {
+          loadData();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    stream.close();
+    listPostPreorityController.close();
+    super.dispose();
   }
 
   @override
@@ -217,6 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          controller: scrollController,
           child: Column(
             children: [
               CarouselSlider(
@@ -238,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 10,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Container(
                   height: 120,
                   //width: 85,
@@ -261,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //   height: 16,
               // ),
               Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: SizedBox(
                   child: Row(
                     children: [
@@ -276,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Container(
                   height: 300,
                   width: MediaQuery.of(context).size.width - 20,
@@ -301,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               buildDevider(Colors.black12, 0, 0, 6, 16),
               Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: SizedBox(
                   child: Row(
                     children: [
@@ -316,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.only(top: 8),
                 child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 3,
@@ -328,7 +366,60 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 15),
               buildDevider(Colors.black12, 0, 0, 6, 16),
               Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: SizedBox(
+                  child: Row(
+                    children: [
+                      Text(
+                        "Tin đăng ưu tiên",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  height: 50,
+                ),
+              ),
+              Container(
+                  height: 350,
+                  padding: EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    bottom: 20,
+                  ),
+                  child: StreamBuilder<List<PostModel>>(
+                    stream: listPostPreorityController.stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return snapshot.data!.length == 0
+                            ? Center(
+                                child: Text("không có tin đăng nào"),
+                              )
+                            : ListView.builder(
+                                itemBuilder: (context, index) {
+                                  return PostCard(
+                                    postData: snapshot.data![index],
+                                  );
+                                },
+                                itemCount: snapshot.data!.length,
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                              );
+                      }
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text("Lỗi"),
+                        );
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  )),
+              buildDevider(Colors.black12, 0, 0, 6, 16),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: SizedBox(
                   child: Row(
                     children: [
@@ -342,30 +433,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 50,
                 ),
               ),
+
               Container(
                 // height: 500,
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: StreamBuilder<List<PostModel>>(
                   stream: stream.stream,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 4.0,
-                            mainAxisSpacing: 8.0,
-                            mainAxisExtent: 310),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return PostCard(
-                            postData: snapshot.data![index],
-                          );
-                        },
-                        itemCount:
-                            snapshot.data!.length, //listDataProduct.length,
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                      );
+                      return snapshot.data!.length == 0
+                          ? Center(
+                              child: Text("Không có tin đăng nào"),
+                            )
+                          : GridView.builder(
+                              // controller: scrollController,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 4.0,
+                                      mainAxisSpacing: 8.0,
+                                      mainAxisExtent: 310),
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (context, index) {
+                                return PostCard(
+                                  postData: snapshot.data![index],
+                                );
+                              },
+                              itemCount: snapshot
+                                  .data!.length, //listDataProduct.length,
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                            );
                     }
                     if (snapshot.hasError) {
                       Center(
