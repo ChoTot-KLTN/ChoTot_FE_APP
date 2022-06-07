@@ -1,12 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:chotot_app/src/models/post/motorbike_model.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/number_widget.dart';
+import 'package:chotot_app/src/widgets/post_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
+import 'package:rxdart/rxdart.dart';
 
 class DetailPostMotorbike extends StatefulWidget {
   const DetailPostMotorbike({Key? key, this.postdetail}) : super(key: key);
@@ -22,6 +25,10 @@ class _DetailPostMotorbikeState extends State<DetailPostMotorbike> {
   String avatar = "a";
   PostMotorbikeModel? postMotorbikeModel;
   bool isLoading = true;
+  List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  var streamController = BehaviorSubject<List<PostModel>>();
+
+  List<PostModel> listPostRecommend = [];
   getPostDetail() async {
     try {
       var result =
@@ -41,23 +48,53 @@ class _DetailPostMotorbikeState extends State<DetailPostMotorbike> {
     }
   }
 
+  getListRecommend() async {
+    var listPost = await PostServiceRepository().getAllPostWithType(
+        page: 0, limit: 10, status: 2, type: "PostMotorbike");
+    if (listPost.length == 0) {
+      streamController.add([]);
+    } else {
+      // listPostController.add(listTemp);
+      listPostRecommend.addAll(listPost);
+      listPostRecommend
+          .removeWhere((element) => element.id == widget.postdetail!.id);
+      streamController.add(listPostRecommend);
+    }
+  }
+
   @override
   void initState() {
     listImgs = widget.postdetail!.image;
     getPostDetail();
+    getListRecommend();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    streamController.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     DateTime? dateStart = widget.postdetail!.dateStartPost;
+    // DateTime? dateEnd = widget.postData.dateEndPost;
+    int monthStart = widget.postdetail!.dateStartPost!.month;
+    int dayStart = widget.postdetail!.dateStartPost!.day;
+    int timeActive = 0;
     var dateNow = DateTime.now();
     int date = dateNow.day - dateStart!.day;
-    int timeActive = 0;
-    if (date == 0) {
-      timeActive = dateNow.hour - dateStart.hour;
+    if (dateNow.month == monthStart) {
+      if (date == 0) {
+        timeActive = dateNow.hour - dateStart.hour;
+      } else {
+        timeActive = date;
+      }
     } else {
-      timeActive = date;
+      int day = dateNow.day;
+      int d = dateOfMonth[dateNow.month - 1];
+      date = d - dayStart + day;
     }
     return Scaffold(
       appBar: AppBar(
@@ -406,6 +443,43 @@ class _DetailPostMotorbikeState extends State<DetailPostMotorbike> {
             height: 20,
           ),
           buildTilte("Các tin liên quan"),
+          Container(
+              height: 350,
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                bottom: 20,
+              ),
+              child: StreamBuilder<List<PostModel>>(
+                stream: streamController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!.length == 0
+                        ? Center(
+                            child: Text("không có tin đăng nào"),
+                          )
+                        : ListView.builder(
+                            itemBuilder: (context, index) {
+                              return PostCard(
+                                postData: snapshot.data![index],
+                              );
+                            },
+                            itemCount: snapshot.data!.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                          );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text("Lỗi"),
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              )),
         ],
       )),
     );

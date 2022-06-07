@@ -12,6 +12,7 @@ import 'package:chotot_app/src/pages/category_post/type_BDS/item_BDS.dart';
 
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/base_widget.dart';
+import 'package:chotot_app/src/widgets/post_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,8 +31,11 @@ class _PostTypeBDSScreenState extends State<PostTypeBDSScreen> {
     'assets/banner/bannerbdsb.jpg',
     'assets/banner/bannerbdsc.jpg',
   ];
-  StreamController<List<PostModel>> stream =
+  StreamController<List<PostModel>> streamCategoryController =
       StreamController<List<PostModel>>();
+  StreamController<List<PostModel>> streamCategoryLastController =
+      StreamController<List<PostModel>>();
+  List<PostModel> listTemp = [];
   int current = 0;
   List<ItemNews> listNews = [
     ItemNews(
@@ -74,11 +78,32 @@ class _PostTypeBDSScreenState extends State<PostTypeBDSScreen> {
   final CarouselController _controller = CarouselController();
 
   loadData() async {
-    var result = await PostServiceRepository().getAllPost(page: 0, limit: 10);
-    if (result.length == 0) {
-      stream.add([]);
+    var result1 = await PostServiceRepository()
+        .getAllPostWithCategoryBDSPriority(page: 0, limit: 10);
+    if (result1.length == 0) {
+      streamCategoryController.add([]);
     } else {
-      stream.add(result);
+      // streamCategoryController.add(result);
+      listTemp.addAll(result1);
+    }
+    var result = await PostServiceRepository()
+        .getAllPostWithCategoryBDS(page: 0, limit: 10);
+    if (result.length == 0) {
+      streamCategoryController.add([]);
+    } else {
+      listTemp.addAll(result);
+      streamCategoryController.add(listTemp);
+    }
+  }
+
+  loadDatalast() async {
+    var result = await PostServiceRepository()
+        .getAllPostWithCategoryBDSLast(page: 0, limit: 10);
+    if (result.length == 0) {
+      streamCategoryLastController.add([]);
+    } else {
+      // listTemp.addAll(result);
+      streamCategoryLastController.add(result);
     }
   }
 
@@ -127,12 +152,14 @@ class _PostTypeBDSScreenState extends State<PostTypeBDSScreen> {
   @override
   void initState() {
     super.initState();
-    // loadData();
+    loadData();
+    loadDatalast();
   }
 
   @override
   void dispose() {
-    stream.close();
+    streamCategoryController.close();
+    streamCategoryLastController.close();
     super.dispose();
   }
 
@@ -223,9 +250,47 @@ class _PostTypeBDSScreenState extends State<PostTypeBDSScreen> {
                 height: 50,
               ),
             ),
-            SizedBox(
-              height: 180,
-              child: Text("Hiển thị tin từ API"),
+            Container(
+              // height: 500,
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: StreamBuilder<List<PostModel>>(
+                stream: streamCategoryController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!.length == 0
+                        ? Center(
+                            child: Text("Không có tin đăng nào"),
+                          )
+                        : GridView.builder(
+                            // controller: scrollController,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 4.0,
+                                    mainAxisSpacing: 8.0,
+                                    mainAxisExtent: 330),
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              return PostCard(
+                                postData: snapshot.data![index],
+                              );
+                            },
+                            itemCount:
+                                snapshot.data!.length, //listDataProduct.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                          );
+                  }
+                  if (snapshot.hasError) {
+                    Center(
+                      child: Text("Lỗi"),
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
             ),
             SizedBox(
               height: 20,
@@ -257,10 +322,43 @@ class _PostTypeBDSScreenState extends State<PostTypeBDSScreen> {
                 height: 50,
               ),
             ),
-            SizedBox(
-              height: 180,
-              child: Text("Hiển thị tin từ API"),
-            ),
+            Container(
+                height: 350,
+                padding: EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  bottom: 20,
+                ),
+                child: StreamBuilder<List<PostModel>>(
+                  stream: streamCategoryLastController.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!.length == 0
+                          ? Center(
+                              child: Text("không có tin đăng nào"),
+                            )
+                          : ListView.builder(
+                              itemBuilder: (context, index) {
+                                return PostCard(
+                                  postData: snapshot.data![index],
+                                );
+                              },
+                              itemCount: snapshot.data!.length,
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                            );
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text("Lỗi"),
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                )),
             SizedBox(
               height: 20,
             ),

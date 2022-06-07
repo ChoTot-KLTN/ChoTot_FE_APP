@@ -34,8 +34,21 @@ class ApiGateway {
   static const updatePost = "post/update-post";
   static const reNewPost = "post/renew-post";
   static const getAllPostType = "post/get-all-post-type";
+  static const getAllPostCategoryTech = "post/get-list-post-categorytech";
+  static const getAllPostCategoryCar = "post/get-list-post-categorycar";
+  static const getAllPostCategoryBDS = "post/get-list-post-categorybds";
 
   // payment Service
   static const paymentPaypal = "payment/order";
   static const paymentVNPay = "post/priority-post";
+  static const vnPayRevenue = "vnpay/revenue";
+
+  // Favorite post
+  static const registerFavorite = "post/favorite";
+  static const getAllPostFavorite = "post/get-list-favorite";
+  static const cancelFavorite = "post/cancel-favorite";
+
+  // Comment post
+  static const createComment = "comments/create-comments";
+  static const getCommentOfPost = "comments/get-comments";
 }

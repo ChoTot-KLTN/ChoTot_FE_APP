@@ -47,6 +47,7 @@ dependencies:
   intl: ^0.17.0
   marquee: ^2.1.0
   webview_flutter: ^2.0.13
+  rxdart: ^0.27.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

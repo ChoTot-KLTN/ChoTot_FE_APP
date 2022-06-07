@@ -34,4 +34,16 @@ class PaymentRepository {
     print("statusCode: " + result.statusCode.toString());
     return result;
   }
+
+  Future<http.Response> vnpayRevenueAPI(
+      {required String idPost, required int price}) async {
+    print('request URL: ' +
+        ApiGateway.vnPayRevenue +
+        '?postId=$idPost&price=$price');
+    var bodypost = {"idPost": idPost, "price": price};
+    http.Response result =
+        await BaseRepository().post(ApiGateway.vnPayRevenue, bodypost);
+    print("statusCode: " + result.statusCode.toString());
+    return result;
+  }
 }

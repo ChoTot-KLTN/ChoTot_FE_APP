@@ -200,4 +200,169 @@ class PostServiceRepository {
     }
     return [];
   }
+
+  // lấy các bài post theo category Car
+  Future<List<PostModel>> getAllPostWithCategoryCar(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryCar +
+        '?isRecent=1&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostCategoryCar +
+            '?isRecent=1&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  // lấy các bài post theo category Car Ưu tiên
+  Future<List<PostModel>> getAllPostWithCategoryCarPriority(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryCar +
+        '?isAdvert=true&isRecent=1&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostCategoryCar +
+            '?isAdvert=true&isRecent=1&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  // lấy các bài post theo category Car mới tạo
+  Future<List<PostModel>> getAllPostWithCategoryCarLast(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryCar +
+        '?page=$page&limit=$limit');
+    http.Response result = await BaseRepository()
+        .get(ApiGateway.getAllPostCategoryCar + '?&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  // lấy các bài post theo category BDS
+  Future<List<PostModel>> getAllPostWithCategoryBDS(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryBDS +
+        '?isRecent=1&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostCategoryBDS +
+            '?isRecent=1&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  // lấy các bài post theo category BDS ưu tiên
+  Future<List<PostModel>> getAllPostWithCategoryBDSPriority(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryBDS +
+        '?isAdvert=true&isRecent=1&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostCategoryBDS +
+            '?isAdvert=true&isRecent=1&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  Future<List<PostModel>> getAllPostWithCategoryBDSLast(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryBDS +
+        '?page=$page&limit=$limit');
+    http.Response result = await BaseRepository()
+        .get(ApiGateway.getAllPostCategoryBDS + '?&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  // lấy các bài post theo category Tech
+  Future<List<PostModel>> getAllPostWithCategoryTech(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryTech +
+        '?isRecent=1&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostCategoryTech +
+            '?isRecent=1&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  Future<List<PostModel>> getAllPostWithCategoryTechPriority(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryTech +
+        '?isAdvert=true&isRecent=1&page=$page&limit=$limit');
+    http.Response result = await BaseRepository().get(
+        ApiGateway.getAllPostCategoryTech +
+            '?isAdvert=true&isRecent=1&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
+
+  Future<List<PostModel>> getAllPostWithCategoryTechLast(
+      {int? page, int? limit}) async {
+    print('request URL: ' +
+        ApiGateway.getAllPostCategoryTech +
+        '?page=$page&limit=$limit');
+    http.Response result = await BaseRepository()
+        .get(ApiGateway.getAllPostCategoryTech + '?&page=$page&limit=$limit');
+
+    if (result.statusCode == 200) {
+      var data = jsonDecode(result.body)['data']['posts'];
+      var list = PostModel.fromJsonList(data);
+      print("Data Response: " + data.toString());
+      return list;
+    }
+    return [];
+  }
 }

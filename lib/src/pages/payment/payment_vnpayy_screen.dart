@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chotot_app/src/repositories/payment_repo.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
@@ -65,12 +66,16 @@ class _PaymentVNPayScreenState extends State<PaymentVNPayScreen> {
               isAdver: true,
             );
             if (result.statusCode == 200) {
-              showDialog(
-                  context: context,
-                  builder: (contex) => CustomDialog(
-                      title: "Thanh toán thành công",
-                      description: "Bạn đã nâng cấp tin thành công",
-                      isSuccess: status));
+              var revenue = await PaymentRepository()
+                  .vnpayRevenueAPI(idPost: widget.postID, price: 50000);
+              if (revenue.statusCode == 200 || revenue.statusCode == 201) {
+                showDialog(
+                    context: context,
+                    builder: (contex) => CustomDialog(
+                        title: "Thanh toán thành công",
+                        description: "Bạn đã nâng cấp tin thành công",
+                        isSuccess: status));
+              }
             } else {
               showDialog(
                   context: context,

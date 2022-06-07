@@ -39,7 +39,7 @@ class _PostCardState extends State<PostCard> {
       if (date == 0) {
         timeActive = dateNow.hour - dateStart.hour;
       } else {
-        timeActive = date;
+        timeActive = date.abs();
       }
     } else {
       int day = dateNow.day;
