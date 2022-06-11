@@ -46,7 +46,7 @@ class FavoritePostModel {
     );
   }
 
-  static List<FavoritePostModel> formJsonList(List list) {
+  static List<FavoritePostModel> fromJsonList(List list) {
     return list.map((e) => FavoritePostModel.fromMap(e)).toList();
   }
 

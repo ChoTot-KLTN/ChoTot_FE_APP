@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'package:chotot_app/src/models/favorite_post_model.dart';
+import 'package:chotot_app/src/pages/notification/favorite_screen.dart';
 import 'package:flutter/material.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -10,6 +13,8 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen>
     with TickerProviderStateMixin {
   late TabController tabController;
+  StreamController<List<FavoritePostModel>> favoritePostController =
+      StreamController<List<FavoritePostModel>>.broadcast();
   @override
   void initState() {
     super.initState();
@@ -19,6 +24,7 @@ class _NotificationScreenState extends State<NotificationScreen>
   @override
   void dispose() {
     tabController.dispose();
+    favoritePostController.close();
     super.dispose();
   }
 
@@ -106,7 +112,12 @@ class _NotificationScreenState extends State<NotificationScreen>
               Expanded(
                   child: TabBarView(
                 controller: tabController,
-                children: [state1(context), state2(context)],
+                children: [
+                  FavoriteScreen(
+                    favoritePostController: favoritePostController,
+                  ),
+                  state2(context)
+                ],
               ))
             ],
           ),

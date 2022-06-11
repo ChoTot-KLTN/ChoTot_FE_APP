@@ -1,9 +1,11 @@
-import 'dart:async';
 import 'dart:convert';
 
+import 'package:chotot_app/src/models/comment_model.dart';
 import 'package:chotot_app/src/models/post/MotelRoom_model.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/repositories/comment_repo.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
+import 'package:chotot_app/src/widgets/comment_widget.dart';
 import 'package:chotot_app/src/widgets/number_widget.dart';
 import 'package:chotot_app/src/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +29,9 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
   bool isLoading = true;
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   var streamController = BehaviorSubject<List<PostModel>>();
-
+  var listCommentController = BehaviorSubject<List<CommentModel>>();
   List<PostModel> listPostRecommend = [];
+  TextEditingController comment = TextEditingController();
   getPostDetail() async {
     try {
       var result =
@@ -62,17 +65,29 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
     }
   }
 
+  getListComment() async {
+    var listComment =
+        await CommentRepository().getAllComment(postID: widget.postdetail!.id);
+    if (listComment.length == 0) {
+      listCommentController.add([]);
+    } else {
+      listCommentController.add(listComment);
+    }
+  }
+
   @override
   void initState() {
     listImgs = widget.postdetail!.image;
     getPostDetail();
     getListRecommend();
+    getListComment();
     super.initState();
   }
 
   @override
   void dispose() {
     streamController.close();
+    listCommentController.close();
     super.dispose();
   }
 
@@ -203,7 +218,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, right: 10, left: 10),
+            padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
             child: Column(
               children: [
                 Row(
@@ -252,7 +267,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
                       ],
                     ),
                     Container(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                           border: Border.all(width: 1, color: Colors.red),
                           borderRadius: BorderRadius.circular(100)),
@@ -281,7 +296,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
             height: 15,
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, right: 10, left: 20),
+            padding: const EdgeInsets.only(top: 10, right: 10, left: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -325,7 +340,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
                   ],
                 ),
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                       border:
                           Border.all(width: 1, color: Colors.orange.shade500),
@@ -340,7 +355,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
           ),
           NumberWidget(),
           Container(
-            padding: EdgeInsets.only(top: 10, right: 10, left: 20),
+            padding: const EdgeInsets.only(top: 10, right: 10, left: 20),
             width: MediaQuery.of(context).size.width - 20,
             child: Text(
               widget.postdetail!.content,
@@ -348,14 +363,14 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, right: 10, left: 20),
+            padding: const EdgeInsets.only(top: 10, right: 10, left: 20),
             child: Text(
               "Liên hệ ngay: 0123456789",
               style: TextStyle(color: Colors.blue.shade500),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, right: 10, left: 20),
+            padding: const EdgeInsets.only(top: 10, right: 10, left: 20),
             child: isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -378,7 +393,8 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
           ),
           buildTilte("Hỏi người bán qua chat"),
           Padding(
-            padding: EdgeInsets.only(top: 0, right: 10, left: 10, bottom: 0),
+            padding:
+                const EdgeInsets.only(top: 0, right: 10, left: 10, bottom: 0),
             child: SizedBox(
               height: 40,
               child: ListView(
@@ -408,7 +424,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
           ),
           buildTilte("Khu vực"),
           Padding(
-            padding: EdgeInsets.only(top: 0, right: 10, left: 20),
+            padding: const EdgeInsets.only(top: 0, right: 10, left: 20),
             child: Row(
               children: [
                 Icon(Icons.location_on_outlined),
@@ -474,6 +490,101 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
                   );
                 },
               )),
+          buildTilte("Bình luận"),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 10,
+              right: 10,
+              bottom: 20,
+            ),
+            child: SizedBox(
+              height: 50,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width - 100,
+                    child: TextField(
+                      controller: comment,
+                      decoration: InputDecoration(
+                          hintText: "Nhập bình luận...",
+                          contentPadding: const EdgeInsets.only(left: 10)),
+                      onSubmitted: (content) {
+                        print(content);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: GestureDetector(
+                      onTap: () async {
+                        print("Send cmt");
+                        var sendCMT = await CommentRepository().registerComment(
+                            idPost: widget.postdetail!.id, text: comment.text);
+                        if (sendCMT.statusCode == 200) {
+                          // showDialoga(
+                          //     title: "Thành công",
+                          //     subTitle: "Gửi yêu cầu thành công",
+                          //     status: "Success");
+                          // await widget.loadData;
+                          getListComment();
+                        } else {
+                          // showDialoga(
+                          //     title: "Thất bại",
+                          //     subTitle: "Gửi yêu cầu thất bại",
+                          //     status: "Fail");
+                        }
+                        setState(() {
+                          comment.text = "";
+                        });
+                      },
+                      child: Icon(
+                        Icons.send_rounded,
+                        color: Colors.orange.shade500,
+                        size: 24,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: 500,
+            child: StreamBuilder<List<CommentModel>>(
+                stream: listCommentController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!.length == 0
+                        ? Center(
+                            child: Text("Chưa có bình luận"),
+                          )
+                        : ListView.builder(
+                            itemBuilder: (context, index) {
+                              return CommentWidget(
+                                commentDetail: snapshot.data![index],
+                                commentStream: listCommentController,
+                                postID: widget.postdetail!.id,
+                              );
+                            },
+                            itemCount: snapshot.data!.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            padding: EdgeInsets.all(10),
+                            // scrollDirection: Axis.horizontal,
+                          );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text("Lỗi"),
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }),
+          )
+          // CommentWidget()
         ],
       )),
     );
@@ -493,7 +604,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
 
   Widget buildItemChat(String title) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
           border: Border.all(width: 1, color: Colors.orange),
           borderRadius: BorderRadius.circular(100)),
@@ -505,7 +616,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
 
   Widget buildTilte(String title) {
     return Padding(
-      padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
+      padding: const EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
       child: Text(
         title,
         style: TextStyle(color: Colors.grey, fontSize: 20),
@@ -522,7 +633,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
       child: Container(
         height: 70,
         width: MediaQuery.of(context).size.width / 3 - 5,
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(color: bg != null ? bg : Colors.white),
         child: Row(
           children: [

@@ -29,7 +29,7 @@ class ItemPostWidget extends StatelessWidget {
         height: 100,
         child: Column(children: [
           Container(
-            padding: EdgeInsets.only(top: 5, left: 5, right: 5),
+            padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
             width: 90,
             height: 90,
             decoration: BoxDecoration(

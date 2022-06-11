@@ -1,33 +1,36 @@
 import 'dart:async';
 
+import 'package:chotot_app/src/models/favorite_post_model.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
-import 'package:chotot_app/src/repositories/post_service_repo.dart';
+import 'package:chotot_app/src/repositories/favorite_repo.dart';
 import 'package:chotot_app/src/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 
-class PostwidgetReject extends StatefulWidget {
-  const PostwidgetReject(
-      {Key? key, required this.postData, required this.postRejectController})
+class PostwidgetFavorite extends StatefulWidget {
+  const PostwidgetFavorite(
+      {Key? key,
+      required this.postData,
+      required this.postFavoriteController,
+      required this.idFavorite})
       : super(key: key);
   final PostModel postData;
-  // final Future loadData;
-  final StreamController<List<PostModel>> postRejectController;
+  final String idFavorite;
+  final StreamController<List<FavoritePostModel>> postFavoriteController;
   @override
-  State<PostwidgetReject> createState() => _PostwidgetRejectState();
+  State<PostwidgetFavorite> createState() => _PostwidgetFavoriteState();
 }
 
-class _PostwidgetRejectState extends State<PostwidgetReject> {
+class _PostwidgetFavoriteState extends State<PostwidgetFavorite> {
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   loadData() async {
     try {
-      var result = await PostServiceRepository()
-          .getAllPostAuth(page: 0, limit: 10, status: 1);
-      if (result.length == 0) {
-        widget.postRejectController.add([]);
+      var result = await FavoriteRepository().getAllPostRegister();
+      if (result!.length == 0) {
+        widget.postFavoriteController.add([]);
       } else {
-        widget.postRejectController.add(result);
+        widget.postFavoriteController.add(result);
       }
     } catch (err) {
       // widget.postRejectController.addError("error");
@@ -236,7 +239,7 @@ class _PostwidgetRejectState extends State<PostwidgetReject> {
                                 size: 15,
                               ),
                               Text(
-                                ' Từ chối duyệt',
+                                'Đã thích',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,
@@ -254,9 +257,8 @@ class _PostwidgetRejectState extends State<PostwidgetReject> {
                               primary: Colors.orange.shade500),
                           onPressed: () async {
                             print("Yêu cầu lại");
-                            var result = await PostServiceRepository()
-                                .updateStatusPostAPI(
-                                    idPost: widget.postData.id, status: 0);
+                            var result = await FavoriteRepository()
+                                .cancelFavorite(idFavorite: widget.idFavorite);
                             if (result.statusCode == 200) {
                               showDialoga(
                                   title: "Thành công",
@@ -271,7 +273,7 @@ class _PostwidgetRejectState extends State<PostwidgetReject> {
                                   status: "Fail");
                             }
                           },
-                          child: Text("Yêu cầu lại")),
+                          child: Text("Hủy thích")),
                     )
                   ],
                 ),

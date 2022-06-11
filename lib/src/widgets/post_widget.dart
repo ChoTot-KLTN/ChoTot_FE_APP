@@ -10,6 +10,8 @@ import 'package:chotot_app/src/pages/detail_post/detail_post_motelroom.dart';
 import 'package:chotot_app/src/pages/detail_post/detail_post_motorbike.dart';
 import 'package:chotot_app/src/pages/detail_post/detail_post_office.dart';
 import 'package:chotot_app/src/pages/detail_post/detail_post_phone.dart';
+import 'package:chotot_app/src/repositories/favorite_repo.dart';
+import 'package:chotot_app/src/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,8 +23,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  // String dateStart = DateFormat("d/MM/y -").format(DateTime.now());
-  // String dateEnd = DateFormat(" d/MM/y").format(DateTime.now());
+  bool isFavorite = false;
   List<int> dateOfMonth = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   @override
   Widget build(BuildContext context) {
@@ -117,7 +118,7 @@ class _PostCardState extends State<PostCard> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 10, right: 5),
+              padding: const EdgeInsets.only(top: 10, right: 5),
               child: Stack(children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
@@ -150,7 +151,7 @@ class _PostCardState extends State<PostCard> {
                     top: 5,
                     left: 5,
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           border: Border.all(width: 1, color: Colors.white),
                           borderRadius: BorderRadius.circular(8),
@@ -168,15 +169,44 @@ class _PostCardState extends State<PostCard> {
                 Positioned(
                     bottom: 5,
                     right: 5,
-                    child: Icon(
-                      Icons.favorite_border,
-                      color: Colors.red,
-                      size: 28,
+                    child: GestureDetector(
+                      onTap: () async {
+                        print("Favorite");
+                        setState(() {
+                          isFavorite = !isFavorite;
+                        });
+                        var response = await FavoriteRepository()
+                            .registerFavorite(idPost: widget.postData.id);
+                        if (response.statusCode == 200) {
+                          print("Register Favorite success");
+                          showDialoga(
+                              title: "Thành công",
+                              subTitle: "Đã thích bài post",
+                              status: "Success");
+                        } else {
+                          print("Register fail");
+                          showDialoga(
+                              title: "Thất bại",
+                              subTitle: "Thích bài đăng thất bại",
+                              status: "Fail");
+                        }
+                      },
+                      child: isFavorite
+                          ? Icon(
+                              Icons.favorite_rounded,
+                              color: Colors.red,
+                              size: 28,
+                            )
+                          : Icon(
+                              Icons.favorite_border,
+                              color: Colors.red,
+                              size: 28,
+                            ),
                     )),
               ]),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 8),
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -198,7 +228,7 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 4),
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 4),
               child: Row(
                 children: [
                   Text(
@@ -212,7 +242,7 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+              padding: const EdgeInsets.only(left: 0, right: 0, top: 8),
               child: Row(
                 children: [
                   Icon(
@@ -231,7 +261,7 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+              padding: const EdgeInsets.only(left: 0, right: 0, top: 8),
               child: Row(
                 children: [
                   Icon(
@@ -261,7 +291,7 @@ class _PostCardState extends State<PostCard> {
                 ? Flexible(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 4),
+                      padding: const EdgeInsets.only(top: 4),
                       child: Row(
                         children: [
                           Icon(

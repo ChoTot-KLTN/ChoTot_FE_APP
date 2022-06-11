@@ -51,4 +51,5 @@ class ApiGateway {
   // Comment post
   static const createComment = "comments/create-comments";
   static const getCommentOfPost = "comments/get-comments";
+  static const deleteComment = "comments/delete-comments";
 }
