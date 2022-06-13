@@ -1,12 +1,20 @@
-import 'package:chotot_app/src/common/common_const.dart';
+import 'dart:async';
+
+import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/repositories/search_post_repo.dart';
+import 'package:chotot_app/src/widgets/dialog_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 
 class FilterBDSScreen extends StatelessWidget {
   final String typePost;
   final Function callBackFunc;
+  final StreamController<List<PostModel>> streamSearchController;
   const FilterBDSScreen(
-      {Key? key, required this.callBackFunc, required this.typePost})
+      {Key? key,
+      required this.callBackFunc,
+      required this.typePost,
+      required this.streamSearchController})
       : super(key: key);
 
   @override
@@ -18,8 +26,8 @@ class FilterBDSScreen extends StatelessWidget {
     RangeLabels labels = RangeLabels(
         values.start.round().toString(), values.end.round().toString());
 
-    double startArea = 0.0;
-    double endArea = 10000.0;
+    int startArea = 0;
+    int endArea = 10000;
 
     RangeValues valueArea = RangeValues(10, 10000);
 
@@ -80,7 +88,7 @@ class FilterBDSScreen extends StatelessWidget {
                           RangeSlider(
                               values: values,
                               labels: labels,
-                              divisions: 30,
+                              divisions: 100,
                               min: 100000,
                               max: 1500000000,
                               onChanged: (newValues) {
@@ -118,14 +126,14 @@ class FilterBDSScreen extends StatelessWidget {
                           RangeSlider(
                               values: valueArea,
                               labels: labelArea,
-                              divisions: 50,
+                              divisions: 90,
                               min: 0,
                               max: 10000,
                               onChanged: (newValues) {
                                 setState(() {
                                   valueArea = newValues;
-                                  startArea = valueArea.start;
-                                  endArea = valueArea.end;
+                                  startArea = valueArea.start.toInt();
+                                  endArea = valueArea.end.toInt();
                                 });
                               }),
                           SizedBox(
@@ -138,10 +146,26 @@ class FilterBDSScreen extends StatelessWidget {
                                   primary: Colors.orange.shade500,
                                   minimumSize: Size(
                                       MediaQuery.of(context).size.width, 40)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
+                              onPressed: () async {
                                 callBackFunc(
                                     endPrice, startPrice, endArea, startArea);
+                                showDialogLoading(context);
+                                var result = await SearchPostRepository()
+                                    .searchPostBDS(
+                                        maxPrice: endPrice,
+                                        minPrice: startPrice,
+                                        category: typePost,
+                                        area: 1,
+                                        maxArea: endArea,
+                                        minArea: startArea,
+                                        page: 0,
+                                        limit: 10);
+                                Navigator.of(context).pop();
+                                if (result.length > 0) {
+                                  // update lại danh sách
+                                  streamSearchController.add(result);
+                                }
+                                Navigator.of(context).pop();
                               },
                               child: Text(
                                 "Áp dụng",

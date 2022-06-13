@@ -246,7 +246,7 @@ class PostServiceRepository {
         ApiGateway.getAllPostCategoryCar +
         '?page=$page&limit=$limit');
     http.Response result = await BaseRepository()
-        .get(ApiGateway.getAllPostCategoryCar + '?&page=$page&limit=$limit');
+        .get(ApiGateway.getAllPostCategoryCar + '?page=$page&limit=$limit');
 
     if (result.statusCode == 200) {
       var data = jsonDecode(result.body)['data']['posts'];
@@ -301,7 +301,7 @@ class PostServiceRepository {
         ApiGateway.getAllPostCategoryBDS +
         '?page=$page&limit=$limit');
     http.Response result = await BaseRepository()
-        .get(ApiGateway.getAllPostCategoryBDS + '?&page=$page&limit=$limit');
+        .get(ApiGateway.getAllPostCategoryBDS + '?page=$page&limit=$limit');
 
     if (result.statusCode == 200) {
       var data = jsonDecode(result.body)['data']['posts'];
@@ -355,7 +355,7 @@ class PostServiceRepository {
         ApiGateway.getAllPostCategoryTech +
         '?page=$page&limit=$limit');
     http.Response result = await BaseRepository()
-        .get(ApiGateway.getAllPostCategoryTech + '?&page=$page&limit=$limit');
+        .get(ApiGateway.getAllPostCategoryTech + '?page=$page&limit=$limit');
 
     if (result.statusCode == 200) {
       var data = jsonDecode(result.body)['data']['posts'];

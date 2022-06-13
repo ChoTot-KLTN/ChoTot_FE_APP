@@ -7,6 +7,7 @@ import 'package:chotot_app/src/widgets/flitter_BDS.dart';
 import 'package:chotot_app/src/widgets/post_widget_ver_s.dart';
 import 'package:flutter/material.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ApartmentScreen extends StatefulWidget {
   ApartmentScreen({Key? key}) : super(key: key);
@@ -20,10 +21,9 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   String provice = listProvince[0];
   int startPrice = 0;
   int endPrice = 10000000;
-  double startArea = 0;
-  double endArea = 10000;
-  StreamController<List<PostModel>> listPostController =
-      StreamController<List<PostModel>>();
+  int startArea = 0;
+  int endArea = 10000;
+  var listPostController = BehaviorSubject<List<PostModel>>();
   StreamController<List<PostModel>> listPostPreorityController =
       StreamController<List<PostModel>>();
   List<PostModel> listTemp = [];
@@ -143,7 +143,8 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                 children: [
                   FilterBDSScreen(
                     callBackFunc: callback,
-                    typePost: "Apartment",
+                    typePost: "PostApartment",
+                    streamSearchController: listPostController,
                   ),
                   Padding(
                       padding: EdgeInsets.only(top: 18, right: 10),

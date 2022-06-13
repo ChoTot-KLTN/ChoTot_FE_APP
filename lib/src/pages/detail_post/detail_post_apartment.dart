@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:chotot_app/src/models/comment_model.dart';
 import 'package:chotot_app/src/models/post/apartment_model.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
-import 'package:chotot_app/src/models/user_model.dart';
-import 'package:chotot_app/src/providers/user_provider.dart';
+
 import 'package:chotot_app/src/repositories/comment_repo.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/comment_widget.dart';
@@ -570,7 +568,8 @@ class _DetailPostAparmentState extends State<DetailPostAparment> {
             ),
           ),
           Container(
-            height: 500,
+            // height: 500,
+            padding: const EdgeInsets.only(bottom: 50),
             child: StreamBuilder<List<CommentModel>>(
                 stream: listCommentController.stream,
                 builder: (context, snapshot) {

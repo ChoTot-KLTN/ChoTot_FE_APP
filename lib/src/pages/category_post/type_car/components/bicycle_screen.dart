@@ -7,6 +7,7 @@ import 'package:chotot_app/src/widgets/filter_widget.dart';
 import 'package:chotot_app/src/widgets/post_widget_ver_s.dart';
 import 'package:flutter/material.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
+import 'package:rxdart/rxdart.dart';
 
 class BicycleScreen extends StatefulWidget {
   const BicycleScreen({Key? key}) : super(key: key);
@@ -22,8 +23,7 @@ class _BicycleScreenState extends State<BicycleScreen> {
   String brandCurrent = listBrandBicycle[0];
   int startPrice = 0;
   int endPrice = 10000000;
-  StreamController<List<PostModel>> listPostController =
-      StreamController<List<PostModel>>();
+  var listPostController = BehaviorSubject<List<PostModel>>();
   StreamController<List<PostModel>> listPostPreorityController =
       StreamController<List<PostModel>>();
   List<PostModel> listTemp = [];
@@ -141,7 +141,8 @@ class _BicycleScreenState extends State<BicycleScreen> {
                 children: [
                   FilterScreen(
                     callBackFunc: callback,
-                    typePost: "Bicycle",
+                    typePost: "PostBicycle",
+                    streamSearchController: listPostController,
                   ),
                   Padding(
                       padding: EdgeInsets.only(top: 18),

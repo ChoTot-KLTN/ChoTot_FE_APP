@@ -8,6 +8,7 @@ import 'package:chotot_app/src/widgets/flitter_BDS.dart';
 import 'package:chotot_app/src/widgets/post_widget_ver_s.dart';
 import 'package:flutter/material.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
+import 'package:rxdart/rxdart.dart';
 
 class GroundScreen extends StatefulWidget {
   GroundScreen({Key? key}) : super(key: key);
@@ -21,10 +22,9 @@ class _GroundScreenState extends State<GroundScreen> {
   String provice = listProvince[0];
   int startPrice = 0;
   int endPrice = 10000000;
-  double startArea = 0;
-  double endArea = 10000;
-  StreamController<List<PostModel>> listPostController =
-      StreamController<List<PostModel>>();
+  int startArea = 0;
+  int endArea = 10000;
+  var listPostController = BehaviorSubject<List<PostModel>>();
   StreamController<List<PostModel>> listPostPreorityController =
       StreamController<List<PostModel>>();
   List<PostModel> listTemp = [];
@@ -41,15 +41,15 @@ class _GroundScreenState extends State<GroundScreen> {
   loadData() async {
     var listPostPreority = await PostServiceRepository()
         .getAllPostWithTypePreority(
-            page: 0, limit: 10, status: 2, type: "PostApartment");
+            page: 0, limit: 10, status: 2, type: "PostGround");
     if (listPostPreority.length == 0) {
       listPostPreorityController.add([]);
     } else {
       listTemp.addAll(listPostPreority);
       listPostPreorityController.add(listPostPreority);
     }
-    var listPost = await PostServiceRepository().getAllPostWithType(
-        page: 0, limit: 10, status: 2, type: "PostApartment");
+    var listPost = await PostServiceRepository()
+        .getAllPostWithType(page: 0, limit: 10, status: 2, type: "PostGround");
     if (listPost.length == 0) {
       listPostController.add([]);
     } else {
@@ -144,7 +144,8 @@ class _GroundScreenState extends State<GroundScreen> {
                 children: [
                   FilterBDSScreen(
                     callBackFunc: callback,
-                    typePost: "Apartment",
+                    typePost: "PostGround",
+                    streamSearchController: listPostController,
                   ),
                   Padding(
                       padding: EdgeInsets.only(top: 18, right: 10),

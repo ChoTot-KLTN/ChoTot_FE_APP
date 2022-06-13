@@ -52,4 +52,12 @@ class ApiGateway {
   static const createComment = "comments/create-comments";
   static const getCommentOfPost = "comments/get-comments";
   static const deleteComment = "comments/delete-comments";
+
+  // search post
+  static const searchPostTech = "post/filter";
+  static const searchPostBDS = "post/filter-bds";
+
+  // getUserInfor
+  static const getUserInfor = "auth/get-user-infor";
+  static const createRating = "rating/create-rating";
 }

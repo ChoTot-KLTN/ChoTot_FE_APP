@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:chotot_app/src/models/comment_model.dart';
@@ -558,7 +557,8 @@ class _DetailPostOfficeState extends State<DetailPostOffice> {
             ),
           ),
           Container(
-            height: 500,
+            // height: 500,
+            padding: const EdgeInsets.only(bottom: 50),
             child: StreamBuilder<List<CommentModel>>(
                 stream: listCommentController.stream,
                 builder: (context, snapshot) {

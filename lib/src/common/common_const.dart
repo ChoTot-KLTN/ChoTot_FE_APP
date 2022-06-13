@@ -177,6 +177,7 @@ List<String> listTypeHouse = [
 ];
 
 List<String> listProvince = [
+  "",
   "Tỉnh An Giang",
   "Tỉnh Bà Rịa - Vũng Tàu",
   "Tỉnh Bắc Giang",
