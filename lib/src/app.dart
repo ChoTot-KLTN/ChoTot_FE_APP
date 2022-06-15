@@ -55,6 +55,7 @@ class _AppChoTotState extends State<AppChoTot> {
         ? SplashScreen()
         : GetStorage().read('token') != null
             ? MyHomePage()
-            : LoginScreen();
+            : MyHomePage();
+    // : LoginScreen();
   }
 }

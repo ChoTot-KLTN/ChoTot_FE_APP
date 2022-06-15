@@ -11,6 +11,7 @@ import 'package:chotot_app/src/widgets/number_widget.dart';
 import 'package:chotot_app/src/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DetailPostlaptop extends StatefulWidget {
@@ -510,63 +511,68 @@ class _DetailPostlaptopState extends State<DetailPostlaptop> {
                 },
               )),
           buildTilte("Bình luận"),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 10,
-              right: 10,
-              bottom: 20,
-            ),
-            child: SizedBox(
-              height: 50,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width - 100,
-                    child: TextField(
-                      controller: comment,
-                      decoration: InputDecoration(
-                          hintText: "Nhập bình luận...",
-                          contentPadding: const EdgeInsets.only(left: 10)),
-                      onSubmitted: (content) {
-                        print(content);
-                      },
+          GetStorage().read('token') != null
+              ? Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    bottom: 20,
+                  ),
+                  child: SizedBox(
+                    height: 50,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 100,
+                          child: TextField(
+                            controller: comment,
+                            decoration: InputDecoration(
+                                hintText: "Nhập bình luận...",
+                                contentPadding:
+                                    const EdgeInsets.only(left: 10)),
+                            onSubmitted: (content) {
+                              print(content);
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: GestureDetector(
+                            onTap: () async {
+                              var sendCMT = await CommentRepository()
+                                  .registerComment(
+                                      idPost: widget.postdetail!.id,
+                                      text: comment.text);
+                              if (sendCMT.statusCode == 200) {
+                                // showDialoga(
+                                //     title: "Thành công",
+                                //     subTitle: "Gửi yêu cầu thành công",
+                                //     status: "Success");
+                                // await widget.loadData;
+                                getListComment();
+                              } else {
+                                // showDialoga(
+                                //     title: "Thất bại",
+                                //     subTitle: "Gửi yêu cầu thất bại",
+                                //     status: "Fail");
+                              }
+                              setState(() {
+                                comment.text = "";
+                              });
+                            },
+                            child: Icon(
+                              Icons.send_rounded,
+                              color: Colors.orange.shade500,
+                              size: 24,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: GestureDetector(
-                      onTap: () async {
-                        var sendCMT = await CommentRepository().registerComment(
-                            idPost: widget.postdetail!.id, text: comment.text);
-                        if (sendCMT.statusCode == 200) {
-                          // showDialoga(
-                          //     title: "Thành công",
-                          //     subTitle: "Gửi yêu cầu thành công",
-                          //     status: "Success");
-                          // await widget.loadData;
-                          getListComment();
-                        } else {
-                          // showDialoga(
-                          //     title: "Thất bại",
-                          //     subTitle: "Gửi yêu cầu thất bại",
-                          //     status: "Fail");
-                        }
-                        setState(() {
-                          comment.text = "";
-                        });
-                      },
-                      child: Icon(
-                        Icons.send_rounded,
-                        color: Colors.orange.shade500,
-                        size: 24,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+                )
+              : SizedBox(),
           Container(
             // height: 500,
             padding: const EdgeInsets.only(bottom: 50),

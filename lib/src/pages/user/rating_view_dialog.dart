@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:chotot_app/src/models/owner_post_model.dart';
@@ -9,10 +10,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 // ignore: must_be_immutable
 class RatingView extends StatefulWidget {
-  RatingView({Key? key, required this.idOwner, required this.ownerPostModel})
+  RatingView({Key? key, required this.idOwner, required this.streamOwnerModel})
       : super(key: key);
   final String idOwner;
-  OwnerPostModel? ownerPostModel;
+  StreamController<OwnerPostModel> streamOwnerModel;
   @override
   State<RatingView> createState() => _RatingViewState();
 }
@@ -24,7 +25,7 @@ class _RatingViewState extends State<RatingView> {
   }
 
   var _ratingPageController = PageController();
-  double rate = 0;
+  double rate = 3.0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,6 +52,7 @@ class _RatingViewState extends State<RatingView> {
               right: 0,
               child: GestureDetector(
                 onTap: () async {
+                  print("rate: " + rate.toString());
                   var result = await UserRepository()
                       .createRating(idOwner: widget.idOwner, rate: rate);
                   if (result.statusCode == 200) {
@@ -58,7 +60,7 @@ class _RatingViewState extends State<RatingView> {
                         .getUserInforAPI(userId: widget.idOwner);
                     if (updateUserRate != null) {
                       setState(() {
-                        widget.ownerPostModel = updateUserRate;
+                        widget.streamOwnerModel.sink.add(updateUserRate);
                       });
                     }
                     showDialoga(
@@ -116,9 +118,10 @@ class _RatingViewState extends State<RatingView> {
             color: Colors.amber,
           ),
           onRatingUpdate: (rating) {
-            // setState(() {
-            //   rate = rating;
-            // });
+            print(rating);
+            setState(() {
+              rate = rating;
+            });
           },
         ),
       ],

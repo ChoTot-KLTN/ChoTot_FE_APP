@@ -5,8 +5,10 @@ import 'package:chotot_app/src/pages/managePost/manage_post_screen.dart';
 import 'package:chotot_app/src/pages/notification/notification_page.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:chotot_app/src/repositories/authentication_repo.dart';
+import 'package:chotot_app/src/widgets/guest_screen.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -39,16 +41,23 @@ class _MyHomePageState extends State<MyHomePage> {
         child = HomeScreen();
         break;
       case 1:
-        child = ManagePostScreen();
+        child = GetStorage().read('token') == null
+            ? GuestScreen()
+            : ManagePostScreen();
         break;
       case 2:
-        child = CreatePostScreen();
+        child = GetStorage().read('token') == null
+            ? GuestScreen()
+            : CreatePostScreen();
         break;
       case 3:
-        child = NotificationScreen();
+        child = GetStorage().read('token') == null
+            ? GuestScreen()
+            : NotificationScreen();
         break;
       default:
-        child = MoreScreen();
+        child =
+            GetStorage().read('token') == null ? GuestScreen() : MoreScreen();
         break;
     }
     return Scaffold(

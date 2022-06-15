@@ -144,6 +144,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   },
                 ),
                 buildItem(Colors.grey.shade500, Icons.logout, "Thoát", () {
+                  GetStorage().remove('token');
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => LoginScreen()),
                       (route) => false);
