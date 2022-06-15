@@ -73,7 +73,7 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 10, right: 5),
+            padding: const EdgeInsets.only(top: 10, right: 5),
             child: Stack(children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
@@ -106,7 +106,7 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
                   top: 5,
                   left: 5,
                   child: Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         border: Border.all(width: 1, color: Colors.white),
                         borderRadius: BorderRadius.circular(8),
@@ -161,7 +161,7 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                  padding: const EdgeInsets.only(left: 0, right: 0, top: 8),
                   child: Row(
                     children: [
                       Text(
@@ -175,7 +175,7 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                  padding: const EdgeInsets.only(left: 0, right: 0, top: 8),
                   child: Row(
                     children: [
                       Icon(
@@ -200,7 +200,8 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                          padding:
+                              const EdgeInsets.only(left: 0, right: 0, top: 8),
                           child: Row(
                             children: [
                               Icon(
@@ -227,7 +228,8 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                          padding:
+                              const EdgeInsets.only(left: 0, right: 0, top: 8),
                           child: Row(
                             children: [
                               Icon(
@@ -247,43 +249,44 @@ class _PostwidgetOvertimeState extends State<PostwidgetOverTime> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 8),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.orange.shade500),
-                          onPressed: () async {
-                            var result = await PostServiceRepository()
-                                .reNewPostAPI(
-                                    idPost: widget.postData.id, date: 7);
-                            if (result.statusCode == 200 ||
-                                result.statusCode == 201) {
-                              Get.snackbar(
-                                  "Thành công", "Gia hạn bài viết thành công",
-                                  duration: Duration(seconds: 3),
-                                  margin: EdgeInsets.all(6),
-                                  backgroundColor: Colors.white,
-                                  leftBarIndicatorColor: Colors.green,
-                                  colorText: Colors.black,
-                                  snackPosition: SnackPosition.TOP);
-                              // await widget.loadData;
-                              loadData();
-                            } else {
-                              Get.snackbar(
-                                "Thất bại",
-                                "Gia hạn bài viết thất bại",
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.orange.shade500,
+                            minimumSize: Size(30, 30)),
+                        onPressed: () async {
+                          var result = await PostServiceRepository()
+                              .reNewPostAPI(
+                                  idPost: widget.postData.id, date: 7);
+                          if (result.statusCode == 200 ||
+                              result.statusCode == 201) {
+                            Get.snackbar(
+                                "Thành công", "Gia hạn bài viết thành công",
                                 duration: Duration(seconds: 3),
                                 margin: EdgeInsets.all(6),
                                 backgroundColor: Colors.white,
-                                leftBarIndicatorColor: Colors.red,
+                                leftBarIndicatorColor: Colors.green,
                                 colorText: Colors.black,
-                                snackPosition: SnackPosition.TOP,
-                              );
-                            }
-                            print("Yêu cầu lại");
-                          },
-                          child: Text("Gia hạn")),
-                    )
+                                snackPosition: SnackPosition.TOP);
+                            // await widget.loadData;
+                            loadData();
+                          } else {
+                            Get.snackbar(
+                              "Thất bại",
+                              "Gia hạn bài viết thất bại",
+                              duration: Duration(seconds: 3),
+                              margin: EdgeInsets.all(6),
+                              backgroundColor: Colors.white,
+                              leftBarIndicatorColor: Colors.red,
+                              colorText: Colors.black,
+                              snackPosition: SnackPosition.TOP,
+                            );
+                          }
+                          print("Yêu cầu lại");
+                        },
+                        child: Text(
+                          "Gia hạn",
+                          style: TextStyle(fontSize: 12),
+                        )),
                   ],
                 ),
               ],

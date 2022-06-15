@@ -61,7 +61,7 @@ class _PostwidgetFavoriteState extends State<PostwidgetFavorite> {
     }
 
     return Container(
-      height: 150,
+      height: 180,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -76,7 +76,7 @@ class _PostwidgetFavoriteState extends State<PostwidgetFavorite> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 10, right: 5),
+            padding: const EdgeInsets.only(top: 10, right: 5),
             child: Stack(children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
@@ -109,7 +109,7 @@ class _PostwidgetFavoriteState extends State<PostwidgetFavorite> {
                   top: 5,
                   left: 5,
                   child: Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         border: Border.all(width: 1, color: Colors.white),
                         borderRadius: BorderRadius.circular(8),
@@ -178,7 +178,7 @@ class _PostwidgetFavoriteState extends State<PostwidgetFavorite> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                  padding: const EdgeInsets.only(left: 0, right: 0, top: 8),
                   child: Row(
                     children: [
                       Icon(
@@ -203,7 +203,7 @@ class _PostwidgetFavoriteState extends State<PostwidgetFavorite> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 0, right: 0, top: 8),
+                          padding: const EdgeInsets.only(top: 8),
                           child: Row(
                             children: [
                               Icon(
@@ -229,52 +229,58 @@ class _PostwidgetFavoriteState extends State<PostwidgetFavorite> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 0, right: 0, top: 8),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.cancel_outlined,
-                                color: Colors.red.shade500,
-                                size: 15,
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8, right: 8),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.cancel_outlined,
+                                    color: Colors.red.shade500,
+                                    size: 15,
+                                  ),
+                                  Text(
+                                    'Đã thích',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: Colors.red),
+                                  )
+                                ],
                               ),
-                              Text(
-                                'Đã thích',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                    color: Colors.red),
-                              )
-                            ],
-                          ),
+                            ),
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.orange.shade500,
+                                    minimumSize: Size(30, 30)),
+                                onPressed: () async {
+                                  print("Yêu cầu lại");
+                                  var result = await FavoriteRepository()
+                                      .cancelFavorite(
+                                          idFavorite: widget.idFavorite);
+                                  if (result.statusCode == 200) {
+                                    showDialoga(
+                                        title: "Thành công",
+                                        subTitle: "Gửi yêu cầu thành công",
+                                        status: "Success");
+                                    // await widget.loadData;
+                                    loadData();
+                                  } else {
+                                    showDialoga(
+                                        title: "Thất bại",
+                                        subTitle: "Gửi yêu cầu thất bại",
+                                        status: "Fail");
+                                  }
+                                },
+                                child: Text(
+                                  "Hủy thích",
+                                  style: TextStyle(fontSize: 12),
+                                )),
+                          ],
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 8),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.orange.shade500),
-                          onPressed: () async {
-                            print("Yêu cầu lại");
-                            var result = await FavoriteRepository()
-                                .cancelFavorite(idFavorite: widget.idFavorite);
-                            if (result.statusCode == 200) {
-                              showDialoga(
-                                  title: "Thành công",
-                                  subTitle: "Gửi yêu cầu thành công",
-                                  status: "Success");
-                              // await widget.loadData;
-                              loadData();
-                            } else {
-                              showDialoga(
-                                  title: "Thất bại",
-                                  subTitle: "Gửi yêu cầu thất bại",
-                                  status: "Fail");
-                            }
-                          },
-                          child: Text("Hủy thích")),
-                    )
                   ],
                 ),
               ],

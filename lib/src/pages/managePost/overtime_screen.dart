@@ -51,7 +51,7 @@ class _OvertimePostScreenState extends State<OvertimePostScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(left: 5.0, top: 10.0),
+            padding: const EdgeInsets.only(left: 5.0, top: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -63,10 +63,10 @@ class _OvertimePostScreenState extends State<OvertimePostScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 5.0, top: 10.0),
+            padding: const EdgeInsets.only(left: 5.0, top: 10.0),
             child: Container(
               // height: 500,
-              padding: EdgeInsets.only(left: 10, right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: StreamBuilder<List<PostModel>>(
                 stream: widget.postOvertimeController.stream,
                 builder: (context, snapshot) {

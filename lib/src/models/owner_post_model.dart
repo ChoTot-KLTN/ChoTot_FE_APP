@@ -35,7 +35,7 @@ class OwnerPostModel {
   factory OwnerPostModel.fromMap(Map<String, dynamic> map) {
     return OwnerPostModel(
       infor: UserModel.fromMap(map['infor']),
-      totalRate: map['totalRate']?.toDouble() ?? 0.0,
+      totalRate: double.parse((map['totalRate']).toString()),
       count: map['count']?.toInt() ?? 0,
     );
   }

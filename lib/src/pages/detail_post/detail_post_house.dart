@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chotot_app/src/models/comment_model.dart';
 import 'package:chotot_app/src/models/post/house_model.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/pages/user/owner_infor_screen.dart';
 import 'package:chotot_app/src/repositories/comment_repo.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
 import 'package:chotot_app/src/widgets/comment_widget.dart';
@@ -342,13 +343,21 @@ class _DetailPostHouseState extends State<DetailPostHouse> {
                     )
                   ],
                 ),
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 1, color: Colors.orange.shade500),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Text("Xem trang"),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => OwnerInforScreen(
+                              idOwner: widget.postdetail!.idUserPost,
+                            )));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 1, color: Colors.orange.shade500),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Text("Xem trang"),
+                  ),
                 ),
               ],
             ),
@@ -654,8 +663,9 @@ class _DetailPostHouseState extends State<DetailPostHouse> {
             ),
             Text(
               title,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: color),
+                  fontSize: 14, fontWeight: FontWeight.bold, color: color),
             ),
           ],
         ),

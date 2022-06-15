@@ -118,7 +118,7 @@ class _PostCardState extends State<PostCard> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(top: 10, right: 5),
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
               child: Stack(children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),

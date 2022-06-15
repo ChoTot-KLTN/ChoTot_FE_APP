@@ -1,8 +1,10 @@
 import 'package:chotot_app/src/models/item_new.dart';
 import 'package:chotot_app/src/models/user_model.dart';
 import 'package:chotot_app/src/pages/authentication/login/login_page.dart';
+import 'package:chotot_app/src/pages/user/user_infor_screen.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:get_storage/get_storage.dart';
@@ -113,6 +115,7 @@ class _MoreScreenState extends State<MoreScreen> {
           "Thêm",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
+        elevation: 0.0,
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -124,7 +127,7 @@ class _MoreScreenState extends State<MoreScreen> {
                 border: Border.all(width: 0.5, color: Colors.black)),
             child: Column(
               children: [
-                buildAvatar(),
+                buildAvatar(context),
                 SizedBox(
                   height: 30,
                 ),
@@ -153,7 +156,7 @@ class _MoreScreenState extends State<MoreScreen> {
     );
   }
 
-  Widget buildAvatar() {
+  Widget buildAvatar(context) {
     return Container(
       child: Row(
         children: [
@@ -200,6 +203,8 @@ class _MoreScreenState extends State<MoreScreen> {
                 ),
                 onTap: () {
                   print("Xem trang cá nhân");
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ProfileScreen()));
                 },
               ),
             ],
