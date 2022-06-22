@@ -1,8 +1,9 @@
 import 'package:chotot_app/src/models/rating_model.dart';
 import 'package:chotot_app/src/models/user_model.dart';
+import 'package:chotot_app/src/pages/user/change_password_screen.dart';
+import 'package:chotot_app/src/pages/user/update_infor_screen.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:chotot_app/src/repositories/user_repo.dart';
-import 'package:chotot_app/src/widgets/dialog_loading.dart';
 import 'package:chotot_app/src/widgets/header_widget.dart';
 import 'package:chotot_app/src/widgets/number_widget.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: (AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Profile",
+          "Thông tin cá nhân",
           style: TextStyle(
               fontSize: 21, fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -105,10 +106,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       )),
       body: SingleChildScrollView(
-        child: Stack(
+        child: Column(
           children: [
             Container(
-              height: 100.0,
+              height: 80.0,
               child: HeaderWidget(100, false, Icons.house_rounded),
             ),
             Container(
@@ -117,29 +118,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
               child: Column(
                 children: [
-                  Container(
-                      padding: EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(width: 10.0, color: Colors.white),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 20,
-                              offset: const Offset(5, 5))
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.grey.shade800,
-                        backgroundImage: AssetImage('assets/images/avatar.png'),
-                      )
-                      //Icon(
-                      //   Icons.person,
-                      //   size: 80,
-                      //   color: Colors.grey.shade500,
-                      // ),
-                      ),
+                  Stack(
+                    children: [
+                      Container(
+                          height: 70,
+                          width: 70,
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(
+                                width: 0.5, color: Colors.orange.shade400),
+                            color: Colors.white,
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //       color: Colors.black26,
+                            //       blurRadius: 20,
+                            //       offset: const Offset(5, 5))
+                            // ],
+                          ),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey.shade800,
+                            backgroundImage:
+                                AssetImage('assets/images/avatar.png'),
+                          )),
+                      Positioned(
+                          height: 110,
+                          width: 110,
+                          child: IconButton(
+                            onPressed: () {
+                              print("pick ảnh");
+                            },
+                            icon: Icon(
+                              Icons.add_a_photo,
+                              size: 21,
+                            ),
+                          )),
+                    ],
+                  ),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -269,6 +284,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.orange.shade300),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UpdateInfoScreen()));
+                    },
+                    icon: Icon(Icons.perm_contact_calendar_sharp),
+                    label: Text("Chỉnh sửa")),
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton.icon(
+                    style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    side: BorderSide(color: Colors.red)))),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ChangePasswordScreen()));
+                    },
+                    icon: Icon(Icons.edit),
+                    label: Text("Đổi mật khẩu")),
+              ],
+            ),
+            SizedBox(
+              height: 20.0,
             ),
           ],
         ),

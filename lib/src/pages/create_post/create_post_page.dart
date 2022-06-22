@@ -32,7 +32,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: ListView(
             children: [
               ExpansionTile(

@@ -14,6 +14,7 @@ import 'package:chotot_app/src/repositories/favorite_repo.dart';
 import 'package:chotot_app/src/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class PostCard extends StatefulWidget {
   const PostCard({required this.postData, Key? key}) : super(key: key);
@@ -171,24 +172,25 @@ class _PostCardState extends State<PostCard> {
                     right: 5,
                     child: GestureDetector(
                       onTap: () async {
-                        print("Favorite");
-                        setState(() {
-                          isFavorite = !isFavorite;
-                        });
-                        var response = await FavoriteRepository()
-                            .registerFavorite(idPost: widget.postData.id);
-                        if (response.statusCode == 200) {
-                          print("Register Favorite success");
-                          showDialoga(
-                              title: "Thành công",
-                              subTitle: "Đã thích bài post",
-                              status: "Success");
-                        } else {
-                          print("Register fail");
-                          showDialoga(
-                              title: "Thất bại",
-                              subTitle: "Thích bài đăng thất bại",
-                              status: "Fail");
+                        if (GetStorage().read('token') != null) {
+                          setState(() {
+                            isFavorite = !isFavorite;
+                          });
+                          var response = await FavoriteRepository()
+                              .registerFavorite(idPost: widget.postData.id);
+                          if (response.statusCode == 200) {
+                            print("Register Favorite success");
+                            showDialoga(
+                                title: "Thành công",
+                                subTitle: "Đã thích bài post",
+                                status: "Success");
+                          } else {
+                            print("Register fail");
+                            showDialoga(
+                                title: "Thất bại",
+                                subTitle: "Thích bài đăng thất bại",
+                                status: "Fail");
+                          }
                         }
                       },
                       child: isFavorite

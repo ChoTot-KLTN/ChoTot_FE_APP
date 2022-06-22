@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chotot_app/src/models/comment_model.dart';
 import 'package:chotot_app/src/models/post/phone_model.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/pages/report_post/report_screen.dart';
 import 'package:chotot_app/src/pages/user/owner_infor_screen.dart';
 import 'package:chotot_app/src/repositories/comment_repo.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
@@ -152,11 +153,27 @@ class _DetailPostPhoneState extends State<DetailPostPhone> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               buildItemBottom(
-                  Icons.phone, "Gọi điện", Colors.white, Colors.green.shade600),
+                Icons.phone,
+                "Gọi điện",
+                Colors.white,
+                () {
+                  print("object");
+                },
+                Colors.green.shade600,
+              ),
               buildItemBottom(
-                  Icons.sms_outlined, "Gửi SMS", Colors.green.shade500),
-              buildItemBottom(
-                  Icons.message_outlined, "Chat", Colors.green.shade500),
+                  Icons.message_outlined, "Chat", Colors.green.shade500, () {
+                print("object");
+              }),
+              buildItemBottom(Icons.report_gmailerrorred_outlined, "Báo cáo",
+                  Colors.red.shade500, () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ReportPost(
+                          postID: widget.postdetail!.id,
+                          nameOwner: widget.postdetail!.nameOfPoster,
+                          postTitle: widget.postdetail!.title,
+                        )));
+              }),
             ],
           ),
         ),
@@ -398,9 +415,9 @@ class _DetailPostPhoneState extends State<DetailPostPhone> {
                       buildDetail(Icons.color_lens_outlined,
                           "Màu sắc: ${postPhoneModel!.color}"),
                       buildDetail(
-                          Icons.sim_card, "Ram: ${postPhoneModel!.color}"),
+                          Icons.sim_card, "Ram: ${postPhoneModel!.ram}"),
                       buildDetail(Icons.history_edu,
-                          "Tình trạng: ${postPhoneModel!.color}"),
+                          "Tình trạng: ${postPhoneModel!.statusPhone}"),
                     ],
                   ),
           ),
@@ -641,11 +658,12 @@ class _DetailPostPhoneState extends State<DetailPostPhone> {
     );
   }
 
-  Widget buildItemBottom(IconData icon, String title, Color color,
+  Widget buildItemBottom(
+      IconData icon, String title, Color color, Function func,
       [Color? bg]) {
     return GestureDetector(
       onTap: () {
-        print(title);
+        func();
       },
       child: Container(
         height: 70,

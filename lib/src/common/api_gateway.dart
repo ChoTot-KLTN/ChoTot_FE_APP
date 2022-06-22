@@ -9,6 +9,8 @@ class ApiGateway {
   static const forgotPass = "auth/forgot-password";
   static const sendNewPass = "auth/send-password";
   static const getAuth = "auth/get-auth";
+  static const changePassword = "auth/change-password";
+  static const updateInfor = "auth/update-info";
 
   // Post API
   //vehicle: xe cộ :))

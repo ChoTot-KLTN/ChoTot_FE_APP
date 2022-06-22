@@ -236,7 +236,7 @@ class _PostwidgetFavoriteState extends State<PostwidgetFavorite> {
                               child: Row(
                                 children: [
                                   Icon(
-                                    Icons.cancel_outlined,
+                                    Icons.favorite,
                                     color: Colors.red.shade500,
                                     size: 15,
                                   ),

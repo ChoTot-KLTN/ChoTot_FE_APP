@@ -1,10 +1,11 @@
 import 'package:chotot_app/src/models/item_new.dart';
 import 'package:chotot_app/src/models/user_model.dart';
 import 'package:chotot_app/src/pages/authentication/login/login_page.dart';
+import 'package:chotot_app/src/pages/policy/policy_screen.dart';
 import 'package:chotot_app/src/pages/user/user_infor_screen.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:get_storage/get_storage.dart';
@@ -58,9 +59,9 @@ class _MoreScreenState extends State<MoreScreen> {
     ItemNews(
         color: Colors.brown.shade500,
         iconData: Icons.history_edu,
-        title: "Lịch sử giao dịch",
+        title: "Chính sách",
         function: () {
-          print("LS giao dịch");
+          Get.to(() => PolicyScreen());
         }),
     ItemNews(
         color: Colors.brown.shade200,

@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                fixedSize: Size(120, 40),
+                                // fixedSize: Size(120, 40),
                                 primary: Colors.orange.shade500),
                             onPressed: () async {
                               print(email.text + password.text);
@@ -212,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               "Đăng nhập",
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),

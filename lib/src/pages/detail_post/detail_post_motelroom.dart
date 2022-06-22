@@ -148,9 +148,9 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
               buildItemBottom(
                   Icons.phone, "Gọi điện", Colors.white, Colors.green.shade600),
               buildItemBottom(
-                  Icons.sms_outlined, "Gửi SMS", Colors.green.shade500),
-              buildItemBottom(
                   Icons.message_outlined, "Chat", Colors.green.shade500),
+              buildItemBottom(Icons.report_gmailerrorred_outlined, "Báo cáo",
+                  Colors.red.shade500),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chotot_app/src/common/api_gateway.dart';
+import 'package:chotot_app/src/models/address_model.dart';
 import 'package:chotot_app/src/models/user_model.dart';
 import 'package:chotot_app/src/repositories/base_repo.dart';
 import 'package:http/http.dart' as http;
@@ -76,5 +77,35 @@ class AuthenticationRepository {
       print("dataUser: " + jsonResponse.toString());
       return UserModel.fromMap(jsonResponse['user']);
     }
+  }
+
+  Future<http.Response> changePasswordAPI(
+      {required String oldPassword, required String newPassword}) async {
+    print('request URL: ' +
+        ApiGateway.changePassword +
+        'oldPassword: $oldPassword, newPassword: $newPassword');
+    var body = {'oldPassword': oldPassword, 'newPassword': newPassword};
+    http.Response response =
+        await BaseRepository().post(ApiGateway.changePassword, body);
+    return response;
+  }
+
+  Future<http.Response> updateInfoAPI(
+      {required String name,
+      required String phone,
+      required AddressModel address}) async {
+    print('request URL: ' +
+        ApiGateway.updateInfor +
+        'name: $name, phone: $phone');
+    var addressBody = {
+      "detail": address.detail,
+      "village": address.village,
+      "district": address.district,
+      "province": address.province
+    };
+    var body = {'name': name, 'phone': phone, 'address': addressBody};
+    http.Response response =
+        await BaseRepository().post(ApiGateway.updateInfor, body);
+    return response;
   }
 }
