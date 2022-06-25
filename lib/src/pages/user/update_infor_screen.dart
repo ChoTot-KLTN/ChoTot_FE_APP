@@ -1,3 +1,10 @@
+import 'dart:io';
+
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/material.dart';
+
+import 'package:image_picker/image_picker.dart';
+
 import 'package:chotot_app/src/common/theme_helper.dart';
 import 'package:chotot_app/src/models/address_model.dart';
 import 'package:chotot_app/src/models/district_model.dart';
@@ -7,14 +14,12 @@ import 'package:chotot_app/src/models/village_model.dart';
 import 'package:chotot_app/src/pages/user/user_infor_screen.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
 import 'package:chotot_app/src/repositories/authentication_repo.dart';
-
 import 'package:chotot_app/src/repositories/location_repo.dart';
 import 'package:chotot_app/src/repositories/user_repo.dart';
 import 'package:chotot_app/src/widgets/dialog_loading.dart';
-
 import 'package:chotot_app/src/widgets/header_widget.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
+
+import 'package:image_cropper/image_cropper.dart';
 
 class UpdateInfoScreen extends StatefulWidget {
   @override
@@ -41,7 +46,12 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
   bool isSelectedDistrict = false;
 
   late UserModel user;
-
+  XFile? pickImage;
+  File? imageCrop;
+  // final cropKey = GlobalKey<CropState>();
+  late DistrictModel defaultDistrict;
+  late Province defaultProvince;
+  late Village defaultVillage;
   @override
   void initState() {
     super.initState();
@@ -49,6 +59,14 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
     name.text = user.name;
     addressDetail.text = user.address.detail;
     phone.text = user.phone;
+    defaultDistrict =
+        DistrictModel(code: "1", nameWithType: user.address.district);
+    defaultProvince = Province(
+        name: user.address.province,
+        name_with_type: user.address.province,
+        type: "1",
+        code: "1");
+    defaultVillage = Village(code: "1", nameWithType: user.address.village);
   }
 
   snackBar(String? message) {
@@ -58,6 +76,89 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
         duration: Duration(seconds: 2),
       ),
     );
+  }
+
+  showPickOptionDialog(BuildContext context) {
+    return showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+      context: context,
+      builder: (context) => Container(
+        height: 120,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListTile(
+                leading: Icon(Icons.picture_as_pdf),
+                title: Text("Chọn ảnh có sẵn"),
+                onTap: () {
+                  loadPicker(ImageSource.gallery);
+                  print("có sẵn");
+                },
+              ),
+            ),
+            Divider(
+              height: 1,
+              color: Colors.black,
+            ),
+            Expanded(
+              child: ListTile(
+                leading: Icon(Icons.camera),
+                title: Text("Chọn ảnh từ camera"),
+                onTap: () {
+                  loadPicker(ImageSource.camera);
+                  print("camera");
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  cropImagefunc(XFile picked) async {
+    File? cropped = await ImageCropper().cropImage(
+        sourcePath: picked.path,
+        aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+        maxHeight: MediaQuery.of(context).size.height.toInt(),
+        maxWidth: MediaQuery.of(context).size.width.toInt(),
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: AndroidUiSettings(
+            backgroundColor: Colors.white,
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            hideBottomControls: true,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        ));
+    if (cropped != null) {
+      setState(() {
+        pickImage = XFile(cropped.path);
+      });
+    }
+  }
+
+  loadPicker(ImageSource source) async {
+    final ImagePicker _picker = ImagePicker();
+    final picked = await _picker.pickImage(source: source);
+    if (picked != null) {
+      cropImagefunc(picked);
+      setState(() {
+        pickImage = picked;
+      });
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -103,14 +204,17 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                                   ),
                                   child: CircleAvatar(
                                     backgroundColor: Colors.grey.shade800,
-                                    backgroundImage:
-                                        AssetImage('assets/images/avatar.png'),
+                                    backgroundImage: pickImage == null
+                                        ? AssetImage('assets/images/avatar.png')
+                                        : FileImage(File(pickImage!.path))
+                                            as ImageProvider,
                                   )),
                               Positioned(
                                   height: 150,
                                   width: 140,
                                   child: IconButton(
                                     onPressed: () {
+                                      showPickOptionDialog(context);
                                       print("pick ảnh");
                                     },
                                     icon: Icon(
@@ -169,6 +273,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                             });
                           },
                           showSearchBox: true,
+                          // selectedItem: defaultProvince,
                           validator: (data) {
                             if (data == null) {
                               return "Chọn tỉnh thành";
@@ -195,6 +300,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                               isSelectedDistrict = true;
                             });
                           },
+                          // selectedItem: defaultDistrict,
                           showSearchBox: true,
                           validator: (data) {
                             if (data == null) {
@@ -221,6 +327,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                             });
                           },
                           showSearchBox: true,
+                          // selectedItem: defaultVillage,
                           validator: (data) {
                             if (data == null) {
                               return "Chọn xã/phường";

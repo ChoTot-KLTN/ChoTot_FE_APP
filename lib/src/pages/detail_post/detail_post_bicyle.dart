@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chotot_app/src/models/comment_model.dart';
 import 'package:chotot_app/src/models/post/bicyle_model.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
+import 'package:chotot_app/src/pages/report_post/report_screen.dart';
 import 'package:chotot_app/src/pages/user/owner_infor_screen.dart';
 import 'package:chotot_app/src/repositories/comment_repo.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
@@ -145,12 +146,19 @@ class _DetailPostBicyleState extends State<DetailPostBicyle> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              buildItemBottom(Icons.phone, "Gọi điện", Colors.white, () {},
+                  Colors.green.shade600),
               buildItemBottom(
-                  Icons.phone, "Gọi điện", Colors.white, Colors.green.shade600),
-              buildItemBottom(
-                  Icons.message_outlined, "Chat", Colors.green.shade500),
+                  Icons.message_outlined, "Chat", Colors.green.shade500, () {}),
               buildItemBottom(Icons.report_gmailerrorred_outlined, "Báo cáo",
-                  Colors.red.shade500),
+                  Colors.red.shade500, () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ReportPost(
+                          postID: widget.postdetail!.id,
+                          nameOwner: widget.postdetail!.nameOfPoster,
+                          postTitle: widget.postdetail!.title,
+                        )));
+              }),
             ],
           ),
         ),
@@ -638,11 +646,11 @@ class _DetailPostBicyleState extends State<DetailPostBicyle> {
     );
   }
 
-  Widget buildItemBottom(IconData icon, String title, Color color,
+  Widget buildItemBottom(IconData icon, String title, Color color, Function fun,
       [Color? bg]) {
     return GestureDetector(
       onTap: () {
-        print(title);
+        fun();
       },
       child: Container(
         height: 70,

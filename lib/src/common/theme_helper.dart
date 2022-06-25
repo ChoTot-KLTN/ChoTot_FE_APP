@@ -16,7 +16,9 @@ class ThemeHelper {
         iconData,
         color: Colors.orange.shade500,
       ),
-      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      contentPadding: iconData != null
+          ? EdgeInsets.fromLTRB(5, 10, 20, 10)
+          : EdgeInsets.fromLTRB(0, 10, 20, 10),
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(100.0),
           borderSide: BorderSide(color: Colors.grey)),
