@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chotot_app/src/services/storage_service.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
@@ -91,7 +92,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
           children: [
             Expanded(
               child: ListTile(
-                leading: Icon(Icons.picture_as_pdf),
+                leading: Icon(Icons.photo_album),
                 title: Text("Chọn ảnh có sẵn"),
                 onTap: () {
                   loadPicker(ImageSource.gallery);
@@ -156,6 +157,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
       cropImagefunc(picked);
       setState(() {
         pickImage = picked;
+        // print('Pick path;' + pickImage!.path);
       });
     }
     Navigator.of(context).pop();
@@ -389,6 +391,9 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                                   Navigator.pop(context);
 
                                   if (status.statusCode == 200) {
+                                    var file = await StorageService()
+                                        .uploadFileToStorage(pickImage!.path);
+                                    print("object: " + file.toString());
                                     await AuthenticationRepository()
                                         .getAuthAPI()
                                         .then((user) {

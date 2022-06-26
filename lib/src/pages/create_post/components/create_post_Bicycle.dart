@@ -8,6 +8,7 @@ import 'package:chotot_app/src/models/province.dart';
 import 'package:chotot_app/src/models/village_model.dart';
 import 'package:chotot_app/src/repositories/location_repo.dart';
 import 'package:chotot_app/src/repositories/post_repo.dart';
+import 'package:chotot_app/src/widgets/base_widget.dart';
 import 'package:chotot_app/src/widgets/dialog_loading.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -690,7 +691,14 @@ class _CreatePostBicycleScreenState extends State<CreatePostBicycleScreen> {
     }
     try {
       final List<XFile>? imgs = await _imagePicker.pickMultiImage();
-      if (imgs!.isNotEmpty) {
+      if (imgs!.length > 3) {
+        showDialoga(
+            title: "Thất bại",
+            subTitle: "Chỉ được chọn tối đa 3 ảnh",
+            status: "Fail");
+        return;
+      }
+      if (imgs.isNotEmpty) {
         _selectedFile.addAll(imgs);
         setState(() {});
       }
@@ -723,7 +731,7 @@ class _CreatePostBicycleScreenState extends State<CreatePostBicycleScreen> {
               Icons.camera_alt,
               size: 30,
             ),
-            Text("Đăng tối đa 6 ảnh"),
+            Text("Đăng tối đa 3 ảnh"),
           ],
         ),
       ),
