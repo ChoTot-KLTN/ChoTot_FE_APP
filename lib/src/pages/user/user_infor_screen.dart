@@ -1,5 +1,7 @@
 import 'package:chotot_app/src/models/rating_model.dart';
 import 'package:chotot_app/src/models/user_model.dart';
+import 'package:chotot_app/src/pages/home/home_nav_page.dart';
+
 import 'package:chotot_app/src/pages/user/change_password_screen.dart';
 import 'package:chotot_app/src/pages/user/update_infor_screen.dart';
 import 'package:chotot_app/src/providers/user_provider.dart';
@@ -61,6 +63,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fontSize: 21, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         elevation: 0.5,
+        backwardsCompatibility: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MyHomePage()));
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
         iconTheme: IconThemeData(color: Colors.white),
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -121,38 +134,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Stack(
                     children: [
                       Container(
-                          height: 70,
-                          width: 70,
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(
-                                width: 0.5, color: Colors.orange.shade400),
-                            color: Colors.white,
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //       color: Colors.black26,
-                            //       blurRadius: 20,
-                            //       offset: const Offset(5, 5))
-                            // ],
-                          ),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.grey.shade800,
-                            backgroundImage:
-                                AssetImage('assets/images/avatar.png'),
-                          )),
-                      Positioned(
-                          height: 110,
-                          width: 110,
-                          child: IconButton(
-                            onPressed: () {
-                              print("pick ảnh");
+                        height: 70,
+                        width: 70,
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(
+                              width: 0.5, color: Colors.orange.shade400),
+                          color: Colors.white,
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //       color: Colors.black26,
+                          //       blurRadius: 20,
+                          //       offset: const Offset(5, 5))
+                          // ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.network(
+                            user.avatar,
+                            fit: BoxFit.fill,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Image.asset(
+                                'assets/images/avatar.png',
+                                fit: BoxFit.fill,
+                                errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
+                                  return Center(child: Icon(Icons.person));
+                                },
+                              );
                             },
-                            icon: Icon(
-                              Icons.add_a_photo,
-                              size: 21,
-                            ),
-                          )),
+                          ),
+                        ),
+                      ),
+                      // Positioned(
+                      //     height: 110,
+                      //     width: 110,
+                      //     child: IconButton(
+                      //       onPressed: () {
+                      //         print("pick ảnh");
+                      //       },
+                      //       icon: Icon(
+                      //         Icons.add_a_photo,
+                      //         size: 21,
+                      //       ),
+                      //     )),
                     ],
                   ),
                   SizedBox(
@@ -230,7 +257,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.bold, fontSize: 17),
                       ),
                       Text(
-                        "8",
+                        "${user.posts}",
                         style: TextStyle(fontSize: 17),
                       ),
                     ],

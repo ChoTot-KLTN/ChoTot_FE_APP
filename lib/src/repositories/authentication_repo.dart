@@ -93,7 +93,8 @@ class AuthenticationRepository {
   Future<http.Response> updateInfoAPI(
       {required String name,
       required String phone,
-      required AddressModel address}) async {
+      required AddressModel address,
+      required String avatar}) async {
     print('request URL: ' +
         ApiGateway.updateInfor +
         'name: $name, phone: $phone');
@@ -103,7 +104,12 @@ class AuthenticationRepository {
       "district": address.district,
       "province": address.province
     };
-    var body = {'name': name, 'phone': phone, 'address': addressBody};
+    var body = {
+      'name': name,
+      'phone': phone,
+      'address': addressBody,
+      'avatar': avatar
+    };
     http.Response response =
         await BaseRepository().post(ApiGateway.updateInfor, body);
     return response;

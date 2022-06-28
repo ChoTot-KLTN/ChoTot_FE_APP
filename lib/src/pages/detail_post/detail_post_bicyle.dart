@@ -317,16 +317,14 @@ class _DetailPostBicyleState extends State<DetailPostBicyle> {
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  child: avatar != ""
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image.network("aw", fit: BoxFit.cover,
-                              errorBuilder: (BuildContext context,
-                                  Object exception, StackTrace? stackTrace) {
-                            return Center(child: Icon(Icons.person));
-                          }),
-                        )
-                      : null,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.network(widget.postdetail!.avatarOfPoster,
+                        fit: BoxFit.cover, errorBuilder: (BuildContext context,
+                            Object exception, StackTrace? stackTrace) {
+                      return Center(child: Icon(Icons.person));
+                    }),
+                  ),
                 ),
                 Column(
                   children: [

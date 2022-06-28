@@ -11,6 +11,7 @@ class UserModel {
   final int ratings;
   final int posts;
   final String role;
+  final String avatar;
   UserModel({
     required this.id,
     required this.name,
@@ -20,6 +21,7 @@ class UserModel {
     required this.ratings,
     required this.posts,
     required this.role,
+    required this.avatar,
   });
 
   UserModel copyWith({
@@ -31,17 +33,18 @@ class UserModel {
     int? ratings,
     int? posts,
     String? role,
+    String? avatar,
   }) {
     return UserModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      phone: phone ?? this.phone,
-      address: address ?? this.address,
-      ratings: ratings ?? this.ratings,
-      posts: posts ?? this.posts,
-      role: role ?? this.role,
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        address: address ?? this.address,
+        ratings: ratings ?? this.ratings,
+        posts: posts ?? this.posts,
+        role: role ?? this.role,
+        avatar: avatar ?? this.avatar);
   }
 
   Map<String, dynamic> toMap() {
@@ -58,6 +61,7 @@ class UserModel {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
+    print(map['avatar']);
     return UserModel(
       id: map['_id'] ?? '',
       name: map['name'] ?? '',
@@ -67,6 +71,7 @@ class UserModel {
       ratings: map['ratings']?.toInt() ?? 0,
       posts: map['posts']?.toInt() ?? 0,
       role: map['role'] ?? '',
+      avatar: map['avatar'] ?? 'nope',
     );
   }
 

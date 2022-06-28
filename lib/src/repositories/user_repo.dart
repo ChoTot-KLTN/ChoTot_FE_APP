@@ -34,7 +34,7 @@ class UserRepository {
     print("request URL: " + ApiGateway.getRating + "?idOwner=$idOwner");
     http.Response response =
         await BaseRepository().get(ApiGateway.getRating + "?idOwner=$idOwner");
-    print("status" + response.statusCode.toString());
+    print("status1: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body)['data'];
       print("dataRating: " + jsonResponse.toString());

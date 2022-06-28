@@ -21,6 +21,8 @@ class PostModel {
   int prePrice;
   String province;
   String nameOfPoster;
+  String phoneOfPoster;
+  String avatarOfPoster;
   PostModel(
       {required this.id,
       required this.title,
@@ -38,7 +40,9 @@ class PostModel {
       required this.dateEndPost,
       required this.prePrice,
       required this.province,
-      required this.nameOfPoster});
+      required this.nameOfPoster,
+      required this.phoneOfPoster,
+      required this.avatarOfPoster});
 
   PostModel copyWith(
       {String? id,
@@ -57,7 +61,9 @@ class PostModel {
       DateTime? dateEndPost,
       int? prePrice,
       String? province,
-      String? nameOfPoster}) {
+      String? nameOfPoster,
+      String? phoneOfPoster,
+      String? avatarOfPoster}) {
     return PostModel(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -75,7 +81,9 @@ class PostModel {
         dateEndPost: dateEndPost ?? this.dateEndPost,
         prePrice: prePrice ?? this.prePrice,
         province: province ?? this.province,
-        nameOfPoster: nameOfPoster ?? this.nameOfPoster);
+        nameOfPoster: nameOfPoster ?? this.nameOfPoster,
+        phoneOfPoster: phoneOfPoster ?? this.phoneOfPoster,
+        avatarOfPoster: avatarOfPoster ?? this.avatarOfPoster);
   }
 
   Map<String, dynamic> toMap() {
@@ -99,23 +107,26 @@ class PostModel {
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
-        id: map['_id'] ?? '',
-        title: map['title'] ?? '',
-        content: map['content'] ?? '',
-        image: List<String>.from(map['image']),
-        typePost: map['typePost'] ?? '',
-        onModel: map['onModel'] ?? '',
-        status: map['status']?.toInt() ?? 0,
-        ratings: map['ratings']?.toInt() ?? 0,
-        idUserPost: map['idUserPost'] ?? '',
-        isAdvertised: map['isAdvertised'] ?? false,
-        priceAdvert: map['priceAdvert']?.toInt() ?? 0,
-        totalPrice: map['totalPrice']?.toInt() ?? 0,
-        dateStartPost: convertTextToDateTime(map['dateStartPost']) ?? null,
-        dateEndPost: convertTextToDateTime(map['dateEndPost']) ?? null,
-        prePrice: map['prePrice']?.toInt() ?? 0,
-        province: map['province'] ?? '',
-        nameOfPoster: map['nameOfPoster'] ?? '');
+      id: map['_id'] ?? '',
+      title: map['title'] ?? '',
+      content: map['content'] ?? '',
+      image: List<String>.from(map['image']),
+      typePost: map['typePost'] ?? '',
+      onModel: map['onModel'] ?? '',
+      status: map['status']?.toInt() ?? 0,
+      ratings: map['ratings']?.toInt() ?? 0,
+      idUserPost: map['idUserPost'] ?? '',
+      isAdvertised: map['isAdvertised'] ?? false,
+      priceAdvert: map['priceAdvert']?.toInt() ?? 0,
+      totalPrice: map['totalPrice']?.toInt() ?? 0,
+      dateStartPost: convertTextToDateTime(map['dateStartPost']) ?? null,
+      dateEndPost: convertTextToDateTime(map['dateEndPost']) ?? null,
+      prePrice: map['prePrice']?.toInt() ?? 0,
+      province: map['province'] ?? '',
+      nameOfPoster: map['nameOfPoster'] ?? '',
+      phoneOfPoster: map['phoneOfPoster'] ?? '01234567890',
+      avatarOfPoster: map['avatarOfPoster'] ?? 'nope',
+    );
   }
 
   static List<PostModel> fromJsonList(List list) {

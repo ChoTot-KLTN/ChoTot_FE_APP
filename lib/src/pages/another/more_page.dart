@@ -168,12 +168,19 @@ class _MoreScreenState extends State<MoreScreen> {
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(100),
-              child: Image.asset(
-                'assets/images/avatar.png',
+              child: Image.network(
+                currentUser!.avatar,
                 fit: BoxFit.fill,
                 errorBuilder: (BuildContext context, Object exception,
                     StackTrace? stackTrace) {
-                  return Center(child: Icon(Icons.error));
+                  return Image.asset(
+                    'assets/images/avatar.png',
+                    fit: BoxFit.fill,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Center(child: Icon(Icons.person));
+                    },
+                  );
                 },
               ),
             ),

@@ -316,23 +316,21 @@ class _DetailPostCarScreenState extends State<DetailPostCarScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: avatar != ""
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image.network("aw", fit: BoxFit.cover,
-                              errorBuilder: (BuildContext context,
-                                  Object exception, StackTrace? stackTrace) {
-                            return Center(child: Icon(Icons.person));
-                          }),
-                        )
-                      : null,
-                ),
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Image.network(widget.postdetail!.avatarOfPoster,
+                          fit: BoxFit.cover, errorBuilder:
+                              (BuildContext context, Object exception,
+                                  StackTrace? stackTrace) {
+                        return Center(child: Icon(Icons.person));
+                      }),
+                    )),
                 Column(
                   children: [
                     Text(
@@ -388,7 +386,7 @@ class _DetailPostCarScreenState extends State<DetailPostCarScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 10, right: 10, left: 20),
             child: Text(
-              "Liên hệ ngay: 0123456789",
+              "Liên hệ ngay: ${widget.postdetail!.phoneOfPoster}",
               style: TextStyle(color: Colors.blue.shade500),
             ),
           ),

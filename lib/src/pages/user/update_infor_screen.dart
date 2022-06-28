@@ -152,7 +152,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
 
   loadPicker(ImageSource source) async {
     final ImagePicker _picker = ImagePicker();
-    final picked = await _picker.pickImage(source: source);
+    final picked = await _picker.pickImage(source: source, imageQuality: 80);
     if (picked != null) {
       cropImagefunc(picked);
       setState(() {
@@ -377,6 +377,8 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
+                                  var file = await StorageService()
+                                      .uploadFileToStorage(pickImage!.path);
                                   showDialogLoading(context);
                                   var status = await AuthenticationRepository()
                                       .updateInfoAPI(
@@ -386,14 +388,12 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                                               detail: addressDetail.text,
                                               village: village,
                                               district: district,
-                                              province: province));
+                                              province: province),
+                                          avatar: file);
 
                                   Navigator.pop(context);
 
                                   if (status.statusCode == 200) {
-                                    var file = await StorageService()
-                                        .uploadFileToStorage(pickImage!.path);
-                                    print("object: " + file.toString());
                                     await AuthenticationRepository()
                                         .getAuthAPI()
                                         .then((user) {

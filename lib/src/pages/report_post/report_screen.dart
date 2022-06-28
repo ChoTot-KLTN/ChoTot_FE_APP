@@ -1,3 +1,7 @@
+import 'package:chotot_app/src/models/user_model.dart';
+import 'package:chotot_app/src/providers/user_provider.dart';
+import 'package:chotot_app/src/repositories/report_repository.dart';
+import 'package:chotot_app/src/widgets/base_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReportPost extends StatefulWidget {
@@ -16,6 +20,14 @@ class ReportPost extends StatefulWidget {
 
 class _ReportPostState extends State<ReportPost> {
   TextEditingController report = TextEditingController();
+  late UserModel user;
+  final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    user = userProvider.getUser!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,12 +85,21 @@ class _ReportPostState extends State<ReportPost> {
                 SizedBox(
                   height: 15,
                 ),
-                TextField(
-                  keyboardType: TextInputType.multiline,
-                  minLines: 1,
-                  maxLines: 5,
-                  controller: report,
-                  decoration: InputDecoration(hintText: "Báo cáo..."),
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 5,
+                    controller: report,
+                    decoration: InputDecoration(hintText: "Báo cáo..."),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Vui lòng nhập lí do báo cáo";
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 20,
@@ -88,7 +109,30 @@ class _ReportPostState extends State<ReportPost> {
                       style: ElevatedButton.styleFrom(
                         primary: Colors.red.shade300,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          var result = await ReportRepository().reportPostAPI(
+                              idPost: widget.postID,
+                              idReporter: user.id,
+                              nameReporter: user.name,
+                              avatar: user.avatar,
+                              reason: report.text);
+                          if (result.statusCode == 200) {
+                            setState(() {
+                              report.text = "";
+                            });
+                            showDialoga(
+                                title: "Thành công",
+                                subTitle: "Gửi báo cáo thành công",
+                                status: "Success");
+                          } else {
+                            showDialoga(
+                                title: "Thất bại",
+                                subTitle: "Bạn đã báo cáo bài viết rồi",
+                                status: "Fail");
+                          }
+                        }
+                      },
                       icon: Icon(Icons.report_outlined),
                       label: Text("Báo cáo")),
                 )

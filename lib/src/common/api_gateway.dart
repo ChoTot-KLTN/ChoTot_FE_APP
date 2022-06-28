@@ -63,4 +63,7 @@ class ApiGateway {
   static const getUserInfor = "auth/get-user-infor";
   static const createRating = "rating/create-rating";
   static const getRating = "rating/get-rating-infor";
+
+  // report post
+  static const reportPost = "report/create-report";
 }

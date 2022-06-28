@@ -11,7 +11,7 @@ class StorageService {
     TaskSnapshot snapshot = await uploadTask;
     var downUrl = await snapshot.ref.getDownloadURL();
     String url = downUrl.toString();
-    print("download: " + url);
+    print("download success: " + url);
     return url;
   }
 }
