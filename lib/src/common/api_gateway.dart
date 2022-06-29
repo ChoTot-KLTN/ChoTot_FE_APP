@@ -11,6 +11,8 @@ class ApiGateway {
   static const getAuth = "auth/get-auth";
   static const changePassword = "auth/change-password";
   static const updateInfor = "auth/update-info";
+  static const loginWithPhone = "auth/login-phone";
+  static const loginPhoneOTP = "auth/login-phone-otp";
 
   // Post API
   //vehicle: xe cộ :))

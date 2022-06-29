@@ -114,4 +114,25 @@ class AuthenticationRepository {
         await BaseRepository().post(ApiGateway.updateInfor, body);
     return response;
   }
+
+  Future<http.Response> loginPhoneAPI({required String phone}) async {
+    print("URL request: " + ApiGateway.loginWithPhone + "Phone=$phone");
+    var body = {'phone': phone};
+    http.Response response =
+        await BaseRepository().post(ApiGateway.loginWithPhone, body);
+    // var jsondata = response.body;
+    print("status reponse: " + response.statusCode.toString());
+    return response;
+  }
+
+  Future<http.Response> loginPhoneOTP(
+      {required String phone, required String otp}) async {
+    print("URL request: " + ApiGateway.loginPhoneOTP + "Phone=$phone");
+    var body = {'phone': phone, 'otp': otp};
+    http.Response response =
+        await BaseRepository().post(ApiGateway.loginPhoneOTP, body);
+    // var jsondata = response.body;
+    print("status reponse: " + response.statusCode.toString());
+    return response;
+  }
 }

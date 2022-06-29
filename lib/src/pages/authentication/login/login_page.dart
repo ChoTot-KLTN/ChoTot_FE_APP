@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chotot_app/src/common/theme_helper.dart';
 import 'package:chotot_app/src/pages/authentication/forgot_password/forgot_password_page.dart';
+import 'package:chotot_app/src/pages/authentication/login_phone/login_with_phone.dart';
 import 'package:chotot_app/src/pages/authentication/register/register_page.dart';
 import 'package:chotot_app/src/pages/authentication/verify/otp_verifycation_page.dart';
 import 'package:chotot_app/src/pages/home/home_nav_page.dart';
@@ -220,7 +221,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text("Hoặc đăng nhập bằng"),
+                          Container(
+                              child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginWithPhoneScreen()));
+                                  },
+                                  child: Text("Hoặc đăng nhập bằng SĐT"))),
                           SizedBox(
                             height: 10,
                           ),
