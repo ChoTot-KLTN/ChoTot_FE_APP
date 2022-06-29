@@ -16,16 +16,20 @@ class SearchPostRepository {
     int? limit,
   }) async {
     String provinceResult = "";
+    String brandResult = "";
     if (province != null) {
       provinceResult = province;
     }
+    if (brand != null) {
+      brandResult = brand;
+    }
     print('request URL: ' +
         ApiGateway.searchPostTech +
-        '?maxPrice=$maxPrice&minPrice=$minPrice&category=$category&province=$provinceResult&brand=$brand&page=$page&limit=$limit');
+        '?maxPrice=$maxPrice&minPrice=$minPrice&category=$category&province=$provinceResult&brand=$brandResult&page=$page&limit=$limit');
 
     http.Response result = await BaseRepository().get(ApiGateway
             .searchPostTech +
-        '?maxPrice=$maxPrice&minPrice=$minPrice&category=$category&province=$provinceResult&brand=$brand&page=$page&limit=$limit');
+        '?maxPrice=$maxPrice&minPrice=$minPrice&category=$category&province=$provinceResult&brand=$brandResult&page=$page&limit=$limit');
 
     if (result.statusCode == 200) {
       var data = jsonDecode(result.body)['data'];

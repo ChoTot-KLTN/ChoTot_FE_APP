@@ -48,57 +48,68 @@ class _PostWidgetVerSState extends State<PostWidgetVerS> {
     }
     return GestureDetector(
       onTap: () {
-        if (widget.postData.onModel == "PostCar") {
+        if (widget.postData.onModel.trim() == "PostCar") {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => DetailPostCarScreen(
                     postdetail: widget.postData,
                   )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostGround") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostGroundScreen(
+                    postdetail: widget.postData,
+                  )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostApartment") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostAparment(
+                    postdetail: widget.postData,
+                  )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostMotelRoom") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostMotelroom(
+                    postdetail: widget.postData,
+                  )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostOffice") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostOffice(
+                    postdetail: widget.postData,
+                  )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostPhone") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostPhone(
+                    postdetail: widget.postData,
+                  )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostLaptop") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostlaptop(
+                    postdetail: widget.postData,
+                  )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostMotorbike") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostMotorbike(
+                    postdetail: widget.postData,
+                  )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostBicycle") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostBicyle(
+                    postdetail: widget.postData,
+                  )));
+          return;
+        } else if (widget.postData.onModel.trim() == "PostHouse") {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetailPostHouse(
+                    postdetail: widget.postData,
+                  )));
+          return;
         }
-        if (widget.postData.onModel == "PostGround") {
-          Get.to(() => DetailPostGroundScreen(
-                postdetail: widget.postData,
-              ));
-        }
-        if (widget.postData.onModel == "PostApartment") {
-          Get.to(() => DetailPostAparment(
-                postdetail: widget.postData,
-              ));
-        }
-        if (widget.postData.onModel == "PostMotelRoom") {
-          Get.to(() => DetailPostMotelroom(
-                postdetail: widget.postData,
-              ));
-        }
-        if (widget.postData.onModel == "PostOffice") {
-          Get.to(() => DetailPostOffice(
-                postdetail: widget.postData,
-              ));
-        }
-        if (widget.postData.onModel == "PostPhone") {
-          Get.to(() => DetailPostPhone(
-                postdetail: widget.postData,
-              ));
-        }
-        if (widget.postData.onModel == "PostLaptop") {
-          Get.to(() => DetailPostlaptop(
-                postdetail: widget.postData,
-              ));
-        }
-        if (widget.postData.onModel == "PostMotorbike") {
-          Get.to(() => DetailPostMotorbike(
-                postdetail: widget.postData,
-              ));
-        }
-        if (widget.postData.onModel == "PostBicycle") {
-          Get.to(() => DetailPostBicyle(
-                postdetail: widget.postData,
-              ));
-        }
-        if (widget.postData.onModel == "PostHouse") {
-          Get.to(() => DetailPostHouse(
-                postdetail: widget.postData,
-              ));
-        }
+        print("Khác loại post1: ${widget.postData.onModel}");
       },
       child: Container(
         height: 150,

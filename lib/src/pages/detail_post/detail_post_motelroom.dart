@@ -381,7 +381,7 @@ class _DetailPostMotelroomState extends State<DetailPostMotelroom> {
           Padding(
             padding: const EdgeInsets.only(top: 10, right: 10, left: 20),
             child: Text(
-              "Liên hệ ngay: 0123456789",
+              "Liên hệ ngay: ${widget.postdetail!.phoneOfPoster}",
               style: TextStyle(color: Colors.blue.shade500),
             ),
           ),

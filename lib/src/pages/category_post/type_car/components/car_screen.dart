@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chotot_app/src/common/common_const.dart';
 import 'package:chotot_app/src/models/post/post_model.dart';
 import 'package:chotot_app/src/repositories/post_service_repo.dart';
+import 'package:chotot_app/src/repositories/search_post_repo.dart';
 import 'package:chotot_app/src/widgets/filter_widget.dart';
 import 'package:chotot_app/src/widgets/post_widget_ver_s.dart';
 import 'package:flutter/material.dart';
@@ -114,10 +115,24 @@ class _CarScreenState extends State<CarScreen> {
                       underline: SizedBox(),
                       isExpanded: false,
                       value: provice,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           provice = value.toString();
                         });
+                        var result =
+                            await SearchPostRepository().searchPostTech(
+                                maxPrice: 2000000000,
+                                minPrice: 100000,
+                                // brand: brand,
+                                category: "PostCar",
+                                province: provice,
+                                page: 0,
+                                limit: 10);
+                        if (result.length > 0) {
+                          listPostController.add(result);
+                        } else {
+                          listPostController.add([]);
+                        }
                       },
                       items: listProvince.map((e) {
                         return DropdownMenuItem(
