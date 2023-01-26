@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:chotot_app/src/common/base_convert.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailPostOffice extends StatefulWidget {
   const DetailPostOffice({Key? key, this.postdetail}) : super(key: key);
@@ -124,7 +125,10 @@ class _DetailPostOfficeState extends State<DetailPostOffice> {
               },
               icon: Icon(Icons.favorite_outline)),
           IconButton(
-              onPressed: () {
+              onPressed: () async {
+                await Share.share(
+                    "${widget.postdetail!.title}\n\n${widget.postdetail!.image[0]}");
+
                 print("Shared");
               },
               icon: Icon(Icons.share_outlined)),
